@@ -1,5 +1,11 @@
 # @use-voltra/expo-plugin
 
+## 1.4.0
+
+### Minor Changes
+
+- 14d4fa5: Add Android ongoing notification support, including richer notification content, remote update flows, and server-side payload rendering APIs. This release also expands the Expo integration and documentation so apps can configure, send, and manage Android ongoing notifications more easily.
+
 ## 1.3.0
 
 ### Patch Changes

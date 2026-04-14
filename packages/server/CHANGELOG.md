@@ -1,5 +1,11 @@
 # @use-voltra/server
 
+## 1.4.0
+
+### Minor Changes
+
+- Android home-screen widgets can use colors that follow the user’s theme and wallpaper (including Material You), so widgets feel native in light, dark, and dynamic setups. If you drive widgets from your own server, you can read the full request URL—including query parameters—when handling updates, which makes it easier to personalize or A/B content per link. Widget updates on iOS are a bit more forgiving when variant data is missing.
+
 ## 1.3.0
 
 ### Minor Changes
