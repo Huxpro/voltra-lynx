@@ -17,6 +17,9 @@ public struct ResolvableEnvironment: Hashable {
     case .showsWidgetContainerBackground:
       guard let showsWidgetContainerBackground else { return nil }
       return .bool(showsWidgetContainerBackground)
+    default:
+      // Android Material color env keys are inert on iOS; payloads should not rely on them here.
+      return nil
     }
   }
 }

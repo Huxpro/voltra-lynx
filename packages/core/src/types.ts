@@ -1,4 +1,8 @@
+import { RESOLVABLE_ENV_IDS } from './resolvable/constants.js'
+
 export type VoltraJsonPrimitive = string | number | boolean | null
+
+export type VoltraResolvableEnvironmentId = (typeof RESOLVABLE_ENV_IDS)[keyof typeof RESOLVABLE_ENV_IDS]
 
 export type VoltraSerializableValue =
   | VoltraJsonPrimitive
@@ -15,7 +19,7 @@ export type VoltraResolvableConditionTuple =
   | [5, VoltraSerializableValue, VoltraSerializableValue[]]
 
 export type VoltraResolvableValueTuple =
-  | [0, 0 | 1]
+  | [0, VoltraResolvableEnvironmentId]
   | [1, VoltraResolvableConditionTuple, VoltraSerializableValue, VoltraSerializableValue]
   | [2, VoltraSerializableValue, Record<string, VoltraSerializableValue>]
 

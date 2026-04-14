@@ -21,6 +21,7 @@ export type {
   VoltraPropValue,
   ResolvableCondition,
   ResolvableEnvironmentKey,
+  ResolvableEnvironmentValueMap,
   ResolvableValue,
   ResolvableWidgetRenderingMode,
   WidgetServerCredentials,

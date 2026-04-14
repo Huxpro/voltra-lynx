@@ -1,6 +1,7 @@
 export type {
   ResolvableCondition,
   ResolvableEnvironmentKey,
+  ResolvableEnvironmentValueMap,
   ResolvableValue,
   ResolvableWidgetRenderingMode,
   VoltraElementJson,

@@ -37,7 +37,14 @@ export type {
   WidgetUpdateHandler,
   WidgetUpdateNodeHandler,
 } from '@use-voltra/server'
-export type { AndroidColorValue, AndroidDynamicColorRole, AndroidDynamicColorToken } from '@use-voltra/android'
+export type { AndroidColorValue } from '@use-voltra/android'
+export type {
+  ResolvableCondition,
+  ResolvableEnvironmentKey,
+  ResolvableEnvironmentValueMap,
+  ResolvableValue,
+  ResolvableWidgetRenderingMode,
+} from '@use-voltra/android'
 export type { WidgetPlatform, WidgetTheme } from '@use-voltra/server'
 
 export type AndroidWidgetSize = {

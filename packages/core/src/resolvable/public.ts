@@ -7,10 +7,16 @@ type ResolvablePrimitive = string | number | boolean | null
 export type ResolvableEnvironmentKey = keyof typeof RESOLVABLE_ENV_IDS
 export type ResolvableWidgetRenderingMode = 'accented' | 'fullColor' | 'vibrant'
 
-export type ResolvableEnvironmentValueMap = {
+type ResolvableIosWidgetEnvironment = {
   renderingMode: ResolvableWidgetRenderingMode
   showsWidgetContainerBackground: boolean
 }
+
+type ResolvableAndroidMaterialEnvironment = {
+  [K in Exclude<keyof typeof RESOLVABLE_ENV_IDS, keyof ResolvableIosWidgetEnvironment>]: string
+}
+
+export type ResolvableEnvironmentValueMap = ResolvableIosWidgetEnvironment & ResolvableAndroidMaterialEnvironment
 
 type ResolvableBrand = {
   readonly [RESOLVABLE_BRAND]: true
@@ -84,6 +90,33 @@ export const isResolvableExpression = (
 export const env: { [K in ResolvableEnvironmentKey]: ResolvableExpression<ResolvableEnvironmentValueMap[K]> } = {
   renderingMode: createResolvable('env', { key: 'renderingMode' }),
   showsWidgetContainerBackground: createResolvable('env', { key: 'showsWidgetContainerBackground' }),
+  primary: createResolvable('env', { key: 'primary' }),
+  onPrimary: createResolvable('env', { key: 'onPrimary' }),
+  primaryContainer: createResolvable('env', { key: 'primaryContainer' }),
+  onPrimaryContainer: createResolvable('env', { key: 'onPrimaryContainer' }),
+  secondary: createResolvable('env', { key: 'secondary' }),
+  onSecondary: createResolvable('env', { key: 'onSecondary' }),
+  secondaryContainer: createResolvable('env', { key: 'secondaryContainer' }),
+  onSecondaryContainer: createResolvable('env', { key: 'onSecondaryContainer' }),
+  tertiary: createResolvable('env', { key: 'tertiary' }),
+  onTertiary: createResolvable('env', { key: 'onTertiary' }),
+  tertiaryContainer: createResolvable('env', { key: 'tertiaryContainer' }),
+  onTertiaryContainer: createResolvable('env', { key: 'onTertiaryContainer' }),
+  error: createResolvable('env', { key: 'error' }),
+  errorContainer: createResolvable('env', { key: 'errorContainer' }),
+  onError: createResolvable('env', { key: 'onError' }),
+  onErrorContainer: createResolvable('env', { key: 'onErrorContainer' }),
+  background: createResolvable('env', { key: 'background' }),
+  onBackground: createResolvable('env', { key: 'onBackground' }),
+  surface: createResolvable('env', { key: 'surface' }),
+  onSurface: createResolvable('env', { key: 'onSurface' }),
+  surfaceVariant: createResolvable('env', { key: 'surfaceVariant' }),
+  onSurfaceVariant: createResolvable('env', { key: 'onSurfaceVariant' }),
+  outline: createResolvable('env', { key: 'outline' }),
+  inverseOnSurface: createResolvable('env', { key: 'inverseOnSurface' }),
+  inverseSurface: createResolvable('env', { key: 'inverseSurface' }),
+  inversePrimary: createResolvable('env', { key: 'inversePrimary' }),
+  widgetBackground: createResolvable('env', { key: 'widgetBackground' }),
 }
 
 export const when = <T>(

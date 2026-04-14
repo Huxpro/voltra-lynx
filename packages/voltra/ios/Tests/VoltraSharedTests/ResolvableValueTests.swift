@@ -113,6 +113,20 @@ final class ResolvableValueTests: XCTestCase {
     XCTAssertEqual(resolved, .string("fallback-value"))
   }
 
+  func testAndroidMaterialEnvResolvesToNullOnIos() {
+    let value = wrapped([
+      .int(0),
+      .int(2),
+    ])
+
+    let resolved = ResolvableValueEvaluator.resolve(
+      value,
+      environment: .init(renderingMode: "accented", showsWidgetContainerBackground: true)
+    )
+
+    XCTAssertEqual(resolved, .null)
+  }
+
   func testEvaluatorReturnsNullForInvalidWrappedPayload() {
     let invalidWrappedValue = JSONValue.object([
       "$rv": .string("not-a-tuple"),
