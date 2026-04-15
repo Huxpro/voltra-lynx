@@ -55,36 +55,6 @@ const Row = ({ label, children }: { label: string; children: React.ReactNode }) 
   )
 }
 
-const CompactRow = ({
-  label,
-  labelWidth,
-  labelFontSize,
-  gap,
-  childGap,
-  children,
-}: {
-  label: string
-  labelWidth: number
-  labelFontSize: number
-  gap: number
-  childGap: number
-  children: React.ReactNode
-}) => (
-  <Voltra.View style={{ flexDirection: 'row', alignItems: 'center', gap }}>
-    <Voltra.Text
-      style={{
-        width: labelWidth,
-        fontSize: labelFontSize,
-        fontWeight: '600',
-        color: labelByMode,
-      }}
-    >
-      {label}
-    </Voltra.Text>
-    <Voltra.View style={{ flexDirection: 'row', alignItems: 'center', gap: childGap }}>{children}</Voltra.View>
-  </Voltra.View>
-)
-
 const ModeSwitch = ({ box, fontSize }: { box: number; fontSize: number }) => (
   <Voltra.ControlSwitch
     value={env.renderingMode}
@@ -173,66 +143,85 @@ const BackgroundToggle = ({ box, fontSize }: { box: number; fontSize: number }) 
   </Voltra.ControlIf>
 )
 
+/**
+ * Lock screen · circular (~76×76 pt): ring frame, env label, mode strip, chrome row.
+ */
+export function ResolvableAccessoryCircular() {
+  const modeBox = 15
+  const chromeBox = 15
+  const modeFont = 8
+  const chromeFont = 8
+
+  return (
+    <Voltra.View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 8
+      }}
+    >
+<ModeSwitch box={modeBox} fontSize={modeFont} />
+            <BackgroundToggle box={chromeBox} fontSize={chromeFont} />
+        </Voltra.View>
+  )
+}
+
+/**
+ * Lock screen · rectangular (~172×76 pt): title row, divider, render + container rows.
+ */
+export function ResolvableAccessoryRectangular() {
+  const modeBox = 20
+  const chromeBox = 20
+  const modeFont = 16
+
+  return (
+    <Voltra.View style={{ flex: 1, paddingHorizontal: 10, paddingVertical: 4 }}>
+    <Voltra.View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+      <Voltra.Text style={{ fontSize: 20, fontWeight: '700', color: labelByMode }}>mode</Voltra.Text>
+      <ModeSwitch box={modeBox} fontSize={modeFont} />
+    </Voltra.View>
+    <Voltra.View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+      <Voltra.Text style={{ fontSize: 20, fontWeight: '700', color: labelByMode }}>bg</Voltra.Text>
+      <BackgroundToggle box={chromeBox} fontSize={modeFont} />
+    </Voltra.View>
+  </Voltra.View>
+  )
+}
+
+/**
+ * Lock screen · inline (~172×40 pt): label block, rule, controls in one band.
+ */
+export function ResolvableAccessoryInline() {
+  const modeBox = 14
+  const chromeBox = 14
+  const modeFont = 9
+
+  return (
+    <Voltra.View style={{ flex: 1, paddingHorizontal: 10, paddingVertical: 4 }}>
+      <Voltra.View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        <Voltra.Text style={{ fontSize: 12, fontWeight: '700', color: labelByMode }}>mode</Voltra.Text>
+        <ModeSwitch box={modeBox} fontSize={modeFont} />
+      </Voltra.View>
+      <Voltra.View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        <Voltra.Text style={{ fontSize: 12, fontWeight: '700', color: labelByMode }}>bg</Voltra.Text>
+        <BackgroundToggle box={chromeBox} fontSize={modeFont} />
+      </Voltra.View>
+    </Voltra.View>
+  )
+}
+
 const IosResolvablePlaygroundBody = ({ size }: { size: WidgetSize }) => {
   if (size === 'accessoryCircular') {
-    const box = 18
-    const fontSize = 9
-    return (
-      <Voltra.View
-        style={{
-          flex: 1,
-          padding: 6,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Voltra.View style={{ flexDirection: 'column', gap: 4, alignItems: 'center' }}>
-          <Voltra.Text style={{ fontSize: 9, fontWeight: '700', color: valueByMode }}>RV</Voltra.Text>
-          <ModeSwitch box={box} fontSize={fontSize} />
-          <BackgroundToggle box={box} fontSize={fontSize} />
-        </Voltra.View>
-      </Voltra.View>
-    )
+    return <ResolvableAccessoryCircular />
   }
 
   if (size === 'accessoryRectangular') {
-    const box = 22
-    const fontSize = 10
-    return (
-      <Voltra.View style={{ flex: 1, padding: 8, justifyContent: 'center' }}>
-        <Voltra.View style={{ flexDirection: 'column', gap: 6, alignItems: 'stretch' }}>
-          <Voltra.Text style={{ fontSize: 11, fontWeight: '700', color: valueByMode, textAlign: 'center' }}>
-            Resolvable
-          </Voltra.Text>
-          <CompactRow label="mode" labelWidth={36} labelFontSize={10} gap={6} childGap={4}>
-            <ModeSwitch box={box} fontSize={fontSize} />
-          </CompactRow>
-          <CompactRow label="bg" labelWidth={36} labelFontSize={10} gap={6} childGap={4}>
-            <BackgroundToggle box={box} fontSize={fontSize} />
-          </CompactRow>
-        </Voltra.View>
-      </Voltra.View>
-    )
+    return <ResolvableAccessoryRectangular />
   }
 
   if (size === 'accessoryInline') {
-    const box = 20
-    const fontSize = 10
-    return (
-      <Voltra.View
-        style={{
-          flex: 1,
-          paddingHorizontal: 8,
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 6,
-        }}
-      >
-        <Voltra.Text style={{ fontSize: 11, fontWeight: '700', color: valueByMode }}>RV</Voltra.Text>
-        <ModeSwitch box={box} fontSize={fontSize} />
-        <BackgroundToggle box={box} fontSize={fontSize} />
-      </Voltra.View>
-    )
+    return <ResolvableAccessoryInline />
   }
 
   const compact = size === 'small'
@@ -283,10 +272,10 @@ export const IosResolvablePlaygroundWidget = ({ size = 'medium' }: { size?: Widg
 }
 
 export const resolvablePlaygroundVariants: WidgetVariants = {
-  systemSmall: <IosResolvablePlaygroundWidget size="small" />,
-  systemMedium: <IosResolvablePlaygroundWidget size="medium" />,
-  systemLarge: <IosResolvablePlaygroundWidget size="medium" />,
-  accessoryCircular: <IosResolvablePlaygroundWidget size="accessoryCircular" />,
-  accessoryRectangular: <IosResolvablePlaygroundWidget size="accessoryRectangular" />,
-  accessoryInline: <IosResolvablePlaygroundWidget size="accessoryInline" />,
+  systemSmall: <IosResolvablePlaygroundBody size="small" />,
+  systemMedium: <IosResolvablePlaygroundBody size="medium" />,
+  systemLarge: <IosResolvablePlaygroundBody size="large" />,
+  accessoryCircular: <ResolvableAccessoryCircular />,
+  accessoryRectangular: <ResolvableAccessoryRectangular />,
+  accessoryInline: <Voltra.Text>Ai</Voltra.Text>,
 }
