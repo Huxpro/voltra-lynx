@@ -91,8 +91,14 @@ internal object ResolvableValueEvaluator {
 
     private fun parse(value: Any?): Parsed =
         when (value) {
-            null, is String, is Boolean, is Number -> Parsed.Literal(value)
-            is List<*> -> Parsed.ArrayVal(value.map { parse(it) })
+            null, is String, is Boolean, is Number -> {
+                Parsed.Literal(value)
+            }
+
+            is List<*> -> {
+                Parsed.ArrayVal(value.map { parse(it) })
+            }
+
             is Map<*, *> -> {
                 @Suppress("UNCHECKED_CAST")
                 val map = value as Map<String, Any?>
@@ -106,7 +112,10 @@ internal object ResolvableValueEvaluator {
                     Parsed.Obj(parsed)
                 }
             }
-            else -> Parsed.Literal(value)
+
+            else -> {
+                Parsed.Literal(value)
+            }
         }
 
     private fun parseWrappedExpression(map: Map<String, Any?>): ResolvableExpr {
@@ -124,6 +133,7 @@ internal object ResolvableValueEvaluator {
                 val envId = tuple[1].asOpcodeInt() ?: error("Invalid environment id")
                 ResolvableExpr.Env(envId)
             }
+
             ResolvableValueOpcode.WHEN -> {
                 require(tuple.size == 4) { "Invalid when tuple" }
                 ResolvableExpr.When(
@@ -132,6 +142,7 @@ internal object ResolvableValueEvaluator {
                     elseValue = parse(tuple[3]),
                 )
             }
+
             ResolvableValueOpcode.MATCH -> {
                 require(tuple.size == 3) { "Invalid match tuple" }
                 val casesRaw = tuple[2]
@@ -139,7 +150,9 @@ internal object ResolvableValueEvaluator {
                 @Suppress("UNCHECKED_CAST")
                 val casesMap = casesRaw as Map<String, Any?>
                 val parsedCases = casesMap.mapValues { (_, v) -> parse(v) }
-                require(ResolvableWireKey.DEFAULT_CASE in parsedCases) { "Resolvable match expression is missing a default case" }
+                require(
+                    ResolvableWireKey.DEFAULT_CASE in parsedCases,
+                ) { "Resolvable match expression is missing a default case" }
                 ResolvableExpr.Match(value = parse(tuple[1]), cases = parsedCases)
             }
         }
@@ -158,26 +171,31 @@ internal object ResolvableValueEvaluator {
                 require(tuple.size == 3) { "Invalid eq tuple" }
                 Condition.Eq(parse(tuple[1]), parse(tuple[2]))
             }
+
             ResolvableConditionOpcode.NE -> {
                 require(tuple.size == 3) { "Invalid ne tuple" }
                 Condition.Ne(parse(tuple[1]), parse(tuple[2]))
             }
+
             ResolvableConditionOpcode.AND -> {
                 require(tuple.size == 2 && tuple[1] is List<*>) { "Invalid and tuple" }
                 @Suppress("UNCHECKED_CAST")
                 val items = tuple[1] as List<Any?>
                 Condition.And(items.map { parseCondition(it) })
             }
+
             ResolvableConditionOpcode.OR -> {
                 require(tuple.size == 2 && tuple[1] is List<*>) { "Invalid or tuple" }
                 @Suppress("UNCHECKED_CAST")
                 val items = tuple[1] as List<Any?>
                 Condition.Or(items.map { parseCondition(it) })
             }
+
             ResolvableConditionOpcode.NOT -> {
                 require(tuple.size == 2) { "Invalid not tuple" }
                 Condition.Not(parseCondition(tuple[1]))
             }
+
             ResolvableConditionOpcode.IN_LIST -> {
                 require(tuple.size == 3 && tuple[2] is List<*>) { "Invalid inList tuple" }
                 @Suppress("UNCHECKED_CAST")
@@ -203,13 +221,18 @@ internal object ResolvableValueEvaluator {
         environment: ResolvableRuntimeEnvironment,
     ): Any? =
         when (expr) {
-            is ResolvableExpr.Env -> environment.envValue(expr.envId)
-            is ResolvableExpr.When ->
+            is ResolvableExpr.Env -> {
+                environment.envValue(expr.envId)
+            }
+
+            is ResolvableExpr.When -> {
                 if (evaluate(expr.condition, environment)) {
                     evaluate(expr.thenValue, environment)
                 } else {
                     evaluate(expr.elseValue, environment)
                 }
+            }
+
             is ResolvableExpr.Match -> {
                 val resolved = evaluate(expr.value, environment)
                 val key = matchCaseKey(resolved)
@@ -228,19 +251,32 @@ internal object ResolvableValueEvaluator {
         environment: ResolvableRuntimeEnvironment,
     ): Boolean =
         when (condition) {
-            is Condition.Eq ->
+            is Condition.Eq -> {
                 jsonEquals(
                     evaluate(condition.left, environment),
                     evaluate(condition.right, environment),
                 )
-            is Condition.Ne ->
+            }
+
+            is Condition.Ne -> {
                 !jsonEquals(
                     evaluate(condition.left, environment),
                     evaluate(condition.right, environment),
                 )
-            is Condition.And -> condition.conditions.all { evaluate(it, environment) }
-            is Condition.Or -> condition.conditions.any { evaluate(it, environment) }
-            is Condition.Not -> !evaluate(condition.condition, environment)
+            }
+
+            is Condition.And -> {
+                condition.conditions.all { evaluate(it, environment) }
+            }
+
+            is Condition.Or -> {
+                condition.conditions.any { evaluate(it, environment) }
+            }
+
+            is Condition.Not -> {
+                !evaluate(condition.condition, environment)
+            }
+
             is Condition.InList -> {
                 val resolved = evaluate(condition.value, environment)
                 condition.values.any { jsonEquals(evaluate(it, environment), resolved) }
@@ -249,8 +285,14 @@ internal object ResolvableValueEvaluator {
 
     private fun matchCaseKey(value: Any?): String =
         when (value) {
-            null -> "null"
-            is Boolean -> if (value) "true" else "false"
+            null -> {
+                "null"
+            }
+
+            is Boolean -> {
+                if (value) "true" else "false"
+            }
+
             is Number -> {
                 val d = value.toDouble()
                 if (d.isFinite() && floor(d) == d && d >= Long.MIN_VALUE.toDouble() && d <= Long.MAX_VALUE.toDouble()) {
@@ -259,10 +301,22 @@ internal object ResolvableValueEvaluator {
                     d.toString()
                 }
             }
-            is String -> value
-            is List<*> -> value.toString()
-            is Map<*, *> -> value.toString()
-            else -> value.toString()
+
+            is String -> {
+                value
+            }
+
+            is List<*> -> {
+                value.toString()
+            }
+
+            is Map<*, *> -> {
+                value.toString()
+            }
+
+            else -> {
+                value.toString()
+            }
         }
 
     private fun jsonEquals(
@@ -278,14 +332,23 @@ internal object ResolvableValueEvaluator {
 
     private fun containsResolvable(value: Any?): Boolean =
         when (value) {
-            null, is String, is Boolean, is Number -> false
+            null, is String, is Boolean, is Number -> {
+                false
+            }
+
             is Map<*, *> -> {
                 @Suppress("UNCHECKED_CAST")
                 val m = value as Map<String, Any?>
                 m.containsKey(ResolvableWireKey.SENTINEL) || m.values.any { containsResolvable(it) }
             }
-            is List<*> -> value.any { containsResolvable(it) }
-            else -> false
+
+            is List<*> -> {
+                value.any { containsResolvable(it) }
+            }
+
+            else -> {
+                false
+            }
         }
 
     private fun Any?.asOpcodeInt(): Int? =

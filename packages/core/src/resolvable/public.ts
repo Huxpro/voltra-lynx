@@ -62,10 +62,10 @@ export type ResolvableExpression<T> =
 export type ResolvableValue<T> = [T] extends [ResolvablePrimitive]
   ? T | ResolvableExpression<T>
   : [T] extends [readonly unknown[]]
-    ? { [K in keyof T]: ResolvableValue<T[K]> } | ResolvableExpression<T>
-    : [T] extends [object]
-      ? { [K in keyof T]: ResolvableValue<T[K]> } | ResolvableExpression<T>
-      : T | ResolvableExpression<T>
+  ? { [K in keyof T]: ResolvableValue<T[K]> } | ResolvableExpression<T>
+  : [T] extends [object]
+  ? { [K in keyof T]: ResolvableValue<T[K]> } | ResolvableExpression<T>
+  : T | ResolvableExpression<T>
 
 const createResolvable = <TKind extends string, TValue extends object>(
   kind: TKind,

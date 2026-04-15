@@ -88,7 +88,7 @@ public struct VoltraElement: Hashable {
        let stylesheet = stylesheet,
        index >= 0, index < stylesheet.count
     {
-     styleDict = stylesheet[index]
+      styleDict = stylesheet[index]
     }
     // Handle inline style (object)
     else if let objectValue = styleValue.objectValue {
@@ -169,6 +169,25 @@ public struct VoltraElement: Hashable {
   public func componentProp(_ propName: String) -> VoltraNode {
     guard let propValue = props?[propName] else { return .empty }
 
+    return VoltraNode(from: propValue, stylesheet: stylesheet, sharedElements: sharedElements)
+  }
+
+  /// Get a raw (unresolved) prop JSON value by full or short name.
+  /// Use this when you need to parse the raw wire format (e.g., condition tuples, case branches)
+  /// before applying any resolvable-value resolution.
+  func rawPropJSON(_ propName: String) -> JSONValue? {
+    guard let props = _props else { return nil }
+    if let value = props[propName] { return value }
+    for (key, value) in props where ShortNames.expand(key) == propName {
+      return value
+    }
+    return nil
+  }
+
+  /// Get a component prop without pre-resolving resolvable values.
+  /// Child elements will resolve their own `$rv` values via `VoltraElementView`.
+  func rawComponentProp(_ propName: String) -> VoltraNode {
+    guard let propValue = rawPropJSON(propName) else { return .empty }
     return VoltraNode(from: propValue, stylesheet: stylesheet, sharedElements: sharedElements)
   }
 

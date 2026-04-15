@@ -26,13 +26,19 @@ object ResolvablePayloadResolver {
         environment: ResolvableRuntimeEnvironment,
     ): VoltraNode =
         when (node) {
-            is VoltraNode.Element ->
+            is VoltraNode.Element -> {
                 VoltraNode.Element(
                     resolveElement(node.element, environment),
                 )
-            is VoltraNode.Array ->
+            }
+
+            is VoltraNode.Array -> {
                 VoltraNode.Array(node.elements.map { resolveNode(it, environment) })
-            else -> node
+            }
+
+            else -> {
+                node
+            }
         }
 
     private fun resolveElement(
@@ -69,7 +75,13 @@ object ResolvablePayloadResolver {
                     resolveMap(m, environment)
                 }
             }
-            is List<*> -> value.map { resolveValue(it, environment) }
-            else -> value
+
+            is List<*> -> {
+                value.map { resolveValue(it, environment) }
+            }
+
+            else -> {
+                value
+            }
         }
 }

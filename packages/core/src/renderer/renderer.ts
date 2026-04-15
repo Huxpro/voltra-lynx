@@ -25,7 +25,13 @@ import {
 
 import { isVoltraComponent } from '../jsx/createVoltraComponent.js'
 import { shorten } from '../payload/short-names.js'
-import { isResolvableValueExpression, serializeResolvablePropValue, serializeStyleObject } from '../resolvable/serialize.js'
+import type { ResolvableCondition } from '../resolvable/public.js'
+import {
+  isResolvableValueExpression,
+  serializeCondition,
+  serializeResolvablePropValue,
+  serializeStyleObject,
+} from '../resolvable/serialize.js'
 import { VoltraElementRef, VoltraNodeJson, VoltraPropValue } from '../types.js'
 import { ContextRegistry, getContextRegistry } from './context-registry.js'
 import { getHooksDispatcher, getReactCurrentDispatcher } from './dispatcher.js'
@@ -208,6 +214,8 @@ function renderNodeInternal(element: ReactNode, context: VoltraRenderingContext)
 
       const { children, ...parameters } = child.props as { children?: ReactNode; [key: string]: unknown }
       const isTextComponent = child.type === 'Text' || child.type === 'AndroidText'
+      const isIfComponent = child.type === 'ControlIf' || child.type === 'AndroidControlIf'
+      const isMatchComponent = child.type === 'ControlSwitch' || child.type === 'AndroidControlSwitch'
 
       // Short-circuit: ResolvableExpression as children of a Text component is serialized
       // via p.txt (wire key for "text") so the native resolver handles it at render time.
@@ -228,6 +236,47 @@ function renderNodeInternal(element: ReactNode, context: VoltraRenderingContext)
         ...context,
         inStringOnlyContext: isTextComponent,
       }
+
+      if (isIfComponent) {
+        const id = typeof parameters.id === 'string' ? parameters.id : undefined
+        const condition = parameters.condition as ResolvableCondition
+        const elseNode = parameters.else as ReactNode | undefined
+        const thenRendered = children !== null && children !== undefined ? renderNode(children, childContext) : []
+        const elseRendered =
+          elseNode !== null && elseNode !== undefined ? renderNode(elseNode, childContext) : undefined
+        const props: Record<string, VoltraPropValue> = {
+          [shorten('condition')]: serializeCondition(condition),
+        }
+        if (elseRendered !== undefined) {
+          props[shorten('else')] = elseRendered
+        }
+        return {
+          t: context.componentRegistry.getComponentId(child.type),
+          ...(id ? { i: id } : {}),
+          c: thenRendered,
+          p: props,
+        }
+      }
+
+      if (isMatchComponent) {
+        const id = typeof parameters.id === 'string' ? parameters.id : undefined
+        const value = parameters.value
+        const cases = parameters.cases as Record<string, ReactNode>
+        const serializedValue = serializeResolvablePropValue(value)
+        const serializedCases: Record<string, VoltraNodeJson> = {}
+        for (const [caseKey, caseNode] of Object.entries(cases)) {
+          serializedCases[caseKey] = renderNode(caseNode as ReactNode, childContext)
+        }
+        return {
+          t: context.componentRegistry.getComponentId(child.type),
+          ...(id ? { i: id } : {}),
+          p: {
+            [shorten('value')]: serializedValue,
+            [shorten('cases')]: serializedCases,
+          },
+        }
+      }
+
       const renderedChildren =
         children !== null && children !== undefined ? renderNode(children, childContext) : isTextComponent ? '' : []
 

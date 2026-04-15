@@ -47,11 +47,11 @@ public struct VoltraWidget: Widget {
         activityId: context.activityID,
         resolvableEnvironment: .init()
       )
-        .widgetURL(VoltraDeepLinkResolver.resolve(context.attributes))
-        .voltraIfLet(context.state.activityBackgroundTint) { view, tint in
-          let color = JSColorParser.parse(tint)
-          view.activityBackgroundTint(color)
-        }
+      .widgetURL(VoltraDeepLinkResolver.resolve(context.attributes))
+      .voltraIfLet(context.state.activityBackgroundTint) { view, tint in
+        let color = JSColorParser.parse(tint)
+        view.activityBackgroundTint(color)
+      }
     } dynamicIsland: { context in
       dynamicIslandContent(context: context)
     }

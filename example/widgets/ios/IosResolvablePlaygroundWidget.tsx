@@ -1,5 +1,5 @@
 import React from 'react'
-import { and, env, eq, when, Voltra, type WidgetVariants } from '@use-voltra/ios'
+import { env, eq, when, Voltra, type WidgetVariants } from '@use-voltra/ios'
 
 type WidgetSize = 'small' | 'medium'
 
@@ -82,114 +82,101 @@ const IosResolvablePlaygroundBody = ({ size }: { size: WidgetSize }) => {
         </Voltra.Text>
 
         <Row label="mode">
-          <Voltra.View
-            style={{
-              width: box,
-              height: box,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: when(eq(env.renderingMode, 'accented'), 2, 1),
-              borderColor: when(eq(env.renderingMode, 'accented'), '#F9FAFB', labelByMode),
-              borderRadius: 4,
+          <Voltra.ControlSwitch
+            value={env.renderingMode}
+            cases={{
+              accented: (
+                <Voltra.View
+                  style={{
+                    width: box,
+                    height: box,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 2,
+                    borderColor: '#F9FAFB',
+                    borderRadius: 4,
+                  }}
+                >
+                  <Voltra.Text style={{ fontSize: compact ? 13 : 14, fontWeight: '700', color: valueByMode }}>
+                    A
+                  </Voltra.Text>
+                </Voltra.View>
+              ),
+              fullColor: (
+                <Voltra.View
+                  style={{
+                    width: box,
+                    height: box,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 2,
+                    borderColor: '#0F172A',
+                    borderRadius: 4,
+                  }}
+                >
+                  <Voltra.Text style={{ fontSize: compact ? 13 : 14, fontWeight: '700', color: valueByMode }}>
+                    F
+                  </Voltra.Text>
+                </Voltra.View>
+              ),
+              default: (
+                <Voltra.View
+                  style={{
+                    width: box,
+                    height: box,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 2,
+                    borderColor: '#FDF2F8',
+                    borderRadius: 4,
+                  }}
+                >
+                  <Voltra.Text style={{ fontSize: compact ? 13 : 14, fontWeight: '700', color: valueByMode }}>
+                    V
+                  </Voltra.Text>
+                </Voltra.View>
+              ),
             }}
-          >
-            <Voltra.Text style={{ fontSize: compact ? 13 : 14, fontWeight: '700', color: valueByMode }}>A</Voltra.Text>
-          </Voltra.View>
-          <Voltra.View
-            style={{
-              width: box,
-              height: box,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: when(eq(env.renderingMode, 'fullColor'), 2, 1),
-              borderColor: when(eq(env.renderingMode, 'fullColor'), '#0F172A', labelByMode),
-              borderRadius: 4,
-            }}
-          >
-            <Voltra.Text style={{ fontSize: compact ? 13 : 14, fontWeight: '700', color: valueByMode }}>F</Voltra.Text>
-          </Voltra.View>
-          <Voltra.View
-            style={{
-              width: box,
-              height: box,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: when(eq(env.renderingMode, 'vibrant'), 2, 1),
-              borderColor: when(eq(env.renderingMode, 'vibrant'), '#FDF2F8', labelByMode),
-              borderRadius: 4,
-            }}
-          >
-            <Voltra.Text style={{ fontSize: compact ? 13 : 14, fontWeight: '700', color: valueByMode }}>V</Voltra.Text>
-          </Voltra.View>
+          />
         </Row>
 
         <Row label="background">
-          <Voltra.View
-            style={{
-              width: box,
-              height: box,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: when(eq(env.showsWidgetContainerBackground, true), 2, 1),
-              borderColor: when(
-                and(eq(env.showsWidgetContainerBackground, true), eq(env.renderingMode, 'accented')),
-                '#F9FAFB',
-                when(
-                  and(eq(env.showsWidgetContainerBackground, true), eq(env.renderingMode, 'fullColor')),
-                  '#0F172A',
-                  when(
-                    and(eq(env.showsWidgetContainerBackground, true), eq(env.renderingMode, 'vibrant')),
-                    '#FDF2F8',
-                    when(
-                      and(eq(env.showsWidgetContainerBackground, false), eq(env.renderingMode, 'accented')),
-                      '#CBD5E1',
-                      when(
-                        and(eq(env.showsWidgetContainerBackground, false), eq(env.renderingMode, 'fullColor')),
-                        '#475569',
-                        '#FBCFE8',
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              borderRadius: 4,
-            }}
+          <Voltra.ControlIf
+            condition={eq(env.showsWidgetContainerBackground, true)}
+            else={
+              <Voltra.View
+                style={{
+                  width: box,
+                  height: box,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 2,
+                  borderColor: labelByMode,
+                  borderRadius: 4,
+                }}
+              >
+                <Voltra.Text style={{ fontSize: compact ? 13 : 14, fontWeight: '700', color: valueByMode }}>
+                  N
+                </Voltra.Text>
+              </Voltra.View>
+            }
           >
-            <Voltra.Text style={{ fontSize: compact ? 13 : 14, fontWeight: '700', color: valueByMode }}>Y</Voltra.Text>
-          </Voltra.View>
-          <Voltra.View
-            style={{
-              width: box,
-              height: box,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: when(eq(env.showsWidgetContainerBackground, false), 2, 1),
-              borderColor: when(
-                and(eq(env.showsWidgetContainerBackground, false), eq(env.renderingMode, 'accented')),
-                '#F9FAFB',
-                when(
-                  and(eq(env.showsWidgetContainerBackground, false), eq(env.renderingMode, 'fullColor')),
-                  '#0F172A',
-                  when(
-                    and(eq(env.showsWidgetContainerBackground, false), eq(env.renderingMode, 'vibrant')),
-                    '#FDF2F8',
-                    when(
-                      and(eq(env.showsWidgetContainerBackground, true), eq(env.renderingMode, 'accented')),
-                      '#CBD5E1',
-                      when(
-                        and(eq(env.showsWidgetContainerBackground, true), eq(env.renderingMode, 'fullColor')),
-                        '#475569',
-                        '#FBCFE8',
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              borderRadius: 4,
-            }}
-          >
-            <Voltra.Text style={{ fontSize: compact ? 13 : 14, fontWeight: '700', color: valueByMode }}>N</Voltra.Text>
-          </Voltra.View>
+            <Voltra.View
+              style={{
+                width: box,
+                height: box,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 2,
+                borderColor: valueByMode,
+                borderRadius: 4,
+              }}
+            >
+              <Voltra.Text style={{ fontSize: compact ? 13 : 14, fontWeight: '700', color: valueByMode }}>
+                Y
+              </Voltra.Text>
+            </Voltra.View>
+          </Voltra.ControlIf>
         </Row>
       </Voltra.View>
     </Voltra.View>

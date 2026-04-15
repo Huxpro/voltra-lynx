@@ -146,13 +146,7 @@ describe('server package split', () => {
     const variants = [
       {
         size: { width: 150, height: 100 },
-        content: (
-          <VoltraAndroid.FilledButton
-            text="Hello"
-            backgroundColor={env.primary}
-            contentColor={env.onPrimary}
-          />
-        ),
+        content: <VoltraAndroid.FilledButton text="Hello" backgroundColor={env.primary} contentColor={env.onPrimary} />,
       },
     ]
     const handler = createAndroidWidgetUpdateHandler({

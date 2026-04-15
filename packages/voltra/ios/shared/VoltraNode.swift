@@ -195,6 +195,12 @@ struct VoltraElementView: View {
         EmptyView()
       }
 
+    case "ControlIf":
+      VoltraControlIf(resolvedElement)
+
+    case "ControlSwitch":
+      VoltraControlSwitch(resolvedElement)
+
     default:
       EmptyView()
     }

@@ -19,8 +19,13 @@ import type {
   NormalizedResolvableValue,
 } from './internal.js'
 import { isResolvableExpression } from './public.js'
-import type { ResolvableExpression } from './public.js'
-import { isResolvableCondition, normalizeResolvableJsonValue, normalizeResolvableValue } from './normalize.js'
+import type { ResolvableCondition, ResolvableExpression } from './public.js'
+import {
+  isResolvableCondition,
+  normalizeCondition,
+  normalizeResolvableJsonValue,
+  normalizeResolvableValue,
+} from './normalize.js'
 
 const serializeConditionTuple = (condition: NormalizedResolvableCondition): VoltraResolvableConditionTuple => {
   switch (condition.type) {
@@ -107,6 +112,10 @@ const serializeNormalizedJsonValue = (value: NormalizedResolvableJsonValue): Vol
     serialized[key] = serializeNormalizedJsonValue(nestedValue)
   }
   return serialized
+}
+
+export const serializeCondition = (condition: ResolvableCondition): VoltraResolvableConditionTuple => {
+  return serializeConditionTuple(normalizeCondition(condition))
 }
 
 export const serializeResolvablePropValue = (value: unknown): VoltraPropValue => {

@@ -8,13 +8,7 @@ describe('Android Material colors via resolvable env', () => {
     const output = renderAndroidWidgetToString([
       {
         size: { width: 150, height: 100 },
-        content: (
-          <VoltraAndroid.FilledButton
-            text="Tap"
-            backgroundColor={env.primary}
-            contentColor={env.onPrimary}
-          />
-        ),
+        content: <VoltraAndroid.FilledButton text="Tap" backgroundColor={env.primary} contentColor={env.onPrimary} />,
       },
     ])
 

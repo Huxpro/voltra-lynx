@@ -6,10 +6,10 @@ public enum ResolvableValueParser {
     case .null, .bool, .int, .double, .string:
       return .literal(value)
     case let .array(items):
-      return .array(try items.map(parse))
+      return try .array(items.map(parse))
     case let .object(object):
       if object.keys.contains(ResolvableWireKey.sentinel) {
-        return .expression(try parseWrappedExpression(object))
+        return try .expression(parseWrappedExpression(object))
       }
 
       var parsed: [String: ResolvableJSONValue] = [:]
@@ -46,10 +46,10 @@ public enum ResolvableValueParser {
       guard tuple.count == 4 else {
         throw ResolvableError.invalidTuple(tupleValue)
       }
-      return .when(
-        condition: try parseCondition(tuple[1]),
-        thenValue: try parse(tuple[2]),
-        elseValue: try parse(tuple[3])
+      return try .when(
+        condition: parseCondition(tuple[1]),
+        thenValue: parse(tuple[2]),
+        elseValue: parse(tuple[3])
       )
     case .match:
       guard tuple.count == 3 else {
@@ -68,11 +68,11 @@ public enum ResolvableValueParser {
         throw ResolvableError.missingDefaultCase
       }
 
-      return .match(value: try parse(tuple[1]), cases: parsedCases)
+      return try .match(value: parse(tuple[1]), cases: parsedCases)
     }
   }
 
-  private static func parseCondition(_ value: JSONValue) throws -> ResolvableCondition {
+  static func parseCondition(_ value: JSONValue) throws -> ResolvableCondition {
     guard case let .array(tuple) = value, let opcodeValue = tuple.first?.intValue else {
       throw ResolvableError.invalidConditionTuple(value)
     }
@@ -86,32 +86,32 @@ public enum ResolvableValueParser {
       guard tuple.count == 3 else {
         throw ResolvableError.invalidConditionTuple(value)
       }
-      return .eq(try parse(tuple[1]), try parse(tuple[2]))
+      return try .eq(parse(tuple[1]), parse(tuple[2]))
     case .ne:
       guard tuple.count == 3 else {
         throw ResolvableError.invalidConditionTuple(value)
       }
-      return .ne(try parse(tuple[1]), try parse(tuple[2]))
+      return try .ne(parse(tuple[1]), parse(tuple[2]))
     case .and:
       guard tuple.count == 2, case let .array(items) = tuple[1] else {
         throw ResolvableError.invalidConditionTuple(value)
       }
-      return .and(try items.map(parseCondition))
+      return try .and(items.map(parseCondition))
     case .or:
       guard tuple.count == 2, case let .array(items) = tuple[1] else {
         throw ResolvableError.invalidConditionTuple(value)
       }
-      return .or(try items.map(parseCondition))
+      return try .or(items.map(parseCondition))
     case .not:
       guard tuple.count == 2 else {
         throw ResolvableError.invalidConditionTuple(value)
       }
-      return .not(try parseCondition(tuple[1]))
+      return try .not(parseCondition(tuple[1]))
     case .inList:
       guard tuple.count == 3, case let .array(items) = tuple[2] else {
         throw ResolvableError.invalidConditionTuple(value)
       }
-      return .inList(try parse(tuple[1]), try items.map(parse))
+      return try .inList(parse(tuple[1]), items.map(parse))
     }
   }
 }

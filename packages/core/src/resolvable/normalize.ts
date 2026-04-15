@@ -60,7 +60,7 @@ const normalizeJsonLike = (value: unknown): NormalizedResolvableJsonValue => {
   throw new Error(`[Voltra] Unsupported resolvable payload value of type "${typeof value}".`)
 }
 
-const normalizeCondition = (condition: ResolvableCondition): NormalizedResolvableCondition => {
+export const normalizeCondition = (condition: ResolvableCondition): NormalizedResolvableCondition => {
   switch (condition.kind) {
     case 'eq':
     case 'ne':
