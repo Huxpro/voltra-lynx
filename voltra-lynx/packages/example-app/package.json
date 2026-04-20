@@ -1,0 +1,23 @@
+{
+  "name": "@voltra-lynx/example-app",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Voltra Lynx example app — verifies Layer 0 packages work in Rspeedy context",
+  "scripts": {
+    "dev": "rspeedy dev",
+    "build": "rspeedy build"
+  },
+  "dependencies": {
+    "@use-voltra/core": "^1.4.0",
+    "@use-voltra/ios": "^1.4.0",
+    "@use-voltra/android": "^1.4.0",
+    "@lynx-js/react": "^0.119.0",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@lynx-js/react-rsbuild-plugin": "^0.16.0",
+    "@lynx-js/rspeedy": "^0.14.2",
+    "@lynx-js/types": "^3.7.0",
+    "typescript": "~5.8.0"
+  }
+}
