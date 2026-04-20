@@ -13,12 +13,16 @@
 - [x] US-009: Lynx iOS Client — VoltraModule + Events (2026-04-21)
 - [x] US-010: Lynx iOS Client — Vendor Business Logic (2026-04-21)
 - [x] US-011: Lynx Android Client — VoltraModule + Events + Business Logic (2026-04-21)
+- [x] US-012: iOS NativeModule Skeleton (2026-04-21)
 
 ## In Progress
 
 (none yet)
 
 ## Not Started
+
+## Notes
+- US-012 through US-020 (native Swift/Kotlin modules) created as source files but Xcode/Gradle compilation cannot be verified in this environment
 - [ ] US-003: Rspeedy Example App Shell
 - [ ] US-004: Bridge Type Definitions
 - [ ] US-005: Module Adapter (Promise Wrapper)
