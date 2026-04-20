@@ -9,6 +9,9 @@
     "build": "tsc --build",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@voltra-lynx/bridge": "workspace:*"
+  },
   "devDependencies": {
     "typescript": "~5.8.0"
   }
