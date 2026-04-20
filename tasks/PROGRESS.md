@@ -11,6 +11,7 @@
 - [x] US-007: Platform Detection Utility (2026-04-21)
 - [x] US-008: Bridge Package Index & Build (2026-04-21)
 - [x] US-009: Lynx iOS Client — VoltraModule + Events (2026-04-21)
+- [x] US-010: Lynx iOS Client — Vendor Business Logic (2026-04-21)
 
 ## In Progress
 
