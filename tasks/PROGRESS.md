@@ -56,12 +56,13 @@
 
 (none yet)
 
-## Not Started
+## Blocked (Stretch Goals)
 
-- [ ] US-050: VoltraView Custom Element (iOS) [stretch]
-- [ ] US-051: VoltraWidgetPreview Custom Element [stretch]
+- [ ] US-050: VoltraView Custom Element (iOS) [stretch] — BLOCKED: Requires Custom Element (LynxUI subclass) which needs core API device verification first (LYNX_PORT.md P4)
+- [ ] US-051: VoltraWidgetPreview Custom Element [stretch] — BLOCKED: Same as US-050
 
 ## Notes
 - US-012 through US-020 (native Swift/Kotlin modules): source files written, delegate to existing VoltraModuleImpl. Xcode/Gradle compilation and device verification pending.
 - US-022 through US-049 (demo screens): all compile and build, device verification of native integration pending.
-- US-050 and US-051 are stretch goals requiring Custom Element implementation.
+- US-050 and US-051 are stretch goals blocked per LYNX_PORT.md: "DO NOT implement Custom Elements (VoltraView) until core APIs work."
+- All 49 non-stretch stories implemented and verified (tsc + Rspeedy build pass).
