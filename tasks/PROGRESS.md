@@ -4,6 +4,7 @@
 
 - [x] US-001: Monorepo Scaffolding (2026-04-21)
 - [x] US-002: Verify Layer 0 Packages Import in Lynx Context (2026-04-21)
+- [x] US-003: Rspeedy Example App Shell (2026-04-21)
 
 ## In Progress
 
