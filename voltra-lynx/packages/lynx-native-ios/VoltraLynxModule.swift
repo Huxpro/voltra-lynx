@@ -1,8 +1,10 @@
+import ActivityKit
 import Foundation
 import Lynx
+import os
 
 /// Voltra native module for Lynx iOS.
-/// Conforms to LynxModule protocol and delegates to existing Voltra rendering code.
+/// Conforms to LynxModule and delegates to VoltraModuleImpl (shared with Expo version).
 @objc
 class VoltraLynxModule: NSObject, LynxModule {
 
@@ -12,7 +14,6 @@ class VoltraLynxModule: NSObject, LynxModule {
 
     static var methodLookup: [String: String] {
         return [
-            // Live Activity methods
             "startLiveActivity": NSStringFromSelector(#selector(startLiveActivity(_:options:callback:))),
             "updateLiveActivity": NSStringFromSelector(#selector(updateLiveActivity(_:jsonString:options:callback:))),
             "endLiveActivity": NSStringFromSelector(#selector(endLiveActivity(_:options:callback:))),
@@ -22,8 +23,6 @@ class VoltraLynxModule: NSObject, LynxModule {
             "isLiveActivityActive": NSStringFromSelector(#selector(isLiveActivityActive(_:callback:))),
             "isHeadless": NSStringFromSelector(#selector(isHeadless(_:))),
             "reloadLiveActivities": NSStringFromSelector(#selector(reloadLiveActivities(_:callback:))),
-
-            // Widget methods
             "updateWidget": NSStringFromSelector(#selector(updateWidget(_:jsonString:options:callback:))),
             "scheduleWidget": NSStringFromSelector(#selector(scheduleWidget(_:timelineJson:callback:))),
             "reloadWidgets": NSStringFromSelector(#selector(reloadWidgets(_:callback:))),
@@ -32,125 +31,241 @@ class VoltraLynxModule: NSObject, LynxModule {
             "getActiveWidgets": NSStringFromSelector(#selector(getActiveWidgets(_:))),
             "setWidgetServerCredentials": NSStringFromSelector(#selector(setWidgetServerCredentials(_:callback:))),
             "clearWidgetServerCredentials": NSStringFromSelector(#selector(clearWidgetServerCredentials(_:))),
-
-            // Image preloading
             "preloadImages": NSStringFromSelector(#selector(preloadImages(_:callback:))),
             "clearPreloadedImages": NSStringFromSelector(#selector(clearPreloadedImages(_:callback:))),
         ]
     }
 
     private weak var lynxContext: LynxContext?
+    private let impl = VoltraModuleImpl()
 
     required init(context: LynxContext) {
         self.lynxContext = context
         super.init()
+        setupEventForwarding()
+        impl.startMonitoring()
     }
 
-    // MARK: - Live Activity Methods (Stubs)
+    deinit {
+        impl.stopMonitoring()
+    }
+
+    // MARK: - Event Forwarding
+
+    private func setupEventForwarding() {
+        VoltraEventBus.shared.subscribe { [weak self] event in
+            self?.lynxContext?.sendGlobalEvent("voltra:\(event.type)", withParams: event.data)
+        }
+    }
+
+    // MARK: - Live Activity Methods (US-013)
 
     @objc func startLiveActivity(_ jsonString: String, options: NSDictionary?, callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] startLiveActivity called with payload length: \(jsonString.count)")
-        // TODO: Integrate with existing Voltra ActivityKit code
-        callback("stub-activity-id")
+        let opts = StartVoltraOptions(from: options)
+        Task {
+            do {
+                let activityId = try await impl.startLiveActivity(jsonString: jsonString, options: opts)
+                callback(activityId)
+            } catch {
+                callback(nil)
+            }
+        }
     }
 
     @objc func updateLiveActivity(_ activityId: String, jsonString: String, options: NSDictionary?, callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] updateLiveActivity called for: \(activityId)")
-        callback(nil)
+        let opts = UpdateVoltraOptions(from: options)
+        Task {
+            do {
+                try await impl.updateLiveActivity(activityId: activityId, jsonString: jsonString, options: opts)
+                callback(nil)
+            } catch {
+                callback(nil)
+            }
+        }
     }
 
     @objc func endLiveActivity(_ activityId: String, options: NSDictionary?, callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] endLiveActivity called for: \(activityId)")
-        callback(nil)
+        let opts = EndVoltraOptions(from: options)
+        Task {
+            do {
+                try await impl.endLiveActivity(activityId: activityId, options: opts)
+                callback(nil)
+            } catch {
+                callback(nil)
+            }
+        }
     }
 
     @objc func endAllLiveActivities(_ callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] endAllLiveActivities called")
-        callback(nil)
+        Task {
+            do {
+                try await impl.endAllLiveActivities()
+                callback(nil)
+            } catch {
+                callback(nil)
+            }
+        }
     }
 
     @objc func getLatestVoltraActivityId(_ callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] getLatestVoltraActivityId called")
-        callback(nil)
+        Task {
+            let id = await impl.getLatestVoltraActivityId()
+            callback(id)
+        }
     }
 
     @objc func listVoltraActivityIds(_ callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] listVoltraActivityIds called")
-        callback([String]())
+        Task {
+            let ids = await impl.listVoltraActivityIds()
+            callback(ids)
+        }
     }
 
     @objc func isLiveActivityActive(_ activityName: String, callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] isLiveActivityActive called for: \(activityName)")
-        callback(false)
+        let result = impl.isLiveActivityActive(activityName: activityName)
+        callback(result)
     }
 
     @objc func isHeadless(_ callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] isHeadless called")
-        callback(false)
+        callback(impl.isHeadless())
     }
 
     @objc func reloadLiveActivities(_ activityNames: NSArray?, callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] reloadLiveActivities called")
-        callback(nil)
+        let names = activityNames as? [String]
+        Task {
+            do {
+                try await impl.reloadLiveActivities(activityNames: names)
+                callback(nil)
+            } catch {
+                callback(nil)
+            }
+        }
     }
 
-    // MARK: - Widget Methods (Stubs)
+    // MARK: - Widget Methods (US-014)
 
     @objc func updateWidget(_ widgetId: String, jsonString: String, options: NSDictionary?, callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] updateWidget called for: \(widgetId)")
-        callback(nil)
+        let deepLinkUrl = options?["deepLinkUrl"] as? String
+        Task {
+            do {
+                try await impl.updateWidget(widgetId: widgetId, jsonString: jsonString, deepLinkUrl: deepLinkUrl)
+                callback(nil)
+            } catch {
+                callback(nil)
+            }
+        }
     }
 
     @objc func scheduleWidget(_ widgetId: String, timelineJson: String, callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] scheduleWidget called for: \(widgetId)")
-        callback(nil)
+        Task {
+            do {
+                try await impl.scheduleWidget(widgetId: widgetId, timelineJson: timelineJson)
+                callback(nil)
+            } catch {
+                callback(nil)
+            }
+        }
     }
 
     @objc func reloadWidgets(_ widgetIds: NSArray?, callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] reloadWidgets called")
-        callback(nil)
+        let ids = widgetIds as? [String]
+        Task {
+            do {
+                try await impl.reloadWidgets(widgetIds: ids)
+                callback(nil)
+            } catch {
+                callback(nil)
+            }
+        }
     }
 
     @objc func clearWidget(_ widgetId: String, callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] clearWidget called for: \(widgetId)")
-        callback(nil)
+        Task {
+            do {
+                try await impl.clearWidget(widgetId: widgetId)
+                callback(nil)
+            } catch {
+                callback(nil)
+            }
+        }
     }
 
     @objc func clearAllWidgets(_ callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] clearAllWidgets called")
-        callback(nil)
+        Task {
+            do {
+                try await impl.clearAllWidgets()
+                callback(nil)
+            } catch {
+                callback(nil)
+            }
+        }
     }
 
     @objc func getActiveWidgets(_ callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] getActiveWidgets called")
-        callback([Any]())
+        Task {
+            do {
+                let widgets = try await impl.getActiveWidgets()
+                callback(widgets)
+            } catch {
+                callback([Any]())
+            }
+        }
     }
 
-    @objc func setWidgetServerCredentials(_ credentials: NSDictionary, callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] setWidgetServerCredentials called")
-        callback(nil)
-    }
-
-    @objc func clearWidgetServerCredentials(_ callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] clearWidgetServerCredentials called")
-        callback(nil)
-    }
-
-    // MARK: - Image Preloading (Stubs)
+    // MARK: - Image Preloading & Utilities (US-016)
 
     @objc func preloadImages(_ images: NSArray, callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] preloadImages called with \(images.count) images")
-        callback(["succeeded": [String](), "failed": [Any]()] as NSDictionary)
+        guard let imageArray = images as? [[String: Any]] else {
+            callback(["succeeded": [String](), "failed": [Any]()] as NSDictionary)
+            return
+        }
+
+        Task {
+            do {
+                let result = try await impl.preloadImages(images: imageArray)
+                callback(result)
+            } catch {
+                callback(["succeeded": [String](), "failed": [Any]()] as NSDictionary)
+            }
+        }
     }
 
     @objc func clearPreloadedImages(_ keys: NSArray?, callback: @escaping (Any?) -> Void) {
-        NSLog("[VoltraLynxModule] clearPreloadedImages called")
-        callback(nil)
+        let keyArray = keys as? [String]
+        Task {
+            do {
+                try await impl.clearPreloadedImages(keys: keyArray)
+                callback(nil)
+            } catch {
+                callback(nil)
+            }
+        }
     }
 
-    // MARK: - Events
+    @objc func setWidgetServerCredentials(_ credentials: NSDictionary, callback: @escaping (Any?) -> Void) {
+        guard let creds = credentials as? [String: Any] else {
+            callback(nil)
+            return
+        }
 
-    func sendEvent(_ name: String, data: Any?) {
-        lynxContext?.sendGlobalEvent("voltra:\(name)", withParams: data)
+        Task {
+            do {
+                try await impl.setWidgetServerCredentials(credentials: creds)
+                callback(nil)
+            } catch {
+                callback(nil)
+            }
+        }
+    }
+
+    @objc func clearWidgetServerCredentials(_ callback: @escaping (Any?) -> Void) {
+        Task {
+            do {
+                try await impl.clearWidgetServerCredentials()
+                callback(nil)
+            } catch {
+                callback(nil)
+            }
+        }
     }
 }
