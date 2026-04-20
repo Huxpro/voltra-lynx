@@ -6,6 +6,7 @@
 - [x] US-002: Verify Layer 0 Packages Import in Lynx Context (2026-04-21)
 - [x] US-003: Rspeedy Example App Shell (2026-04-21)
 - [x] US-004: Bridge Type Definitions (2026-04-21)
+- [x] US-005: Module Adapter (Promise Wrapper) (2026-04-21)
 
 ## In Progress
 
