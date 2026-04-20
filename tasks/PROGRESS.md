@@ -8,6 +8,7 @@
 - [x] US-004: Bridge Type Definitions (2026-04-21)
 - [x] US-005: Module Adapter (Promise Wrapper) (2026-04-21)
 - [x] US-006: Event Adapter (GlobalEventEmitter) (2026-04-21)
+- [x] US-007: Platform Detection Utility (2026-04-21)
 
 ## In Progress
 
