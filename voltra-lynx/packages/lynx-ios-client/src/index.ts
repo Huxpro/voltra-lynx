@@ -1,5 +1,14 @@
 // @voltra-lynx/ios-client — iOS client APIs for Lynx
-// Verify bridge import works from sibling package
-import { createIOSModuleAdapter, createEventAdapter, isIOS } from '@voltra-lynx/bridge';
-
-export { createIOSModuleAdapter, createEventAdapter, isIOS };
+export { default as VoltraModule } from './VoltraModule';
+export type { StartVoltraOptions, UpdateVoltraOptions, EndVoltraOptions } from './VoltraModule';
+export { addVoltraListener } from './events';
+export type {
+  BasicVoltraEvent,
+  VoltraActivityState,
+  VoltraActivityTokenReceivedEvent,
+  VoltraActivityPushToStartTokenReceivedEvent,
+  VoltraActivityUpdateEvent,
+  VoltraInteractionEvent,
+  VoltraEventMap,
+} from './events';
+export { default as assertRunningOnApple } from './utils/assertRunningOnApple';
