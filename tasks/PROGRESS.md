@@ -22,6 +22,7 @@
 - [x] US-018: Android NativeModule — Widget Methods (2026-04-21)
 - [x] US-019: Android NativeModule — Live Update & Ongoing Notification Methods (2026-04-21)
 - [x] US-020: Android NativeModule — Events & Utilities (2026-04-21)
+- [x] US-021: Example App Navigation Structure (2026-04-21)
 
 ## In Progress
 
