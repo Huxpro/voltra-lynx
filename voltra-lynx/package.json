@@ -1,0 +1,14 @@
+{
+  "name": "voltra-lynx",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Voltra for LynxJS — iOS Live Activities, Dynamic Island, Widgets, Android Widgets",
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf packages/*/dist"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.0"
+  }
+}
