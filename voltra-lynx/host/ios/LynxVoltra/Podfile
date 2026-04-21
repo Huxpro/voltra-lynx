@@ -1,0 +1,27 @@
+source 'https://cdn.cocoapods.org/'
+
+platform :ios, '16.0'
+
+target 'LynxVoltra' do
+  use_frameworks! :linkage => :static
+  inhibit_all_warnings!
+
+  # Core Lynx Engine (minimal)
+  pod 'Lynx', '3.7.0', :subspecs => ['Framework']
+
+  # JavaScript Runtime (version must match Lynx)
+  pod 'PrimJS', '3.7.0', :subspecs => ['quickjs', 'napi']
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+      # Fix LynxServiceAPI header search path
+      if target.name == 'LynxServiceAPI'
+        config.build_settings['HEADER_SEARCH_PATHS'] ||= ['$(inherited)']
+        config.build_settings['HEADER_SEARCH_PATHS'] << '"${PODS_ROOT}/LynxServiceAPI"'
+      end
+    end
+  end
+end
