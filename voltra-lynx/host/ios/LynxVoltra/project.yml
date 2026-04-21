@@ -23,6 +23,9 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.voltra.lynx.demo
         TARGETED_DEVICE_FAMILY: "1,2"
         SWIFT_OBJC_BRIDGING_HEADER: LynxVoltra/LynxVoltra-Bridging-Header.h
+    dependencies:
+      - target: VoltraWidgetExtension
+        embed: true
 
   VoltraWidgetExtension:
     type: app-extension
@@ -37,4 +40,5 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.voltra.lynx.demo.widget
         TARGETED_DEVICE_FAMILY: "1,2"
         SWIFT_ACTIVE_COMPILATION_CONDITIONS: "WIDGET_EXTENSION"
-    dependencies: []
+        SKIP_INSTALL: "YES"
+        SWIFT_EMIT_LOC_STRINGS: "NO"

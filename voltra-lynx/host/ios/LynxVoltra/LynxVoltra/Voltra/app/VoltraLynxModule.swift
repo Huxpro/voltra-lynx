@@ -48,14 +48,17 @@ public class VoltraLynxModule: NSObject, LynxModule {
   // MARK: - Live Activity
 
   @objc func startLiveActivity(_ jsonString: NSString, options: NSDictionary?, callback: @escaping LynxCallbackBlock) {
+    NSLog("[VoltraLynxModule] startLiveActivity called, payload length: \(jsonString.length)")
     let opts = StartVoltraOptions(from: options)
     Task {
       do {
         let activityId = try await impl.startLiveActivity(jsonString: jsonString as String, options: opts)
+        NSLog("[VoltraLynxModule] startLiveActivity success: \(activityId)")
         callback(activityId as NSString)
       } catch {
-        NSLog("[VoltraLynxModule] startLiveActivity error: \(error)")
-        callback(NSNull())
+        let errorMsg = "ERROR:\(error.localizedDescription)"
+        NSLog("[VoltraLynxModule] startLiveActivity failed: \(error)")
+        callback(errorMsg as NSString)
       }
     }
   }

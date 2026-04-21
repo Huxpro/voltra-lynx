@@ -37,22 +37,39 @@ export function BasicLiveActivityDemo() {
 
   const start = useCallback(() => {
     'background only';
+    // Debug: check if NativeModules exists
+    if (typeof NativeModules === 'undefined') {
+      setStatus('Error: NativeModules is undefined');
+      return;
+    }
+    if (!NativeModules.VoltraModule) {
+      setStatus('Error: NativeModules.VoltraModule not found. Available: ' + Object.keys(NativeModules).join(', '));
+      return;
+    }
+    if (typeof NativeModules.VoltraModule.startLiveActivity !== 'function') {
+      setStatus('Error: startLiveActivity is not a function. Type: ' + typeof NativeModules.VoltraModule.startLiveActivity);
+      return;
+    }
+
     const payload = makeBasicPayload('Live Activity', 'Running...');
     try {
       NativeModules.VoltraModule.startLiveActivity(
         payload,
         { activityName: 'basic-demo' },
         (id: any) => {
-          if (id && id !== null) {
-            setActivityId(String(id));
-            setStatus('Active (id: ' + String(id).substring(0, 8) + '...)');
+          const result = String(id);
+          if (result.startsWith('ERROR:')) {
+            setStatus('Native error: ' + result.substring(6));
+          } else if (id && id !== null && result !== 'null') {
+            setActivityId(result);
+            setStatus('Active (id: ' + result.substring(0, 8) + '...)');
           } else {
-            setStatus('Failed to start');
+            setStatus('Callback returned null');
           }
         }
       );
-    } catch (e) {
-      setStatus('Error: ' + String(e));
+    } catch (e: any) {
+      setStatus('Catch: ' + (e?.message || String(e)));
     }
   }, []);
 

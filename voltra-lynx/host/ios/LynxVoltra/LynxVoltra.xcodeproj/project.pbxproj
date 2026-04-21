@@ -71,6 +71,7 @@
 		4D12FA7D99DEF699696B6238 /* BackgroundValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0989CB16A459ABEEA9DA87 /* BackgroundValue.swift */; };
 		4D65634CF49543638353945E /* View.modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312447C52865B93299FD97ED /* View.modifiers.swift */; };
 		4E61C940055DFD490DEBE4FF /* VoltraPersistentEventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87162D4B375DACAD3AE89ACD /* VoltraPersistentEventQueue.swift */; };
+		4F2F4EFAC732B826F12B1907 /* Pods_LynxVoltra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4205E910EB4C2F28BFB872B /* Pods_LynxVoltra.framework */; };
 		4FA6820163B3E0FDBA4C0453 /* AndroidSwitchParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4146C1D75A9C81AF580F7C6B /* AndroidSwitchParameters.swift */; };
 		50B969157A01D77D490524CC /* VoltraRefreshIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4EB01F8E73AB324176FBFA /* VoltraRefreshIntent.swift */; };
 		50D66B4F26099A564A3D3C21 /* TimerParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB63644323E583227F09AF39 /* TimerParameters.swift */; };
@@ -134,7 +135,6 @@
 		8F5EC1193FD81B7A591543C4 /* LinkParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9F9AA274859AA769C44F8C /* LinkParameters.swift */; };
 		8FD749C18594AA027E25F7AC /* SymbolParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DEDA804A0824C0C30E2E69 /* SymbolParameters.swift */; };
 		9239D9DAB4FBCC767C9A18E3 /* GroupBoxParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBDB386849AA493DE7FD881 /* GroupBoxParameters.swift */; };
-		92BB99EB869A55B00E525090 /* Pods_LynxVoltra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 782C931F9D4C2601A7073D18 /* Pods_LynxVoltra.framework */; };
 		92FA9EEEC8AFAC746C36662D /* VoltraTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B74755D0557CC0704574025 /* VoltraTimer.swift */; };
 		942D7F478A6437D8505CB4BC /* AndroidCheckBoxParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DC2C55370679ED387C13E5 /* AndroidCheckBoxParameters.swift */; };
 		96E69CF1ED8C5AEA7A20271A /* VoltraConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3BFB4835BADDF5B6FBDC1DB /* VoltraConstants.swift */; };
@@ -169,6 +169,7 @@
 		A98B07962C4034133992B934 /* AndroidRadioButtonParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3CEB6A9D42B85029DBFF01 /* AndroidRadioButtonParameters.swift */; };
 		A9B39C92D0868AC4BDC24164 /* VoltraRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95786E401F485B1D41D38620 /* VoltraRegion.swift */; };
 		AFC3178B5FECD9D603EB56C6 /* VoltraGauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6B107B73CE7FFD758467F3 /* VoltraGauge.swift */; };
+		B04FCBE4D03DBCC326E3FB05 /* VoltraWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540DF6560A875A77D9248107 /* VoltraWidgetBundle.swift */; };
 		B0DFC4F5D7EE5385975A1502 /* VoltraLinearGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1984C458331A97D82DAB6D3C /* VoltraLinearGradient.swift */; };
 		B7138E9366825E1D78AE9453 /* BackgroundValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0989CB16A459ABEEA9DA87 /* BackgroundValue.swift */; };
 		B81507C1E67868691AE11C2D /* ButtonParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02FDCB97EA15FD77F2745B4 /* ButtonParameters.swift */; };
@@ -208,6 +209,7 @@
 		E0E4CB2ACC90447E09B1E103 /* VoltraEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C22D618F420621113A86294 /* VoltraEvent.swift */; };
 		E42B17EAD539EAFF896C09D9 /* VoltraGlassContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92616D842738E9EF6F4966B /* VoltraGlassContainer.swift */; };
 		E57B7B15238F8892E5F09DD4 /* SymbolParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DEDA804A0824C0C30E2E69 /* SymbolParameters.swift */; };
+		E58AC9E4169A155819A611A6 /* VoltraWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A6F174A71C7156927C29A58F /* VoltraWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E718B7D19380EA925FB6E92F /* ToggleParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21239D995E2F8CD1B5B72BEA /* ToggleParameters.swift */; };
 		E8DB35EFD907AFE8BF1E0D9A /* VoltraKeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2FD9028689BCA79E77F48F /* VoltraKeychainHelper.swift */; };
 		E9A8536F4071390B1359511F /* CircularProgressViewParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FCD9C5E82BF36A711A8F38 /* CircularProgressViewParameters.swift */; };
@@ -237,9 +239,34 @@
 		FF707CD4FA14C78108DDAFC5 /* ComponentParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9ABE842F938BBE818472BC6 /* ComponentParameters.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		E08FACAAF5B848F9F30B44A2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7AB3D0562717EEC6B4D75EF3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4DDB47E8606FAEBE57D48380;
+			remoteInfo = VoltraWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		34A3E7844B04B26CF352820F /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E58AC9E4169A155819A611A6 /* VoltraWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		03D7EF4EC7C4ECD996CCFBEC /* VoltraLiveActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraLiveActivityManager.swift; sourceTree = "<group>"; };
 		04D5C818FF7EFFED9651D835 /* GaugeParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaugeParameters.swift; sourceTree = "<group>"; };
+		08064ACDF712A0EB636677B7 /* Pods-LynxVoltra.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LynxVoltra.debug.xcconfig"; path = "Target Support Files/Pods-LynxVoltra/Pods-LynxVoltra.debug.xcconfig"; sourceTree = "<group>"; };
 		0C4EB01F8E73AB324176FBFA /* VoltraRefreshIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraRefreshIntent.swift; sourceTree = "<group>"; };
 		132A7590CE0464FD0A5BF279 /* VoltraHomeWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraHomeWidget.swift; sourceTree = "<group>"; };
 		139C5E8E4D1461E15AEDA46C /* VoltraActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraActivity.swift; sourceTree = "<group>"; };
@@ -253,7 +280,6 @@
 		24F6E62B6CAADC64789EF65F /* JSGradientParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSGradientParser.swift; sourceTree = "<group>"; };
 		28B0ED9691037B21CF87062F /* VoltraLynxModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraLynxModule.swift; sourceTree = "<group>"; };
 		290CFE12CE9E046D9B81477D /* TextStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyle.swift; sourceTree = "<group>"; };
-		2A2845C73371FFCC8D26208C /* Pods-LynxVoltra.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LynxVoltra.release.xcconfig"; path = "Target Support Files/Pods-LynxVoltra/Pods-LynxVoltra.release.xcconfig"; sourceTree = "<group>"; };
 		2BFCA27B41D8A6BD4D7999A3 /* JSONValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONValue.swift; sourceTree = "<group>"; };
 		2D18EED3ED292A233CF0A334 /* GlassContainerParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassContainerParameters.swift; sourceTree = "<group>"; };
 		2D3CEB6A9D42B85029DBFF01 /* AndroidRadioButtonParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AndroidRadioButtonParameters.swift; sourceTree = "<group>"; };
@@ -277,9 +303,9 @@
 		4AA31BB4AAF0C22AEF4128AA /* TextDecoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextDecoration.swift; sourceTree = "<group>"; };
 		4AD9277E4D60906F7D62CB8D /* VoltraDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraDivider.swift; sourceTree = "<group>"; };
 		4BD924796FBB8A6747843C0D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		4EE4C2E2C95D12C69070276A /* Pods-LynxVoltra.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LynxVoltra.debug.xcconfig"; path = "Target Support Files/Pods-LynxVoltra/Pods-LynxVoltra.debug.xcconfig"; sourceTree = "<group>"; };
 		50379162C4C14341CDA0DF42 /* ViewParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewParameters.swift; sourceTree = "<group>"; };
 		5121C7FEFCD89466C6B148AB /* Data+hexString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+hexString.swift"; sourceTree = "<group>"; };
+		540DF6560A875A77D9248107 /* VoltraWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraWidgetBundle.swift; sourceTree = "<group>"; };
 		565FEA52BAA7FBFF49173FB3 /* VoltraWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraWidget.swift; sourceTree = "<group>"; };
 		575AB9DEB264604365E171FE /* VoltraLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraLabel.swift; sourceTree = "<group>"; };
 		585B4C34BF5DEDC261311817 /* VoltraSpacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraSpacer.swift; sourceTree = "<group>"; };
@@ -296,7 +322,6 @@
 		6D51773AAC9A9B0B1AC2CCBD /* TextParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextParameters.swift; sourceTree = "<group>"; };
 		701E2A301D27D6EC831DDE35 /* VoltraConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraConfig.swift; sourceTree = "<group>"; };
 		773689D8A0B36618B22E0F5E /* VoltraChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraChart.swift; sourceTree = "<group>"; };
-		782C931F9D4C2601A7073D18 /* Pods_LynxVoltra.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LynxVoltra.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AE3F1734C972F05C9857820 /* VoltraWidgetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraWidgetService.swift; sourceTree = "<group>"; };
 		7C22D618F420621113A86294 /* VoltraEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraEvent.swift; sourceTree = "<group>"; };
 		7F81F0E1489469E85A78E22B /* Voltra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Voltra.swift; sourceTree = "<group>"; };
@@ -317,6 +342,7 @@
 		A0726501C83A2F9FE4032AD1 /* VoltraFlexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraFlexView.swift; sourceTree = "<group>"; };
 		A2F841CE63A7014F36FEDB29 /* BrotliCompression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrotliCompression.swift; sourceTree = "<group>"; };
 		A300C7D8E8B7948C14BE8EC8 /* VoltraSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraSymbol.swift; sourceTree = "<group>"; };
+		A4205E910EB4C2F28BFB872B /* Pods_LynxVoltra.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LynxVoltra.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A42F4C0ABD86C225AB1027E7 /* ShortNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortNames.swift; sourceTree = "<group>"; };
 		A56A171A7505F64C6C3581F9 /* VoltraNode+Parameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoltraNode+Parameters.swift"; sourceTree = "<group>"; };
 		A6F174A71C7156927C29A58F /* VoltraWidgetExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = VoltraWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -351,6 +377,7 @@
 		E5611151DB7CC419E0660569 /* VoltraImagePreload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraImagePreload.swift; sourceTree = "<group>"; };
 		E6D6C0747C0A4F63C33A7735 /* VoltraAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltraAttributes.swift; sourceTree = "<group>"; };
 		E8B399FDEE57A20E655C5C24 /* JSStyleParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSStyleParser.swift; sourceTree = "<group>"; };
+		E97E7E0EDBA6879F94D29D73 /* Pods-LynxVoltra.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LynxVoltra.release.xcconfig"; path = "Target Support Files/Pods-LynxVoltra/Pods-LynxVoltra.release.xcconfig"; sourceTree = "<group>"; };
 		EB63644323E583227F09AF39 /* TimerParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerParameters.swift; sourceTree = "<group>"; };
 		EBCA08E99A629408B2C58062 /* DecorationStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecorationStyle.swift; sourceTree = "<group>"; };
 		EF84BFF01DE09ADB2E67828B /* SliderParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderParameters.swift; sourceTree = "<group>"; };
@@ -369,17 +396,25 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		DAC1121A69FC58FDAECD8248 /* Frameworks */ = {
+		7D127CCE49B26CE0D0EE66C9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92BB99EB869A55B00E525090 /* Pods_LynxVoltra.framework in Frameworks */,
+				4F2F4EFAC732B826F12B1907 /* Pods_LynxVoltra.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		007A0A99DD394525EAC20095 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A4205E910EB4C2F28BFB872B /* Pods_LynxVoltra.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		04B476B85163F7DA9E6C2DB7 /* Parameters */ = {
 			isa = PBXGroup;
 			children = (
@@ -496,6 +531,7 @@
 				455F90D5F27FD257ED8E87A6 /* Info.plist */,
 				132A7590CE0464FD0A5BF279 /* VoltraHomeWidget.swift */,
 				565FEA52BAA7FBFF49173FB3 /* VoltraWidget.swift */,
+				540DF6560A875A77D9248107 /* VoltraWidgetBundle.swift */,
 			);
 			name = target;
 			path = LynxVoltra/Voltra/target;
@@ -516,8 +552,8 @@
 				D30410F5DA274993E9ECD09C /* LynxVoltra */,
 				6812F3E497906946B32B68B2 /* target */,
 				544477FC479D77F2261F5892 /* Products */,
-				BD436C2B4C9FA2B1D60C5CA0 /* Pods */,
-				B7D5C866545F1C3DE8F95368 /* Frameworks */,
+				BA2F095C12E0F6AB7FAB027C /* Pods */,
+				007A0A99DD394525EAC20095 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -553,19 +589,11 @@
 			path = Style;
 			sourceTree = "<group>";
 		};
-		B7D5C866545F1C3DE8F95368 /* Frameworks */ = {
+		BA2F095C12E0F6AB7FAB027C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				782C931F9D4C2601A7073D18 /* Pods_LynxVoltra.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		BD436C2B4C9FA2B1D60C5CA0 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				4EE4C2E2C95D12C69070276A /* Pods-LynxVoltra.debug.xcconfig */,
-				2A2845C73371FFCC8D26208C /* Pods-LynxVoltra.release.xcconfig */,
+				08064ACDF712A0EB636677B7 /* Pods-LynxVoltra.debug.xcconfig */,
+				E97E7E0EDBA6879F94D29D73 /* Pods-LynxVoltra.release.xcconfig */,
 			);
 			name = Pods;
 			path = Pods;
@@ -674,14 +702,16 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CC35C487C9F1E0193E12169B /* Build configuration list for PBXNativeTarget "LynxVoltra" */;
 			buildPhases = (
-				2C24C3ECCA63016CCA5F41CD /* [CP] Check Pods Manifest.lock */,
+				E0C27C21B418968B24D9863B /* [CP] Check Pods Manifest.lock */,
 				D57DBAB6D890692563F83F7B /* Sources */,
-				DAC1121A69FC58FDAECD8248 /* Frameworks */,
-				91820B7E783F7EF318BE69EE /* [CP] Copy Pods Resources */,
+				34A3E7844B04B26CF352820F /* Embed Foundation Extensions */,
+				7D127CCE49B26CE0D0EE66C9 /* Frameworks */,
+				0721945D990AF89EB77F9472 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A6260552F88E7C7D9A59E1BF /* PBXTargetDependency */,
 			);
 			name = LynxVoltra;
 			productName = LynxVoltra;
@@ -720,7 +750,24 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2C24C3ECCA63016CCA5F41CD /* [CP] Check Pods Manifest.lock */ = {
+		0721945D990AF89EB77F9472 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LynxVoltra/Pods-LynxVoltra-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LynxVoltra/Pods-LynxVoltra-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LynxVoltra/Pods-LynxVoltra-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E0C27C21B418968B24D9863B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -740,23 +787,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		91820B7E783F7EF318BE69EE /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LynxVoltra/Pods-LynxVoltra-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LynxVoltra/Pods-LynxVoltra-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LynxVoltra/Pods-LynxVoltra-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -871,6 +901,7 @@
 				A4E0E175F3C1551CB7E9370B /* VoltraVStack.swift in Sources */,
 				F56248F8848162BDBEFDE667 /* VoltraView.swift in Sources */,
 				4C7635E0899AF7762F0344F3 /* VoltraWidget.swift in Sources */,
+				B04FCBE4D03DBCC326E3FB05 /* VoltraWidgetBundle.swift in Sources */,
 				B9253D33A96A1472013EB747 /* VoltraWidgetDefaults.swift in Sources */,
 				DCC0A8BA8D7A6B32C06687A5 /* VoltraWidgetServerFetcher.swift in Sources */,
 				07EDC177D1F2F6907CA58350 /* VoltraZStack.swift in Sources */,
@@ -1005,10 +1036,18 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		A6260552F88E7C7D9A59E1BF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4DDB47E8606FAEBE57D48380 /* VoltraWidgetExtension */;
+			targetProxy = E08FACAAF5B848F9F30B44A2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
 		028AD5AB9CD9C6F96CA0A1F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4EE4C2E2C95D12C69070276A /* Pods-LynxVoltra.debug.xcconfig */;
+			baseConfigurationReference = 08064ACDF712A0EB636677B7 /* Pods-LynxVoltra.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1026,7 +1065,7 @@
 		};
 		2F0B58923E424C19A2A2FA06 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2A2845C73371FFCC8D26208C /* Pods-LynxVoltra.release.xcconfig */;
+			baseConfigurationReference = E97E7E0EDBA6879F94D29D73 /* Pods-LynxVoltra.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1110,7 +1149,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.voltra.lynx.demo.widget;
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = WIDGET_EXTENSION;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1126,7 +1167,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.voltra.lynx.demo.widget;
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = WIDGET_EXTENSION;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
