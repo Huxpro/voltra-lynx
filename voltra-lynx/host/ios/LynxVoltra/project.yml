@@ -2,12 +2,11 @@ name: LynxVoltra
 options:
   bundleIdPrefix: com.voltra.lynx
   deploymentTarget:
-    iOS: "16.0"
+    iOS: "16.2"
   xcodeVersion: "16.0"
 
 settings:
   base:
-    SWIFT_OBJC_BRIDGING_HEADER: LynxVoltra/LynxVoltra-Bridging-Header.h
     USER_SCRIPT_SANDBOXING: "NO"
 
 targets:
@@ -15,9 +14,27 @@ targets:
     type: application
     platform: iOS
     sources:
-      - LynxVoltra
+      - path: LynxVoltra
+        excludes:
+          - "Voltra/target/*"
     settings:
       base:
         INFOPLIST_FILE: LynxVoltra/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.voltra.lynx.demo
         TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_OBJC_BRIDGING_HEADER: LynxVoltra/LynxVoltra-Bridging-Header.h
+
+  VoltraWidgetExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: LynxVoltra/Voltra/target
+      - path: LynxVoltra/Voltra/shared
+      - path: LynxVoltra/Voltra/ui
+    settings:
+      base:
+        INFOPLIST_FILE: LynxVoltra/Voltra/target/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.voltra.lynx.demo.widget
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "WIDGET_EXTENSION"
+    dependencies: []

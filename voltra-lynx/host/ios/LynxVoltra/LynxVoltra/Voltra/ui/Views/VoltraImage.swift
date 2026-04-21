@@ -1,0 +1,109 @@
+import Foundation
+import SwiftUI
+import UIKit
+
+public struct VoltraImage: VoltraView {
+  public typealias Parameters = ImageParameters
+
+  public let element: VoltraElement
+
+  public init(_ element: VoltraElement) {
+    self.element = element
+  }
+
+  /// Creates an Image from the source parameter, returning nil if invalid or not found
+  private func createImage(from source: String?) -> Image? {
+    guard let sourceString = source,
+          let sourceData = sourceString.data(using: .utf8),
+          let sourceDict = try? JSONSerialization.jsonObject(with: sourceData) as? [String: Any]
+    else {
+      return nil
+    }
+
+    // Check for base64 first
+    if let base64String = sourceDict["base64"] as? String,
+       let base64Data = Data(base64Encoded: base64String),
+       let uiImage = UIImage(data: base64Data)
+    {
+      return Image(uiImage: uiImage)
+    }
+
+    // Check for assetName - first try preloaded images from App Group, then asset catalog
+    if let assetName = sourceDict["assetName"] as? String,
+       !assetName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    {
+      let trimmedName = assetName.trimmingCharacters(in: .whitespacesAndNewlines)
+
+      // First, check for preloaded image in App Group storage
+      if let preloadedImage = VoltraImageStore.loadImage(key: trimmedName) {
+        return Image(uiImage: preloadedImage)
+      }
+
+      // Fall back to asset catalog
+      if let catalogImage = UIImage(named: trimmedName) {
+        return Image(uiImage: catalogImage)
+      }
+    }
+
+    // Asset not found or invalid
+    return nil
+  }
+
+  @ViewBuilder
+  public var body: some View {
+    let resizeMode = params.resizeMode.lowercased()
+    if let baseImage = createImage(from: params.source) {
+      switch resizeMode {
+      case "cover":
+        // Fill container, may crop
+        baseImage
+          .resizable()
+          .scaledToFill()
+          .clipped()
+          .applyStyle(element.style)
+
+      case "contain":
+        // Fit within container, may leave space
+        baseImage
+          .resizable()
+          .scaledToFit()
+          .applyStyle(element.style)
+
+      case "stretch":
+        // Stretch to fill, may distort
+        baseImage
+          .resizable()
+          .applyStyle(element.style)
+
+      case "repeat":
+        // Tile the image
+        baseImage
+          .resizable(resizingMode: .tile)
+          .applyStyle(element.style)
+
+      case "center":
+        // Center without scaling
+        baseImage
+          .applyStyle(element.style)
+
+      default:
+        // Default to cover
+        baseImage
+          .resizable()
+          .scaledToFill()
+          .clipped()
+          .applyStyle(element.style)
+      }
+    } else {
+      let fallbackNode = element.componentProp("fallback")
+      if !fallbackNode.isEmpty {
+        Color.clear
+          .overlay(fallbackNode)
+          .applyStyle(element.style)
+      } else {
+        Color.clear
+          .applyStyle(element.style)
+      }
+    }
+  }
+}

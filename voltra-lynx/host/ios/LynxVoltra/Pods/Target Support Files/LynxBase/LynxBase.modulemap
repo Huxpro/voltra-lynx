@@ -1,0 +1,6 @@
+framework module LynxBase {
+  umbrella header "LynxBase-umbrella.h"
+
+  export *
+  module * { export * }
+}
