@@ -22,7 +22,7 @@ function staticPositioningJson(): string {
           backgroundColor: '#3B82F6',
           width: 80,
           height: 60,
-          borderRadius: 8,
+          borderRadius: '8px',
           borderWidth: 2,
           borderColor: '#60A5FA',
           left: 100,
@@ -44,7 +44,7 @@ function relativeBasicJson(): string {
           backgroundColor: '#64748B',
           width: 80,
           height: 60,
-          borderRadius: 8,
+          borderRadius: '8px',
           opacity: 0.4,
         } as any}
       >
@@ -58,7 +58,7 @@ function relativeBasicJson(): string {
           backgroundColor: '#10B981',
           width: 80,
           height: 60,
-          borderRadius: 8,
+          borderRadius: '8px',
           borderWidth: 2,
           borderColor: '#34D399',
         } as any}
@@ -78,7 +78,7 @@ function relativeNegativeJson(): string {
           backgroundColor: '#64748B',
           width: 80,
           height: 60,
-          borderRadius: 8,
+          borderRadius: '8px',
           opacity: 0.4,
         } as any}
       >
@@ -92,7 +92,7 @@ function relativeNegativeJson(): string {
           backgroundColor: '#F59E0B',
           width: 80,
           height: 60,
-          borderRadius: 8,
+          borderRadius: '8px',
           borderWidth: 2,
           borderColor: '#FBBF24',
         } as any}
@@ -115,7 +115,7 @@ function absoluteBasicJson(): string {
           width: 10,
           height: 10,
           backgroundColor: '#EF4444',
-          borderRadius: 5,
+          borderRadius: '5px',
         } as any}
       />
       <Voltra.VStack
@@ -126,7 +126,7 @@ function absoluteBasicJson(): string {
           backgroundColor: '#8B5CF6',
           width: 80,
           height: 60,
-          borderRadius: 8,
+          borderRadius: '8px',
           borderWidth: 2,
           borderColor: '#A78BFA',
         } as any}
@@ -150,7 +150,7 @@ function absoluteCornersJson(): string {
             backgroundColor: '#3B82F6',
             width: 50,
             height: 40,
-            borderRadius: 6,
+            borderRadius: '6px',
             opacity: 0.9,
           } as any}
         >
@@ -164,7 +164,7 @@ function absoluteCornersJson(): string {
             backgroundColor: '#10B981',
             width: 50,
             height: 40,
-            borderRadius: 6,
+            borderRadius: '6px',
             opacity: 0.9,
           } as any}
         >
@@ -178,7 +178,7 @@ function absoluteCornersJson(): string {
             backgroundColor: '#F59E0B',
             width: 50,
             height: 40,
-            borderRadius: 6,
+            borderRadius: '6px',
             opacity: 0.9,
           } as any}
         >
@@ -187,19 +187,19 @@ function absoluteCornersJson(): string {
         <Voltra.VStack
           style={{
             position: 'absolute', left: 115, top: 100,
-            width: 6, height: 6, backgroundColor: '#FF0000', borderRadius: 3,
+            width: 6, height: 6, backgroundColor: '#FF0000', borderRadius: '3px',
           } as any}
         />
         <Voltra.VStack
           style={{
             position: 'absolute', left: 200, top: 170,
-            width: 6, height: 6, backgroundColor: '#EF4444', borderRadius: 3,
+            width: 6, height: 6, backgroundColor: '#EF4444', borderRadius: '3px',
           } as any}
         />
         <Voltra.VStack
           style={{
             position: 'absolute', left: 30, top: 30,
-            width: 6, height: 6, backgroundColor: '#EF4444', borderRadius: 3,
+            width: 6, height: 6, backgroundColor: '#EF4444', borderRadius: '3px',
           } as any}
         />
       </Voltra.ZStack>
@@ -214,7 +214,7 @@ function zIndexJson(): string {
         style={{
           position: 'absolute', left: 80, top: 60, zIndex: 1,
           backgroundColor: '#3B82F6', width: 70, height: 70,
-          borderRadius: 8, borderWidth: 2, borderColor: '#60A5FA',
+          borderRadius: '8px', borderWidth: 2, borderColor: '#60A5FA',
         } as any}
       >
         <Voltra.Text style={{ color: 'white', fontSize: 10 } as any}>z: 1</Voltra.Text>
@@ -223,7 +223,7 @@ function zIndexJson(): string {
         style={{
           position: 'absolute', left: 110, top: 75, zIndex: 2,
           backgroundColor: '#10B981', width: 70, height: 70,
-          borderRadius: 8, borderWidth: 2, borderColor: '#34D399',
+          borderRadius: '8px', borderWidth: 2, borderColor: '#34D399',
         } as any}
       >
         <Voltra.Text style={{ color: 'white', fontSize: 10 } as any}>z: 2</Voltra.Text>
@@ -232,7 +232,7 @@ function zIndexJson(): string {
         style={{
           position: 'absolute', left: 140, top: 90, zIndex: 3,
           backgroundColor: '#F59E0B', width: 70, height: 70,
-          borderRadius: 8, borderWidth: 2, borderColor: '#FBBF24',
+          borderRadius: '8px', borderWidth: 2, borderColor: '#FBBF24',
         } as any}
       >
         <Voltra.Text style={{ color: 'white', fontSize: 10 } as any}>z: 3</Voltra.Text>
@@ -247,7 +247,7 @@ function badgeOverlayJson(): string {
       alignment="center"
       style={{
         backgroundColor: '#1F2937',
-        borderRadius: 12,
+        borderRadius: '12px',
         padding: 12,
         borderWidth: 1,
         borderColor: '#374151',
@@ -257,14 +257,14 @@ function badgeOverlayJson(): string {
         <Voltra.VStack
           style={{
             backgroundColor: '#6366F1',
-            width: 50, height: 50, borderRadius: 25,
+            width: 50, height: 50, borderRadius: '25px',
           } as any}
         />
         <Voltra.VStack
           style={{
             position: 'absolute', left: 40, top: 5,
             backgroundColor: '#EF4444',
-            width: 20, height: 20, borderRadius: 10,
+            width: 20, height: 20, borderRadius: '10px',
             borderWidth: 2, borderColor: '#1F2937',
           } as any}
         >
@@ -332,7 +332,7 @@ export function PositioningScreen() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
-    <scroll-view scroll-y style={{ flex: 1 } as any}>
+    <scroll-view scroll-orientation="vertical" style={{ linearWeight: 1 } as any}>
       <view style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 20, paddingBottom: 24 }}>
         <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 8 }}>
           Positioning Examples
@@ -348,7 +348,7 @@ export function PositioningScreen() {
               key={item.id}
               style={{
                 backgroundColor: '#1c1c1e',
-                borderRadius: 16,
+                borderRadius: '16px',
                 padding: 16,
                 marginBottom: 12,
               }}
@@ -366,7 +366,7 @@ export function PositioningScreen() {
                   paddingTop: 6, paddingBottom: 6,
                   paddingLeft: 12, paddingRight: 12,
                   backgroundColor: '#333',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                   alignSelf: 'flex-start',
                   marginBottom: isExpanded ? 8 : 0,
                 }}

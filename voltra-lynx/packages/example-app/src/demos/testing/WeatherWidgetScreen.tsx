@@ -223,7 +223,7 @@ export function WeatherWidgetScreen() {
         {/* Status */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 10,
+          borderRadius: '10px',
           padding: 12,
           marginBottom: 16,
         } as any}>
@@ -233,7 +233,7 @@ export function WeatherWidgetScreen() {
         {/* Current Weather Display */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 12,
+          borderRadius: '12px',
           padding: 16,
           marginBottom: 16,
         } as any}>
@@ -248,7 +248,7 @@ export function WeatherWidgetScreen() {
         {/* Widget Family Selection */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 12,
+          borderRadius: '12px',
           padding: 16,
           marginBottom: 16,
         } as any}>
@@ -267,7 +267,7 @@ export function WeatherWidgetScreen() {
                   backgroundColor: selectedFamily === family.id ? '#007AFF' : 'rgba(255,255,255,0.1)',
                   paddingLeft: 10, paddingRight: 10,
                   paddingTop: 8, paddingBottom: 8,
-                  borderRadius: 8,
+                  borderRadius: '8px',
                   marginRight: 6,
                   marginBottom: 6,
                 } as any}
@@ -287,7 +287,7 @@ export function WeatherWidgetScreen() {
         {/* Weather Condition Buttons */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 12,
+          borderRadius: '12px',
           padding: 16,
           marginBottom: 16,
         } as any}>
@@ -306,7 +306,7 @@ export function WeatherWidgetScreen() {
                   flex: 1,
                   backgroundColor: selectedWeather === condition.id ? '#007AFF' : 'rgba(255,255,255,0.1)',
                   padding: 12,
-                  borderRadius: 8,
+                  borderRadius: '8px',
                   alignItems: 'center',
                   marginRight: condition.id !== 'rainy' ? 8 : 0,
                 } as any}
@@ -327,7 +327,7 @@ export function WeatherWidgetScreen() {
         {/* Quick Actions */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 12,
+          borderRadius: '12px',
           padding: 16,
           marginBottom: 16,
         } as any}>
@@ -341,7 +341,7 @@ export function WeatherWidgetScreen() {
                 flex: 1,
                 backgroundColor: isUpdating ? '#555' : 'rgba(255,255,255,0.1)',
                 padding: 12,
-                borderRadius: 8,
+                borderRadius: '8px',
                 alignItems: 'center',
                 marginRight: 8,
               } as any}
@@ -356,7 +356,7 @@ export function WeatherWidgetScreen() {
                 flex: 1,
                 backgroundColor: isUpdating ? '#555' : 'rgba(255,255,255,0.1)',
                 padding: 12,
-                borderRadius: 8,
+                borderRadius: '8px',
                 alignItems: 'center',
               } as any}
             >
@@ -370,7 +370,7 @@ export function WeatherWidgetScreen() {
         {/* Timeline Scheduling */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 12,
+          borderRadius: '12px',
           padding: 16,
           marginBottom: 16,
         } as any}>
@@ -386,7 +386,7 @@ export function WeatherWidgetScreen() {
             style={{
               backgroundColor: isUpdating ? '#555' : '#007AFF',
               padding: 14,
-              borderRadius: 10,
+              borderRadius: '10px',
               alignItems: 'center',
               marginBottom: 8,
             } as any}
@@ -404,7 +404,7 @@ export function WeatherWidgetScreen() {
         {/* Widget Preview */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 12,
+          borderRadius: '12px',
           padding: 16,
           marginBottom: 16,
         } as any}>
@@ -418,7 +418,7 @@ export function WeatherWidgetScreen() {
           {/* Simulated widget preview */}
           <view style={{
             backgroundColor: gradientColor.from,
-            borderRadius: 16,
+            borderRadius: '16px',
             padding: 20,
             alignItems: 'center',
           } as any}>
@@ -440,7 +440,7 @@ export function WeatherWidgetScreen() {
         {/* How to Test */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 12,
+          borderRadius: '12px',
           padding: 16,
         } as any}>
           <text style={{ fontSize: 16, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 8 } as any}>

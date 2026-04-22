@@ -94,7 +94,7 @@ export function GradientPlaygroundScreen() {
       style={{
         height: '100%',
         backgroundColor: 'linear-gradient(to right, red 10%, yellow 50%, blue 90%)',
-        borderRadius: 8,
+        borderRadius: '8px',
         width: '100%',
       } as any}
     />
@@ -105,7 +105,7 @@ export function GradientPlaygroundScreen() {
       style={{
         height: '100%',
         backgroundColor: 'linear-gradient(to right, rgba(255,0,0,0.8) 0%, rgba(0,0,255,0.3) 100%)',
-        borderRadius: 8,
+        borderRadius: '8px',
         width: '100%',
       } as any}
     />
@@ -116,7 +116,7 @@ export function GradientPlaygroundScreen() {
       style={{
         height: '100%',
         backgroundColor: '#3B82F6',
-        borderRadius: 8,
+        borderRadius: '8px',
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
@@ -129,7 +129,7 @@ export function GradientPlaygroundScreen() {
   const truncate = (json: string) => json.length > 400 ? json.slice(0, 400) + '...' : json;
 
   return (
-    <scroll-view scroll-y style={{ flex: 1 } as any}>
+    <scroll-view scroll-orientation="vertical" style={{ linearWeight: 1 } as any}>
       <view style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 20, paddingBottom: 24 }}>
         <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 8 }}>
           Gradient Playground
@@ -144,7 +144,7 @@ export function GradientPlaygroundScreen() {
         {/* Controls */}
         <view style={{
           backgroundColor: '#1c1c1e',
-          borderRadius: 16,
+          borderRadius: '16px',
           padding: 16,
           marginBottom: 16,
         }}>
@@ -159,7 +159,7 @@ export function GradientPlaygroundScreen() {
                 paddingLeft: 12, paddingRight: 12,
                 paddingTop: 6, paddingBottom: 6,
                 backgroundColor: '#333',
-                borderRadius: 6,
+                borderRadius: '6px',
               }}
             >
               <text style={{ color: '#fff', fontSize: 13 }}>{gradientType}</text>
@@ -177,7 +177,7 @@ export function GradientPlaygroundScreen() {
                     paddingLeft: 12, paddingRight: 12,
                     paddingTop: 6, paddingBottom: 6,
                     backgroundColor: '#333',
-                    borderRadius: 6,
+                    borderRadius: '6px',
                   }}
                 >
                   <text style={{ color: '#fff', fontSize: 13 }}>{useAngle ? 'angle' : 'direction'}</text>
@@ -192,7 +192,7 @@ export function GradientPlaygroundScreen() {
                       paddingLeft: 12, paddingRight: 12,
                       paddingTop: 6, paddingBottom: 6,
                       backgroundColor: '#333',
-                      borderRadius: 6,
+                      borderRadius: '6px',
                     }}
                   >
                     <text style={{ color: '#fff', fontSize: 13 }}>cycle</text>
@@ -207,7 +207,7 @@ export function GradientPlaygroundScreen() {
                       paddingLeft: 12, paddingRight: 12,
                       paddingTop: 6, paddingBottom: 6,
                       backgroundColor: '#333',
-                      borderRadius: 6,
+                      borderRadius: '6px',
                     }}
                   >
                     <text style={{ color: '#fff', fontSize: 13 }}>{direction}</text>
@@ -227,7 +227,7 @@ export function GradientPlaygroundScreen() {
                   paddingLeft: 12, paddingRight: 12,
                   paddingTop: 6, paddingBottom: 6,
                   backgroundColor: '#333',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 }}
               >
                 <text style={{ color: '#fff', fontSize: 13 }}>cycle</text>
@@ -244,7 +244,7 @@ export function GradientPlaygroundScreen() {
                 paddingLeft: 12, paddingRight: 12,
                 paddingTop: 6, paddingBottom: 6,
                 backgroundColor: '#333',
-                borderRadius: 6,
+                borderRadius: '6px',
               }}
             >
               <text style={{ color: '#fff', fontSize: 13 }}>cycle</text>
@@ -261,7 +261,7 @@ export function GradientPlaygroundScreen() {
                   paddingLeft: 14, paddingRight: 14,
                   paddingTop: 6, paddingBottom: 6,
                   backgroundColor: '#333',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 }}
               >
                 <text style={{ color: '#fff', fontSize: 15 }}>-</text>
@@ -272,7 +272,7 @@ export function GradientPlaygroundScreen() {
                   paddingLeft: 14, paddingRight: 14,
                   paddingTop: 6, paddingBottom: 6,
                   backgroundColor: '#333',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 }}
               >
                 <text style={{ color: '#fff', fontSize: 15 }}>+</text>
@@ -284,7 +284,7 @@ export function GradientPlaygroundScreen() {
         {/* Live Preview */}
         <view style={{
           backgroundColor: '#1c1c1e',
-          borderRadius: 16,
+          borderRadius: '16px',
           padding: 16,
           marginBottom: 16,
         }}>
@@ -298,7 +298,7 @@ export function GradientPlaygroundScreen() {
         {/* Color Stop Positions */}
         <view style={{
           backgroundColor: '#1c1c1e',
-          borderRadius: 16,
+          borderRadius: '16px',
           padding: 16,
           marginBottom: 16,
         }}>
@@ -314,7 +314,7 @@ export function GradientPlaygroundScreen() {
         {/* RGBA Inside Gradient */}
         <view style={{
           backgroundColor: '#1c1c1e',
-          borderRadius: 16,
+          borderRadius: '16px',
           padding: 16,
           marginBottom: 16,
         }}>
@@ -330,7 +330,7 @@ export function GradientPlaygroundScreen() {
         {/* Solid Color */}
         <view style={{
           backgroundColor: '#1c1c1e',
-          borderRadius: 16,
+          borderRadius: '16px',
           padding: 16,
           marginBottom: 16,
         }}>

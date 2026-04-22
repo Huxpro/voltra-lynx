@@ -167,7 +167,7 @@ const STYLING_DATA: StylingExample[] = [
               <Voltra.VStack
                 style={{
                   backgroundColor: '#3B82F6',
-                  borderRadius: 8,
+                  borderRadius: '8px',
                   borderWidth: 2,
                   borderColor: '#1E40AF',
                   flexGrowWidth: true,
@@ -179,7 +179,7 @@ const STYLING_DATA: StylingExample[] = [
               <Voltra.VStack
                 style={{
                   backgroundColor: '#10B981',
-                  borderRadius: 120,
+                  borderRadius: '120px',
                   borderWidth: 3,
                   borderColor: '#047857',
                   flexGrowWidth: true,
@@ -274,7 +274,7 @@ const STYLING_DATA: StylingExample[] = [
 
 export function StylingScreen() {
   return (
-    <scroll-view style={{ flex: 1 } as any} scroll-orientation="vertical">
+    <scroll-view style={{ linearWeight: 1 } as any} scroll-orientation="vertical">
       <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}>
         <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' } as any}>
           Styling Examples
@@ -289,7 +289,7 @@ export function StylingScreen() {
               key={item.id}
               style={{
                 backgroundColor: '#1E293B',
-                borderRadius: 12,
+                borderRadius: '12px',
                 padding: 16,
                 borderWidth: 1,
                 borderColor: '#334155',
@@ -304,7 +304,7 @@ export function StylingScreen() {
 
               <view style={{
                 backgroundColor: '#0F172A',
-                borderRadius: 8,
+                borderRadius: '8px',
                 padding: 10,
               } as any}>
                 <text style={{
@@ -321,7 +321,7 @@ export function StylingScreen() {
         </view>
 
         {/* Summary */}
-        <view style={{ marginTop: 20, padding: 12, backgroundColor: '#1E293B', borderRadius: 8 }}>
+        <view style={{ marginTop: 20, padding: 12, backgroundColor: '#1E293B', borderRadius: '8px' }}>
           <text style={{ fontSize: 13, color: '#94A3B8' } as any}>
             Total styling examples: {STYLING_DATA.length}
           </text>

@@ -45,7 +45,7 @@ export function CustomFontsScreen() {
         {/* Preview area */}
         <view style={{
           backgroundColor: '#1c1c1e',
-          borderRadius: 12,
+          borderRadius: '12px',
           padding: 20,
           marginBottom: 20,
         }}>
@@ -67,13 +67,13 @@ export function CustomFontsScreen() {
           <text style={{ fontSize: 13, fontWeight: '600' }}>Size: {fontSize}px</text>
           <view
             bindtap={() => setFontSize(Math.max(10, fontSize - 2))}
-            style={{ backgroundColor: '#e5e5e5', paddingLeft: 12, paddingRight: 12, paddingTop: 6, paddingBottom: 6, borderRadius: 6 }}
+            style={{ backgroundColor: '#e5e5e5', paddingLeft: 12, paddingRight: 12, paddingTop: 6, paddingBottom: 6, borderRadius: '6px' }}
           >
             <text style={{ fontSize: 16, fontWeight: 'bold' }}>-</text>
           </view>
           <view
             bindtap={() => setFontSize(Math.min(32, fontSize + 2))}
-            style={{ backgroundColor: '#e5e5e5', paddingLeft: 12, paddingRight: 12, paddingTop: 6, paddingBottom: 6, borderRadius: 6 }}
+            style={{ backgroundColor: '#e5e5e5', paddingLeft: 12, paddingRight: 12, paddingTop: 6, paddingBottom: 6, borderRadius: '6px' }}
           >
             <text style={{ fontSize: 16, fontWeight: 'bold' }}>+</text>
           </view>
@@ -92,7 +92,7 @@ export function CustomFontsScreen() {
                 alignItems: 'center',
                 padding: 12,
                 backgroundColor: selectedFont === i ? '#f0f7ff' : '#f5f5f5',
-                borderRadius: 10,
+                borderRadius: '10px',
                 borderWidth: selectedFont === i ? 1 : 0,
                 borderColor: '#007AFF',
                 gap: 10,
@@ -102,7 +102,7 @@ export function CustomFontsScreen() {
               <view style={{
                 width: 8,
                 height: 8,
-                borderRadius: 4,
+                borderRadius: '4px',
                 backgroundColor: font.loaded ? '#34C759' : '#FF9500',
               }} />
 
@@ -125,7 +125,7 @@ export function CustomFontsScreen() {
                     backgroundColor: '#007AFF',
                     paddingLeft: 10, paddingRight: 10,
                     paddingTop: 5, paddingBottom: 5,
-                    borderRadius: 6,
+                    borderRadius: '6px',
                   }}
                 >
                   <text style={{ color: '#fff', fontSize: 11, fontWeight: '600' }}>Load</text>

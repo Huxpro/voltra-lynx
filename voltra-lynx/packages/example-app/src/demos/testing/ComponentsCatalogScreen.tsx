@@ -161,7 +161,7 @@ const COMPONENTS_DATA: ComponentExample[] = [
         return JSON.stringify(
           renderVoltraVariantToJson(
             <Voltra.VStack style={{ backgroundColor: '#334155', padding: 12 } as any} alignment="center">
-              <Voltra.Image source={{ base64: IMAGE }} style={{ width: 50, height: 50, borderRadius: 8 } as any} />
+              <Voltra.Image source={{ base64: IMAGE }} style={{ width: 50, height: 50, borderRadius: '8px' } as any} />
             </Voltra.VStack>
           ),
           null,
@@ -361,10 +361,10 @@ const COMPONENTS_DATA: ComponentExample[] = [
               />
               <Voltra.GlassContainer spacing={10} style={{ padding: 12 } as any}>
                 <Voltra.VStack>
-                  <Voltra.VStack style={{ padding: 12, borderRadius: 16, glassEffect: 'regular' } as any}>
+                  <Voltra.VStack style={{ padding: 12, borderRadius: '16px', glassEffect: 'regular' } as any}>
                     <Voltra.Text style={{ color: '#000', fontWeight: '600' } as any}>Glass View</Voltra.Text>
                   </Voltra.VStack>
-                  <Voltra.VStack style={{ padding: 12, borderRadius: 16, glassEffect: 'regular' } as any}>
+                  <Voltra.VStack style={{ padding: 12, borderRadius: '16px', glassEffect: 'regular' } as any}>
                     <Voltra.Text style={{ color: '#000', fontWeight: '600' } as any}>Glass View</Voltra.Text>
                   </Voltra.VStack>
                 </Voltra.VStack>
@@ -428,7 +428,7 @@ export function ComponentsCatalogScreen() {
   }, []);
 
   return (
-    <scroll-view style={{ flex: 1 } as any} scroll-orientation="vertical">
+    <scroll-view style={{ linearWeight: 1 } as any} scroll-orientation="vertical">
       <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}>
         <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' } as any}>
           Components Showcase
@@ -443,7 +443,7 @@ export function ComponentsCatalogScreen() {
               key={item.id}
               style={{
                 backgroundColor: '#1E293B',
-                borderRadius: 12,
+                borderRadius: '12px',
                 padding: 16,
                 borderWidth: 1,
                 borderColor: expandedId === item.id ? '#3B82F6' : '#334155',
@@ -460,7 +460,7 @@ export function ComponentsCatalogScreen() {
               {/* Always show a compact indicator */}
               <view style={{
                 backgroundColor: '#0F172A',
-                borderRadius: 8,
+                borderRadius: '8px',
                 padding: 10,
               } as any}>
                 {expandedId === item.id ? (
@@ -483,7 +483,7 @@ export function ComponentsCatalogScreen() {
         </view>
 
         {/* Summary */}
-        <view style={{ marginTop: 20, padding: 12, backgroundColor: '#1E293B', borderRadius: 8 }}>
+        <view style={{ marginTop: 20, padding: 12, backgroundColor: '#1E293B', borderRadius: '8px' }}>
           <text style={{ fontSize: 13, color: '#94A3B8' } as any}>
             Total components: {COMPONENTS_DATA.length}
           </text>

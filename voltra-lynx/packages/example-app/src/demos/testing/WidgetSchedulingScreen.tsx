@@ -154,7 +154,7 @@ export function WidgetSchedulingScreen() {
         {/* Status */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 10,
+          borderRadius: '10px',
           padding: 12,
           marginBottom: 16,
         } as any}>
@@ -164,7 +164,7 @@ export function WidgetSchedulingScreen() {
         {/* Configuration */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 12,
+          borderRadius: '12px',
           padding: 16,
           marginBottom: 16,
         } as any}>
@@ -187,7 +187,7 @@ export function WidgetSchedulingScreen() {
                   backgroundColor: 'rgba(255,255,255,0.1)',
                   paddingLeft: 10, paddingRight: 10,
                   paddingTop: 6, paddingBottom: 6,
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 } as any}
               >
                 <text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' } as any}>-</text>
@@ -201,7 +201,7 @@ export function WidgetSchedulingScreen() {
                   backgroundColor: 'rgba(255,255,255,0.1)',
                   paddingLeft: 10, paddingRight: 10,
                   paddingTop: 6, paddingBottom: 6,
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 } as any}
               >
                 <text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' } as any}>+</text>
@@ -221,7 +221,7 @@ export function WidgetSchedulingScreen() {
                   backgroundColor: 'rgba(255,255,255,0.1)',
                   paddingLeft: 10, paddingRight: 10,
                   paddingTop: 6, paddingBottom: 6,
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 } as any}
               >
                 <text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' } as any}>-</text>
@@ -235,7 +235,7 @@ export function WidgetSchedulingScreen() {
                   backgroundColor: 'rgba(255,255,255,0.1)',
                   paddingLeft: 10, paddingRight: 10,
                   paddingTop: 6, paddingBottom: 6,
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 } as any}
               >
                 <text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' } as any}>+</text>
@@ -247,7 +247,7 @@ export function WidgetSchedulingScreen() {
         {/* Schedule description */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 12,
+          borderRadius: '12px',
           padding: 16,
           marginBottom: 16,
         } as any}>
@@ -269,7 +269,7 @@ export function WidgetSchedulingScreen() {
                 flex: 1,
                 backgroundColor: isScheduling ? '#555' : '#007AFF',
                 padding: 14,
-                borderRadius: 10,
+                borderRadius: '10px',
                 alignItems: 'center',
                 marginRight: scheduledTimes ? 8 : 0,
               } as any}
@@ -285,7 +285,7 @@ export function WidgetSchedulingScreen() {
                   backgroundColor: '#FF3B30',
                   paddingLeft: 16, paddingRight: 16,
                   paddingTop: 14, paddingBottom: 14,
-                  borderRadius: 10,
+                  borderRadius: '10px',
                   alignItems: 'center',
                 } as any}
               >
@@ -299,7 +299,7 @@ export function WidgetSchedulingScreen() {
         {scheduledTimes && (
           <view style={{
             backgroundColor: '#1E293B',
-            borderRadius: 12,
+            borderRadius: '12px',
             padding: 16,
             marginBottom: 16,
           } as any}>
@@ -309,8 +309,8 @@ export function WidgetSchedulingScreen() {
 
             {/* State 1 */}
             <view style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 } as any}>
-              <view style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: '#3498DB', marginRight: 12 } as any} />
-              <view style={{ flex: 1 } as any}>
+              <view style={{ width: 12, height: 12, borderRadius: '6px', backgroundColor: '#3498DB', marginRight: 12 } as any} />
+              <view style={{ linearWeight: 1 } as any}>
                 <text style={{ fontSize: 14, fontWeight: '600', color: '#FFFFFF' } as any}>State 1 (Current)</text>
                 <text style={{ fontSize: 13, color: '#CBD5F5' } as any}>{scheduledTimes.past}</text>
               </view>
@@ -318,8 +318,8 @@ export function WidgetSchedulingScreen() {
 
             {/* State 2 */}
             <view style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 } as any}>
-              <view style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: '#16A085', marginRight: 12 } as any} />
-              <view style={{ flex: 1 } as any}>
+              <view style={{ width: 12, height: 12, borderRadius: '6px', backgroundColor: '#16A085', marginRight: 12 } as any} />
+              <view style={{ linearWeight: 1 } as any}>
                 <text style={{ fontSize: 14, fontWeight: '600', color: '#FFFFFF' } as any}>State 2</text>
                 <text style={{ fontSize: 13, color: '#CBD5F5' } as any}>{scheduledTimes.second}</text>
               </view>
@@ -327,8 +327,8 @@ export function WidgetSchedulingScreen() {
 
             {/* State 3 */}
             <view style={{ flexDirection: 'row', alignItems: 'center' } as any}>
-              <view style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: '#8E44AD', marginRight: 12 } as any} />
-              <view style={{ flex: 1 } as any}>
+              <view style={{ width: 12, height: 12, borderRadius: '6px', backgroundColor: '#8E44AD', marginRight: 12 } as any} />
+              <view style={{ linearWeight: 1 } as any}>
                 <text style={{ fontSize: 14, fontWeight: '600', color: '#FFFFFF' } as any}>State 3</text>
                 <text style={{ fontSize: 13, color: '#CBD5F5' } as any}>{scheduledTimes.third}</text>
               </view>
@@ -339,7 +339,7 @@ export function WidgetSchedulingScreen() {
         {/* Widget Previews */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 12,
+          borderRadius: '12px',
           padding: 16,
           marginBottom: 16,
         } as any}>
@@ -353,7 +353,7 @@ export function WidgetSchedulingScreen() {
           </text>
           <view style={{
             backgroundColor: '#2C3E50',
-            borderRadius: 16,
+            borderRadius: '16px',
             padding: 16,
             alignItems: 'center',
             marginBottom: 16,
@@ -369,7 +369,7 @@ export function WidgetSchedulingScreen() {
           </text>
           <view style={{
             backgroundColor: '#16A085',
-            borderRadius: 16,
+            borderRadius: '16px',
             padding: 16,
             alignItems: 'center',
             marginBottom: 16,
@@ -385,7 +385,7 @@ export function WidgetSchedulingScreen() {
           </text>
           <view style={{
             backgroundColor: '#8E44AD',
-            borderRadius: 16,
+            borderRadius: '16px',
             padding: 16,
             alignItems: 'center',
           } as any}>
@@ -398,7 +398,7 @@ export function WidgetSchedulingScreen() {
         {/* How to Test */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 12,
+          borderRadius: '12px',
           padding: 16,
         } as any}>
           <text style={{ fontSize: 16, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 8 } as any}>

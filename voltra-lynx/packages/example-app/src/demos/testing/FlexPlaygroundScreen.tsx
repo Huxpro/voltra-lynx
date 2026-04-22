@@ -67,13 +67,13 @@ export function FlexPlaygroundScreen() {
               gap,
             } as any}
           >
-            <Voltra.View style={{ backgroundColor: '#EF4444', padding: 12, borderRadius: 8 } as any}>
+            <Voltra.View style={{ backgroundColor: '#EF4444', padding: 12, borderRadius: '8px' } as any}>
               <Voltra.Text style={{ color: '#FFFFFF', fontSize: 12, fontWeight: 'bold' } as any}>Item 1</Voltra.Text>
             </Voltra.View>
-            <Voltra.View style={{ backgroundColor: '#3B82F6', padding: 12, borderRadius: 8 } as any}>
+            <Voltra.View style={{ backgroundColor: '#3B82F6', padding: 12, borderRadius: '8px' } as any}>
               <Voltra.Text style={{ color: '#FFFFFF', fontSize: 12, fontWeight: 'bold' } as any}>Item 2</Voltra.Text>
             </Voltra.View>
-            <Voltra.View style={{ backgroundColor: '#10B981', padding: 12, borderRadius: 8 } as any}>
+            <Voltra.View style={{ backgroundColor: '#10B981', padding: 12, borderRadius: '8px' } as any}>
               <Voltra.Text style={{ color: '#FFFFFF', fontSize: 12, fontWeight: 'bold' } as any}>Item 3</Voltra.Text>
             </Voltra.View>
           </Voltra.View>
@@ -85,7 +85,7 @@ export function FlexPlaygroundScreen() {
   };
 
   return (
-    <scroll-view style={{ flex: 1 } as any} scroll-orientation="vertical">
+    <scroll-view style={{ linearWeight: 1 } as any} scroll-orientation="vertical">
       <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}>
         <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF', marginBottom: 8 } as any}>
           Flex Layout Playground
@@ -95,7 +95,7 @@ export function FlexPlaygroundScreen() {
         </text>
 
         {/* Controls Card */}
-        <view style={{ backgroundColor: '#1E293B', borderRadius: 12, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#334155' } as any}>
+        <view style={{ backgroundColor: '#1E293B', borderRadius: '12px', padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#334155' } as any}>
           <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 12 } as any}>Controls</text>
 
           {/* Flex Direction */}
@@ -103,7 +103,7 @@ export function FlexPlaygroundScreen() {
             <text style={{ fontSize: 14, color: '#CBD5F5' } as any}>Flex Direction:</text>
             <view
               bindtap={cycleFlexDirection}
-              style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 7, paddingBottom: 7, backgroundColor: '#334155', borderRadius: 8 }}
+              style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 7, paddingBottom: 7, backgroundColor: '#334155', borderRadius: '8px' }}
             >
               <text style={{ color: '#3B82F6', fontSize: 13, fontWeight: '600' } as any}>{flexDirection}</text>
             </view>
@@ -114,7 +114,7 @@ export function FlexPlaygroundScreen() {
             <text style={{ fontSize: 14, color: '#CBD5F5' } as any}>Align Items:</text>
             <view
               bindtap={cycleAlignItems}
-              style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 7, paddingBottom: 7, backgroundColor: '#334155', borderRadius: 8 }}
+              style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 7, paddingBottom: 7, backgroundColor: '#334155', borderRadius: '8px' }}
             >
               <text style={{ color: '#3B82F6', fontSize: 13, fontWeight: '600' } as any}>{alignItems}</text>
             </view>
@@ -125,7 +125,7 @@ export function FlexPlaygroundScreen() {
             <text style={{ fontSize: 14, color: '#CBD5F5' } as any}>Justify Content:</text>
             <view
               bindtap={cycleJustifyContent}
-              style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 7, paddingBottom: 7, backgroundColor: '#334155', borderRadius: 8 }}
+              style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 7, paddingBottom: 7, backgroundColor: '#334155', borderRadius: '8px' }}
             >
               <text style={{ color: '#3B82F6', fontSize: 13, fontWeight: '600' } as any}>{justifyContent}</text>
             </view>
@@ -137,13 +137,13 @@ export function FlexPlaygroundScreen() {
             <view style={{ flexDirection: 'row', gap: 8 }}>
               <view
                 bindtap={decreaseGap}
-                style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 7, paddingBottom: 7, backgroundColor: '#334155', borderRadius: 8 }}
+                style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 7, paddingBottom: 7, backgroundColor: '#334155', borderRadius: '8px' }}
               >
                 <text style={{ color: '#FFFFFF', fontSize: 13, fontWeight: '600' } as any}>-</text>
               </view>
               <view
                 bindtap={increaseGap}
-                style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 7, paddingBottom: 7, backgroundColor: '#334155', borderRadius: 8 }}
+                style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 7, paddingBottom: 7, backgroundColor: '#334155', borderRadius: '8px' }}
               >
                 <text style={{ color: '#FFFFFF', fontSize: 13, fontWeight: '600' } as any}>+</text>
               </view>
@@ -156,13 +156,13 @@ export function FlexPlaygroundScreen() {
             <view style={{ flexDirection: 'row', gap: 8 }}>
               <view
                 bindtap={decreasePadding}
-                style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 7, paddingBottom: 7, backgroundColor: '#334155', borderRadius: 8 }}
+                style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 7, paddingBottom: 7, backgroundColor: '#334155', borderRadius: '8px' }}
               >
                 <text style={{ color: '#FFFFFF', fontSize: 13, fontWeight: '600' } as any}>-</text>
               </view>
               <view
                 bindtap={increasePadding}
-                style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 7, paddingBottom: 7, backgroundColor: '#334155', borderRadius: 8 }}
+                style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 7, paddingBottom: 7, backgroundColor: '#334155', borderRadius: '8px' }}
               >
                 <text style={{ color: '#FFFFFF', fontSize: 13, fontWeight: '600' } as any}>+</text>
               </view>
@@ -171,7 +171,7 @@ export function FlexPlaygroundScreen() {
         </view>
 
         {/* Live Preview — 3 colored boxes */}
-        <view style={{ backgroundColor: '#1E293B', borderRadius: 12, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#334155' } as any}>
+        <view style={{ backgroundColor: '#1E293B', borderRadius: '12px', padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#334155' } as any}>
           <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 } as any}>Live Preview</text>
           <text style={{ fontSize: 12, color: '#94A3B8', marginBottom: 12 } as any}>
             See how your flex settings affect the layout below
@@ -180,7 +180,7 @@ export function FlexPlaygroundScreen() {
           <view style={{
             height: 250,
             backgroundColor: '#0F172A',
-            borderRadius: 8,
+            borderRadius: '8px',
             padding: 8,
             flexDirection: flexDirection,
             justifyContent: justifyContent,
@@ -190,7 +190,7 @@ export function FlexPlaygroundScreen() {
             <view style={{
               backgroundColor: '#EF4444',
               padding: 12,
-              borderRadius: 8,
+              borderRadius: '8px',
               width: flexDirection === 'row' ? 80 : undefined,
               height: flexDirection === 'column' ? 60 : undefined,
             } as any}>
@@ -199,7 +199,7 @@ export function FlexPlaygroundScreen() {
             <view style={{
               backgroundColor: '#3B82F6',
               padding: 12,
-              borderRadius: 8,
+              borderRadius: '8px',
               width: flexDirection === 'row' ? 100 : undefined,
               height: flexDirection === 'column' ? 80 : undefined,
             } as any}>
@@ -208,7 +208,7 @@ export function FlexPlaygroundScreen() {
             <view style={{
               backgroundColor: '#10B981',
               padding: 12,
-              borderRadius: 8,
+              borderRadius: '8px',
               width: flexDirection === 'row' ? 60 : undefined,
               height: flexDirection === 'column' ? 50 : undefined,
             } as any}>
@@ -218,13 +218,13 @@ export function FlexPlaygroundScreen() {
         </view>
 
         {/* Voltra JSON Output */}
-        <view style={{ backgroundColor: '#1E293B', borderRadius: 12, padding: 16, borderWidth: 1, borderColor: '#334155' } as any}>
+        <view style={{ backgroundColor: '#1E293B', borderRadius: '12px', padding: 16, borderWidth: 1, borderColor: '#334155' } as any}>
           <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 } as any}>Voltra JSON Output</text>
           <text style={{ fontSize: 12, color: '#94A3B8', marginBottom: 12 } as any}>
             renderVoltraVariantToJson output for the current settings
           </text>
 
-          <view style={{ backgroundColor: '#0F172A', borderRadius: 8, padding: 10 }}>
+          <view style={{ backgroundColor: '#0F172A', borderRadius: '8px', padding: 10 }}>
             <text style={{
               fontSize: 10,
               fontFamily: 'monospace',
@@ -237,7 +237,7 @@ export function FlexPlaygroundScreen() {
         </view>
 
         {/* Text Align Test */}
-        <view style={{ backgroundColor: '#1E293B', borderRadius: 12, padding: 16, marginTop: 16, borderWidth: 1, borderColor: '#334155' } as any}>
+        <view style={{ backgroundColor: '#1E293B', borderRadius: '12px', padding: 16, marginTop: 16, borderWidth: 1, borderColor: '#334155' } as any}>
           <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 } as any}>Text Align in Flex</text>
           <text style={{ fontSize: 12, color: '#94A3B8', marginBottom: 12 } as any}>
             Text alignment within stretched flex children
@@ -245,7 +245,7 @@ export function FlexPlaygroundScreen() {
 
           <view style={{
             backgroundColor: '#0F172A',
-            borderRadius: 8,
+            borderRadius: '8px',
             padding: 8,
             height: 180,
             flexDirection: 'column',

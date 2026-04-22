@@ -115,7 +115,7 @@ export function ImagePreloadingScreen() {
         {/* Progress summary */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 12,
+          borderRadius: '12px',
           padding: 16,
           marginTop: 16,
           marginBottom: 16,
@@ -129,14 +129,14 @@ export function ImagePreloadingScreen() {
             <view style={{
               height: 6,
               backgroundColor: '#334155',
-              borderRadius: 3,
+              borderRadius: '3px',
               marginTop: 8,
             } as any}>
               <view style={{
                 width: `${entries.length > 0 ? ((loadedCount + errorCount) / entries.length) * 100 : 0}%`,
                 height: 6,
                 backgroundColor: errorCount > 0 ? '#FF9500' : '#34C759',
-                borderRadius: 3,
+                borderRadius: '3px',
               } as any} />
             </view>
           )}
@@ -152,20 +152,20 @@ export function ImagePreloadingScreen() {
             alignItems: 'center',
             padding: 12,
             backgroundColor: '#1E293B',
-            borderRadius: 8,
+            borderRadius: '8px',
             marginBottom: 8,
           } as any}>
             {/* Status dot */}
             <view style={{
               width: 10,
               height: 10,
-              borderRadius: 5,
+              borderRadius: '5px',
               backgroundColor: statusColors[entry.status],
               marginRight: 10,
             } as any} />
 
             {/* Info */}
-            <view style={{ flex: 1 } as any}>
+            <view style={{ linearWeight: 1 } as any}>
               <text style={{ fontSize: 13, fontWeight: '500', color: '#E2E8F0' } as any}>
                 {entry.key}
               </text>
@@ -192,7 +192,7 @@ export function ImagePreloadingScreen() {
             style={{
               backgroundColor: '#334155',
               padding: 14,
-              borderRadius: 10,
+              borderRadius: '10px',
               alignItems: 'center',
               marginBottom: 8,
             } as any}
@@ -207,7 +207,7 @@ export function ImagePreloadingScreen() {
             style={{
               backgroundColor: isProcessing ? '#555' : '#007AFF',
               padding: 14,
-              borderRadius: 10,
+              borderRadius: '10px',
               alignItems: 'center',
               marginBottom: 8,
             } as any}
@@ -222,7 +222,7 @@ export function ImagePreloadingScreen() {
             style={{
               backgroundColor: '#FF3B30',
               padding: 14,
-              borderRadius: 10,
+              borderRadius: '10px',
               alignItems: 'center',
             } as any}
           >

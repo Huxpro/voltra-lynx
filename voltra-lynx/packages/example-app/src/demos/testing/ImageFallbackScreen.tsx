@@ -26,7 +26,7 @@ const scenarios: FallbackScenario[] = [
     bgColor: '#EF4444',
     borderColor: null,
     borderWidth: 0,
-    borderRadius: 12,
+    borderRadius: '12px' as any,
     hasCustomFallback: false,
   },
   {
@@ -36,7 +36,7 @@ const scenarios: FallbackScenario[] = [
     bgColor: '#F59E0B',
     borderColor: null,
     borderWidth: 0,
-    borderRadius: 8,
+    borderRadius: '8px' as any,
     hasCustomFallback: false,
   },
   {
@@ -46,7 +46,7 @@ const scenarios: FallbackScenario[] = [
     bgColor: null,
     borderColor: '#FFFFFF',
     borderWidth: 2,
-    borderRadius: 16,
+    borderRadius: '16px' as any,
     hasCustomFallback: false,
   },
   {
@@ -56,7 +56,7 @@ const scenarios: FallbackScenario[] = [
     bgColor: '#8B5CF6',
     borderColor: '#A78BFA',
     borderWidth: 3,
-    borderRadius: 20,
+    borderRadius: '20px' as any,
     hasCustomFallback: false,
   },
   {
@@ -66,7 +66,7 @@ const scenarios: FallbackScenario[] = [
     bgColor: '#1E293B',
     borderColor: '#334155',
     borderWidth: 2,
-    borderRadius: 12,
+    borderRadius: '12px' as any,
     hasCustomFallback: true,
   },
   {
@@ -76,7 +76,7 @@ const scenarios: FallbackScenario[] = [
     bgColor: '#DC2626',
     borderColor: null,
     borderWidth: 0,
-    borderRadius: 8,
+    borderRadius: '8px' as any,
     hasCustomFallback: false,
   },
 ];
@@ -138,7 +138,7 @@ export function ImageFallbackScreen() {
         {/* Status bar */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 10,
+          borderRadius: '10px' as any,
           padding: 12,
           marginBottom: 16,
         } as any}>
@@ -149,7 +149,7 @@ export function ImageFallbackScreen() {
         {scenarios.map((scenario) => (
           <view key={scenario.id} style={{
             backgroundColor: '#1E293B',
-            borderRadius: 12,
+            borderRadius: '12px' as any,
             padding: 16,
             marginBottom: 12,
             borderWidth: activeScenario === scenario.id ? 1 : 0,
@@ -230,7 +230,7 @@ export function ImageFallbackScreen() {
               style={{
                 backgroundColor: '#007AFF',
                 padding: 12,
-                borderRadius: 8,
+                borderRadius: '8px' as any,
                 alignItems: 'center',
               } as any}
             >
@@ -244,7 +244,7 @@ export function ImageFallbackScreen() {
         {/* Migration note */}
         <view style={{
           backgroundColor: '#1E293B',
-          borderRadius: 12,
+          borderRadius: '12px' as any,
           padding: 16,
           marginTop: 8,
           borderLeftWidth: 4,

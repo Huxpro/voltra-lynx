@@ -179,7 +179,7 @@ export function ChartPlaygroundScreen() {
   }) => (
     <view style={{
       backgroundColor: '#1c1c1e',
-      borderRadius: 16,
+      borderRadius: '16px',
       padding: 16,
       marginBottom: 16,
     }}>
@@ -193,7 +193,7 @@ export function ChartPlaygroundScreen() {
               paddingLeft: 12, paddingRight: 12,
               paddingTop: 6, paddingBottom: 6,
               backgroundColor: '#333',
-              borderRadius: 6,
+              borderRadius: '6px',
             }}
           >
             <text style={{ color: '#fff', fontSize: 12 }}>Randomize</text>
@@ -207,7 +207,7 @@ export function ChartPlaygroundScreen() {
   );
 
   return (
-    <scroll-view scroll-y style={{ flex: 1 } as any}>
+    <scroll-view scroll-orientation="vertical" style={{ linearWeight: 1 } as any}>
       <view style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 20, paddingBottom: 24 }}>
         <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 8 }}>
           Chart Playground
@@ -221,7 +221,7 @@ export function ChartPlaygroundScreen() {
           style={{
             backgroundColor: '#007AFF',
             padding: 12,
-            borderRadius: 10,
+            borderRadius: '10px',
             alignItems: 'center',
             marginBottom: 16,
           }}

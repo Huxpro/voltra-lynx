@@ -103,7 +103,7 @@ export function ProgressIndicatorsScreen() {
   }, [durationSec]);
 
   return (
-    <scroll-view scroll-y style={{ flex: 1 } as any}>
+    <scroll-view scroll-orientation="vertical" style={{ linearWeight: 1 } as any}>
       <view style={{ padding: 16 }}>
         <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 8 }}>
           Progress Indicators
@@ -115,7 +115,7 @@ export function ProgressIndicatorsScreen() {
         {/* Live Preview (Voltra JSON) */}
         <view style={{
           backgroundColor: '#1c1c1e',
-          borderRadius: 16,
+          borderRadius: '16px',
           padding: 16,
           marginBottom: 16,
         }}>
@@ -133,7 +133,7 @@ export function ProgressIndicatorsScreen() {
             style={{
               backgroundColor: '#007AFF',
               padding: 12,
-              borderRadius: 10,
+              borderRadius: '10px',
               alignItems: 'center',
               marginBottom: 16,
             }}
@@ -145,7 +145,7 @@ export function ProgressIndicatorsScreen() {
         {/* Base Configuration */}
         <view style={{
           backgroundColor: '#1c1c1e',
-          borderRadius: 16,
+          borderRadius: '16px',
           padding: 16,
           marginBottom: 16,
         }}>
@@ -163,7 +163,7 @@ export function ProgressIndicatorsScreen() {
                   paddingLeft: 12, paddingRight: 12,
                   paddingTop: 6, paddingBottom: 6,
                   backgroundColor: type === 'linear' ? '#007AFF' : '#333',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 }}
               >
                 <text style={{ color: '#fff', fontSize: 13 }}>Linear</text>
@@ -174,7 +174,7 @@ export function ProgressIndicatorsScreen() {
                   paddingLeft: 12, paddingRight: 12,
                   paddingTop: 6, paddingBottom: 6,
                   backgroundColor: type === 'circular' ? '#007AFF' : '#333',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 }}
               >
                 <text style={{ color: '#fff', fontSize: 13 }}>Circular</text>
@@ -192,7 +192,7 @@ export function ProgressIndicatorsScreen() {
                   paddingLeft: 10, paddingRight: 10,
                   paddingTop: 6, paddingBottom: 6,
                   backgroundColor: mode === 'determinate' ? '#007AFF' : '#333',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 }}
               >
                 <text style={{ color: '#fff', fontSize: 12 }}>Determinate</text>
@@ -203,7 +203,7 @@ export function ProgressIndicatorsScreen() {
                   paddingLeft: 10, paddingRight: 10,
                   paddingTop: 6, paddingBottom: 6,
                   backgroundColor: mode === 'timer' ? '#007AFF' : '#333',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                   opacity: type === 'circular' ? 0.4 : 1,
                 }}
               >
@@ -215,7 +215,7 @@ export function ProgressIndicatorsScreen() {
                   paddingLeft: 10, paddingRight: 10,
                   paddingTop: 6, paddingBottom: 6,
                   backgroundColor: mode === 'indeterminate' ? '#007AFF' : '#333',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                   opacity: type === 'linear' ? 0.4 : 1,
                 }}
               >
@@ -235,7 +235,7 @@ export function ProgressIndicatorsScreen() {
                     paddingLeft: 12, paddingRight: 12,
                     paddingTop: 6, paddingBottom: 6,
                     backgroundColor: '#333',
-                    borderRadius: 6,
+                    borderRadius: '6px',
                   }}
                 >
                   <text style={{ color: '#fff', fontSize: 13 }}>-10</text>
@@ -246,7 +246,7 @@ export function ProgressIndicatorsScreen() {
                     paddingLeft: 12, paddingRight: 12,
                     paddingTop: 6, paddingBottom: 6,
                     backgroundColor: '#333',
-                    borderRadius: 6,
+                    borderRadius: '6px',
                   }}
                 >
                   <text style={{ color: '#fff', fontSize: 13 }}>+10</text>
@@ -266,7 +266,7 @@ export function ProgressIndicatorsScreen() {
                     paddingLeft: 12, paddingRight: 12,
                     paddingTop: 6, paddingBottom: 6,
                     backgroundColor: '#333',
-                    borderRadius: 6,
+                    borderRadius: '6px',
                   }}
                 >
                   <text style={{ color: '#fff', fontSize: 13 }}>Cycle</text>
@@ -280,7 +280,7 @@ export function ProgressIndicatorsScreen() {
                     paddingLeft: 12, paddingRight: 12,
                     paddingTop: 6, paddingBottom: 6,
                     backgroundColor: countDown ? '#007AFF' : '#333',
-                    borderRadius: 6,
+                    borderRadius: '6px',
                   }}
                 >
                   <text style={{ color: '#fff', fontSize: 13 }}>{countDown ? 'ON' : 'OFF'}</text>
@@ -296,7 +296,7 @@ export function ProgressIndicatorsScreen() {
         {/* Styling Configuration */}
         <view style={{
           backgroundColor: '#1c1c1e',
-          borderRadius: 16,
+          borderRadius: '16px',
           padding: 16,
           marginBottom: 16,
         }}>
@@ -315,7 +315,7 @@ export function ProgressIndicatorsScreen() {
                   style={{
                     width: 28, height: 28,
                     backgroundColor: c,
-                    borderRadius: 6,
+                    borderRadius: '6px',
                     borderWidth: trackColor === c ? 2 : 0,
                     borderColor: '#007AFF',
                   }}
@@ -335,7 +335,7 @@ export function ProgressIndicatorsScreen() {
                   style={{
                     width: 28, height: 28,
                     backgroundColor: c,
-                    borderRadius: 6,
+                    borderRadius: '6px',
                     borderWidth: progressColor === c ? 2 : 0,
                     borderColor: '#fff',
                   }}
@@ -358,7 +358,7 @@ export function ProgressIndicatorsScreen() {
                         paddingLeft: 10, paddingRight: 10,
                         paddingTop: 6, paddingBottom: 6,
                         backgroundColor: height === h ? '#007AFF' : '#333',
-                        borderRadius: 6,
+                        borderRadius: '6px',
                       }}
                     >
                       <text style={{ color: '#fff', fontSize: 12 }}>
@@ -380,7 +380,7 @@ export function ProgressIndicatorsScreen() {
                         paddingLeft: 10, paddingRight: 10,
                         paddingTop: 6, paddingBottom: 6,
                         backgroundColor: cornerRadius === r ? '#007AFF' : '#333',
-                        borderRadius: 6,
+                        borderRadius: '6px',
                       }}
                     >
                       <text style={{ color: '#fff', fontSize: 12 }}>
@@ -399,7 +399,7 @@ export function ProgressIndicatorsScreen() {
                     paddingLeft: 12, paddingRight: 12,
                     paddingTop: 6, paddingBottom: 6,
                     backgroundColor: useThumb ? '#007AFF' : '#333',
-                    borderRadius: 6,
+                    borderRadius: '6px',
                   }}
                 >
                   <text style={{ color: '#fff', fontSize: 13 }}>{useThumb ? 'ON' : 'OFF'}</text>
@@ -421,7 +421,7 @@ export function ProgressIndicatorsScreen() {
                       paddingLeft: 12, paddingRight: 12,
                       paddingTop: 6, paddingBottom: 6,
                       backgroundColor: lineWidth === w ? '#007AFF' : '#333',
-                      borderRadius: 6,
+                      borderRadius: '6px',
                     }}
                   >
                     <text style={{ color: '#fff', fontSize: 13 }}>{w}</text>

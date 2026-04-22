@@ -11,7 +11,7 @@ const mockPayloads: { name: string; payload: WidgetPayload }[] = [
     name: 'Simple Text',
     payload: {
       type: 'container',
-      props: { backgroundColor: '#1c1c1e', borderRadius: 12, padding: 16 },
+      props: { backgroundColor: '#1c1c1e', borderRadius: '12px', padding: 16 },
       children: [
         { type: 'text', props: { content: 'Hello from server!', color: '#fff', fontSize: 18, fontWeight: 'bold' } },
         { type: 'text', props: { content: 'This widget is server-driven.', color: '#aaa', fontSize: 14 } },
@@ -22,7 +22,7 @@ const mockPayloads: { name: string; payload: WidgetPayload }[] = [
     name: 'Status Card',
     payload: {
       type: 'container',
-      props: { backgroundColor: '#1c1c1e', borderRadius: 12, padding: 16 },
+      props: { backgroundColor: '#1c1c1e', borderRadius: '12px', padding: 16 },
       children: [
         { type: 'row', props: {}, children: [
           { type: 'text', props: { content: 'Server Status', color: '#fff', fontSize: 16, fontWeight: '600' } },
@@ -36,7 +36,7 @@ const mockPayloads: { name: string; payload: WidgetPayload }[] = [
     name: 'Promo Banner',
     payload: {
       type: 'container',
-      props: { backgroundColor: '#5856D6', borderRadius: 12, padding: 20 },
+      props: { backgroundColor: '#5856D6', borderRadius: '12px', padding: 20 },
       children: [
         { type: 'text', props: { content: '50% OFF', color: '#fff', fontSize: 28, fontWeight: 'bold' } },
         { type: 'text', props: { content: 'Limited time offer', color: 'rgba(255,255,255,0.8)', fontSize: 14 } },
@@ -71,7 +71,7 @@ export function ServerDrivenWidgetsScreen() {
                 flex: 1,
                 paddingTop: 8, paddingBottom: 8,
                 backgroundColor: selectedPayload === i ? '#007AFF' : '#e5e5e5',
-                borderRadius: 8,
+                borderRadius: '8px',
                 alignItems: 'center',
               }}
             >
@@ -98,7 +98,7 @@ export function ServerDrivenWidgetsScreen() {
           style={{
             backgroundColor: '#333',
             padding: 12,
-            borderRadius: 8,
+            borderRadius: '8px',
             alignItems: 'center',
             marginBottom: 12,
           }}
@@ -112,7 +112,7 @@ export function ServerDrivenWidgetsScreen() {
         {showJson && (
           <view style={{
             backgroundColor: '#1c1c1e',
-            borderRadius: 8,
+            borderRadius: '8px',
             padding: 12,
           }}>
             <text style={{ color: '#aaa', fontSize: 11, fontFamily: 'monospace' }}>
@@ -148,7 +148,7 @@ function RenderPayload({ payload }: { payload: WidgetPayload }) {
         backgroundColor: props.color as string,
         paddingLeft: 8, paddingRight: 8,
         paddingTop: 3, paddingBottom: 3,
-        borderRadius: 6,
+        borderRadius: '6px',
       }}>
         <text style={{ color: '#fff', fontSize: 11, fontWeight: '600' }}>
           {props.content as string}
@@ -163,7 +163,7 @@ function RenderPayload({ payload }: { payload: WidgetPayload }) {
         backgroundColor: props.backgroundColor as string || '#007AFF',
         paddingLeft: 16, paddingRight: 16,
         paddingTop: 10, paddingBottom: 10,
-        borderRadius: 8,
+        borderRadius: '8px',
         alignItems: 'center',
         marginTop: 8,
       }}>

@@ -95,7 +95,7 @@ export function TimerScreen() {
   };
 
   return (
-    <scroll-view style={{ flex: 1 } as any} scroll-orientation="vertical">
+    <scroll-view style={{ linearWeight: 1 } as any} scroll-orientation="vertical">
       <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}>
         <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF', marginBottom: 8 } as any}>
           Timer Testing
@@ -105,13 +105,13 @@ export function TimerScreen() {
         </text>
 
         {/* Timer Preview Card */}
-        <view style={{ backgroundColor: '#1E293B', borderRadius: 12, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#334155' } as any}>
+        <view style={{ backgroundColor: '#1E293B', borderRadius: '12px', padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#334155' } as any}>
           <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 12 } as any}>Live Preview</text>
 
           {/* Timer display area */}
           <view style={{
             backgroundColor: '#1a1a2e',
-            borderRadius: 16,
+            borderRadius: '16px',
             padding: 24,
             alignItems: 'center',
             marginBottom: 16,
@@ -131,7 +131,7 @@ export function TimerScreen() {
             style={{
               backgroundColor: '#3B82F6',
               padding: 14,
-              borderRadius: 10,
+              borderRadius: '10px',
               alignItems: 'center',
             } as any}
           >
@@ -140,7 +140,7 @@ export function TimerScreen() {
         </view>
 
         {/* Configuration Card */}
-        <view style={{ backgroundColor: '#1E293B', borderRadius: 12, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#334155' } as any}>
+        <view style={{ backgroundColor: '#1E293B', borderRadius: '12px', padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#334155' } as any}>
           <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 16 } as any}>Configuration</text>
 
           {/* Mode */}
@@ -153,7 +153,7 @@ export function TimerScreen() {
                   paddingLeft: 12, paddingRight: 12,
                   paddingTop: 6, paddingBottom: 6,
                   backgroundColor: mode === 'timer' ? '#3B82F6' : '#334155',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 }}
               >
                 <text style={{ color: mode === 'timer' ? '#fff' : '#94A3B8', fontSize: 13 } as any}>Timer</text>
@@ -164,7 +164,7 @@ export function TimerScreen() {
                   paddingLeft: 12, paddingRight: 12,
                   paddingTop: 6, paddingBottom: 6,
                   backgroundColor: mode === 'stopwatch' ? '#3B82F6' : '#334155',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 }}
               >
                 <text style={{ color: mode === 'stopwatch' ? '#fff' : '#94A3B8', fontSize: 13 } as any}>Stopwatch</text>
@@ -183,7 +183,7 @@ export function TimerScreen() {
                     paddingLeft: 12, paddingRight: 12,
                     paddingTop: 6, paddingBottom: 6,
                     backgroundColor: direction === 'down' ? '#3B82F6' : '#334155',
-                    borderRadius: 6,
+                    borderRadius: '6px',
                   }}
                 >
                   <text style={{ color: direction === 'down' ? '#fff' : '#94A3B8', fontSize: 13 } as any}>Down</text>
@@ -194,7 +194,7 @@ export function TimerScreen() {
                     paddingLeft: 12, paddingRight: 12,
                     paddingTop: 6, paddingBottom: 6,
                     backgroundColor: direction === 'up' ? '#3B82F6' : '#334155',
-                    borderRadius: 6,
+                    borderRadius: '6px',
                   }}
                 >
                   <text style={{ color: direction === 'up' ? '#fff' : '#94A3B8', fontSize: 13 } as any}>Up</text>
@@ -210,13 +210,13 @@ export function TimerScreen() {
               <view style={{ flexDirection: 'row', gap: 8 }}>
                 <view
                   bindtap={decreaseDuration}
-                  style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 6, paddingBottom: 6, backgroundColor: '#334155', borderRadius: 6 }}
+                  style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 6, paddingBottom: 6, backgroundColor: '#334155', borderRadius: '6px' }}
                 >
                   <text style={{ color: '#fff', fontSize: 13, fontWeight: '600' } as any}>-60s</text>
                 </view>
                 <view
                   bindtap={increaseDuration}
-                  style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 6, paddingBottom: 6, backgroundColor: '#334155', borderRadius: 6 }}
+                  style={{ paddingLeft: 14, paddingRight: 14, paddingTop: 6, paddingBottom: 6, backgroundColor: '#334155', borderRadius: '6px' }}
                 >
                   <text style={{ color: '#fff', fontSize: 13, fontWeight: '600' } as any}>+60s</text>
                 </view>
@@ -234,7 +234,7 @@ export function TimerScreen() {
                   paddingLeft: 12, paddingRight: 12,
                   paddingTop: 6, paddingBottom: 6,
                   backgroundColor: textStyle === 'timer' ? '#3B82F6' : '#334155',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 }}
               >
                 <text style={{ color: textStyle === 'timer' ? '#fff' : '#94A3B8', fontSize: 13 } as any}>Timer</text>
@@ -245,7 +245,7 @@ export function TimerScreen() {
                   paddingLeft: 12, paddingRight: 12,
                   paddingTop: 6, paddingBottom: 6,
                   backgroundColor: textStyle === 'relative' ? '#3B82F6' : '#334155',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 }}
               >
                 <text style={{ color: textStyle === 'relative' ? '#fff' : '#94A3B8', fontSize: 13 } as any}>Relative</text>
@@ -263,7 +263,7 @@ export function TimerScreen() {
                   paddingLeft: 12, paddingRight: 12,
                   paddingTop: 6, paddingBottom: 6,
                   backgroundColor: !showHours ? '#3B82F6' : '#334155',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 }}
               >
                 <text style={{ color: !showHours ? '#fff' : '#94A3B8', fontSize: 13 } as any}>Off</text>
@@ -274,7 +274,7 @@ export function TimerScreen() {
                   paddingLeft: 12, paddingRight: 12,
                   paddingTop: 6, paddingBottom: 6,
                   backgroundColor: showHours ? '#3B82F6' : '#334155',
-                  borderRadius: 6,
+                  borderRadius: '6px',
                 }}
               >
                 <text style={{ color: showHours ? '#fff' : '#94A3B8', fontSize: 13 } as any}>On</text>
@@ -284,13 +284,13 @@ export function TimerScreen() {
         </view>
 
         {/* JSON Output */}
-        <view style={{ backgroundColor: '#1E293B', borderRadius: 12, padding: 16, borderWidth: 1, borderColor: '#334155' } as any}>
+        <view style={{ backgroundColor: '#1E293B', borderRadius: '12px', padding: 16, borderWidth: 1, borderColor: '#334155' } as any}>
           <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 } as any}>Voltra Timer JSON</text>
           <text style={{ fontSize: 12, color: '#94A3B8', marginBottom: 12 } as any}>
             renderVoltraVariantToJson output
           </text>
 
-          <view style={{ backgroundColor: '#0F172A', borderRadius: 8, padding: 10 }}>
+          <view style={{ backgroundColor: '#0F172A', borderRadius: '8px', padding: 10 }}>
             <text style={{
               fontSize: 10,
               fontFamily: 'monospace',
