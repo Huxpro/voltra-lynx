@@ -192,7 +192,7 @@ function DemoScreen({ id, title, onBack }: { id: string; title: string; onBack: 
       </view>
 
       {/* Demo Content */}
-      <scroll-view style={{ flexGrow: 1 }} scroll-y>
+      <scroll-view style={{ width: '100%', flex: 1 }} scroll-orientation="vertical">
         {DemoComponent ? <DemoComponent /> : (
           <view style={{ padding: 16 }}>
             <text style={{ color: colors.textMuted }}>No demo component for "{id}"</text>
@@ -222,7 +222,7 @@ function IOSActivityList({
   }, []);
 
   return (
-    <scroll-view style={{ flexGrow: 1, backgroundColor: colors.screenBg }} scroll-y>
+    <scroll-view style={{ width: '100%', flex: 1, backgroundColor: colors.screenBg }} scroll-orientation="vertical">
       <view style={{ padding: 16 }}>
         {iosActivities.map((entry) => (
           <view
@@ -270,7 +270,7 @@ function AndroidWidgetList({
 }) {
   'background only';
   return (
-    <scroll-view style={{ flexGrow: 1, backgroundColor: colors.screenBg }} scroll-y>
+    <scroll-view style={{ width: '100%', flex: 1, backgroundColor: colors.screenBg }} scroll-orientation="vertical">
       <view style={{ padding: 16 }}>
         {androidWidgets.map((entry) => {
           const resolvedId = entry.id === 'charts' ? 'android-charts' : entry.id;
@@ -311,7 +311,7 @@ function TestingList({
 }) {
   'background only';
   return (
-    <scroll-view style={{ flexGrow: 1, backgroundColor: colors.screenBg }} scroll-y>
+    <scroll-view style={{ width: '100%', flex: 1, backgroundColor: colors.screenBg }} scroll-orientation="vertical">
       <view style={{ padding: 16 }}>
         {testingSections.map((section) => (
           <view key={section.header} style={{ marginBottom: 16 }}>

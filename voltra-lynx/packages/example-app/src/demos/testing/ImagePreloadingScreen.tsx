@@ -102,7 +102,7 @@ export function ImagePreloadingScreen() {
   const errorCount = entries.filter((e) => e.status === 'error').length;
 
   return (
-    <scroll-view style={{ flex: 1, backgroundColor: '#0B0F1A' } as any} scroll-y>
+    <scroll-view style={{ flex: 1, backgroundColor: '#0B0F1A' } as any} scroll-orientation="vertical">
       <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 } as any}>
         <text style={{ fontSize: 24, fontWeight: 'bold', color: '#FFFFFF' } as any}>
           Image Preloading

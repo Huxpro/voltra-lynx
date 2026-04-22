@@ -274,7 +274,7 @@ const STYLING_DATA: StylingExample[] = [
 
 export function StylingScreen() {
   return (
-    <scroll-view style={{ flex: 1 } as any} scroll-y>
+    <scroll-view style={{ flex: 1 } as any} scroll-orientation="vertical">
       <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}>
         <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' } as any}>
           Styling Examples
