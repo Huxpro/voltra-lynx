@@ -171,12 +171,12 @@ function DemoScreen({ id, title, onBack }: { id: string; title: string; onBack: 
   const DemoComponent = demoComponents[id];
 
   return (
-    <view style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: colors.screenBg }}>
+    <view style={{ width: '100%', height: '100%', backgroundColor: colors.screenBg }}>
       {/* Header */}
       <view
         style={{
-          display: 'flex',
-          flexDirection: 'row',
+          display: 'linear',
+          linearDirection: 'row',
           alignItems: 'center',
           padding: 12,
           paddingTop: 16,
@@ -192,7 +192,7 @@ function DemoScreen({ id, title, onBack }: { id: string; title: string; onBack: 
       </view>
 
       {/* Demo Content */}
-      <scroll-view style={{ width: '100%', flex: 1 }} scroll-orientation="vertical">
+      <scroll-view style={{ width: '100%', linearWeight: 1 }} scroll-orientation="vertical">
         {DemoComponent ? <DemoComponent /> : (
           <view style={{ padding: 16 }}>
             <text style={{ color: colors.textMuted }}>No demo component for "{id}"</text>
@@ -222,7 +222,7 @@ function IOSActivityList({
   }, []);
 
   return (
-    <scroll-view style={{ width: '100%', flex: 1, backgroundColor: colors.screenBg }} scroll-orientation="vertical">
+    <scroll-view style={{ width: '100%', linearWeight: 1, backgroundColor: colors.screenBg }} scroll-orientation="vertical">
       <view style={{ padding: 16 }}>
         {iosActivities.map((entry) => (
           <view
@@ -270,7 +270,7 @@ function AndroidWidgetList({
 }) {
   'background only';
   return (
-    <scroll-view style={{ width: '100%', flex: 1, backgroundColor: colors.screenBg }} scroll-orientation="vertical">
+    <scroll-view style={{ width: '100%', linearWeight: 1, backgroundColor: colors.screenBg }} scroll-orientation="vertical">
       <view style={{ padding: 16 }}>
         {androidWidgets.map((entry) => {
           const resolvedId = entry.id === 'charts' ? 'android-charts' : entry.id;
@@ -311,7 +311,7 @@ function TestingList({
 }) {
   'background only';
   return (
-    <scroll-view style={{ width: '100%', flex: 1, backgroundColor: colors.screenBg }} scroll-orientation="vertical">
+    <scroll-view style={{ width: '100%', linearWeight: 1, backgroundColor: colors.screenBg }} scroll-orientation="vertical">
       <view style={{ padding: 16 }}>
         {testingSections.map((section) => (
           <view key={section.header} style={{ marginBottom: 16 }}>
@@ -390,7 +390,7 @@ export function App() {
   const handleSelect = (id: string, title: string) => setCurrentScreen({ id, title });
 
   return (
-    <view style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: colors.screenBg }}>
+    <view style={{ width: '100%', height: '100%', backgroundColor: colors.screenBg }}>
       {/* Header */}
       <view style={{ padding: 16, paddingTop: 20, backgroundColor: colors.headerBg, borderBottomWidth: 1, borderBottomColor: colors.tabBarBorder }}>
         <text style={{ fontSize: 24, fontWeight: 'bold', color: '#FFFFFF' }}>Voltra Lynx Demo</text>
@@ -404,15 +404,15 @@ export function App() {
       {/* Tab Bar */}
       <view
         style={{
-          display: 'flex',
-          flexDirection: 'row',
+          display: 'linear',
+          linearDirection: 'row',
           backgroundColor: colors.tabBarBg,
           borderTopWidth: 1,
           borderTopColor: colors.tabBarBorder,
         }}
       >
         <view
-          style={{ flex: 1, padding: 12, alignItems: 'center' }}
+          style={{ linearWeight: 1, padding: 12, alignItems: 'center' }}
           bindtap={() => setActiveTab('ios')}
         >
           <text
@@ -426,7 +426,7 @@ export function App() {
           </text>
         </view>
         <view
-          style={{ flex: 1, padding: 12, alignItems: 'center' }}
+          style={{ linearWeight: 1, padding: 12, alignItems: 'center' }}
           bindtap={() => setActiveTab('android')}
         >
           <text
@@ -440,7 +440,7 @@ export function App() {
           </text>
         </view>
         <view
-          style={{ flex: 1, padding: 12, alignItems: 'center' }}
+          style={{ linearWeight: 1, padding: 12, alignItems: 'center' }}
           bindtap={() => setActiveTab('testing')}
         >
           <text
