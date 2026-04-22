@@ -31,7 +31,7 @@ export function BasicLiveActivityDemo() {
       return;
     }
 
-    const payload = makeBasicLiveActivityPayload('Live Activity', 'Running...');
+    const payload = makeBasicLiveActivityPayload();
     try {
       NativeModules.VoltraModule.startLiveActivity(
         payload,
@@ -56,7 +56,7 @@ export function BasicLiveActivityDemo() {
   const update = useCallback(() => {
     'background only';
     if (!activityId) return;
-    const payload = makeBasicLiveActivityPayload('Updated!', 'Content changed at ' + new Date().toLocaleTimeString());
+    const payload = makeBasicLiveActivityPayload();
     NativeModules.VoltraModule.updateLiveActivity(
       activityId, payload, {},
       () => { setStatus('Updated'); }

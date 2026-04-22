@@ -48,7 +48,7 @@ const ACTIVITIES: ActivityDef[] = [
   {
     key: 'basic', title: 'Basic live activity',
     description: 'Inline JSX styles with core stacks, labels, and buttons.',
-    makePayload: () => makeBasicLiveActivityPayload('Live Activity', 'Running...'),
+    makePayload: () => makeBasicLiveActivityPayload(),
     activityName: 'basic',
   },
   {

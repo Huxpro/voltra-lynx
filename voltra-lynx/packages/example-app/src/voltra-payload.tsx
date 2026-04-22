@@ -2,38 +2,92 @@ import { Voltra, renderLiveActivityToString } from '@use-voltra/ios';
 
 // ─── Basic Live Activity ────────────────────────────────────────
 
-export function makeBasicLiveActivityPayload(title: string, subtitle: string): string {
+export function makeBasicLiveActivityPayload(): string {
+  // Exact copy of BasicLiveActivityUI.tsx from original Voltra example
   return renderLiveActivityToString({
     lockScreen: (
-      <Voltra.VStack alignment="center" spacing={8}>
-        <Voltra.Symbol name="target" style={{ foregroundColor: '#FF3B30' } as any} />
-        <Voltra.Text style={{ fontSize: 16, fontWeight: 'bold' } as any}>
-          {title}
-        </Voltra.Text>
-        <Voltra.Text style={{ fontSize: 14, color: '#AAAAAA' } as any}>
-          {subtitle}
-        </Voltra.Text>
+      <Voltra.VStack id="basic-live-activity" spacing={16} style={{ padding: 16 } as any}>
+        <Voltra.VStack spacing={8} alignment="center">
+          <Voltra.ZStack alignment="center">
+            <Voltra.Image
+              source={{ assetName: 'voltra-icon' }}
+              style={{ width: 60, height: 60, borderRadius: 12 } as any}
+              resizeMode="stretch"
+            />
+            <Voltra.Text
+              style={{
+                backgroundColor: '#8232FF',
+                color: '#FFFFFF',
+                fontSize: 10,
+                fontWeight: '600',
+                paddingLeft: 4, paddingRight: 4,
+                paddingTop: 2, paddingBottom: 2,
+                borderRadius: 6,
+              } as any}
+            >
+              NEW
+            </Voltra.Text>
+          </Voltra.ZStack>
+
+          <Voltra.Text
+            style={{
+              color: '#F0F9FF',
+              fontSize: 28,
+              fontWeight: '700',
+              letterSpacing: -0.5,
+            } as any}
+          >
+            Hello, Voltra!
+          </Voltra.Text>
+          <Voltra.Text
+            style={{
+              color: '#94A3B8',
+              fontSize: 16,
+              fontWeight: '500',
+            } as any}
+          >
+            Welcome to your first Live Activity.
+          </Voltra.Text>
+        </Voltra.VStack>
       </Voltra.VStack>
     ),
     island: {
       compact: {
-        leading: <Voltra.Symbol name="target" style={{ foregroundColor: '#FF3B30' } as any} />,
-        trailing: <Voltra.Text>{title}</Voltra.Text>,
+        leading: (
+          <Voltra.Image
+            source={{ assetName: 'voltra-icon' }}
+            style={{ width: 24, height: 24, borderRadius: 6 } as any}
+            resizeMode="stretch"
+          />
+        ),
+        trailing: <Voltra.Text style={{ fontSize: 12, color: '#F0F9FF' } as any}>Voltra</Voltra.Text>,
       },
       expanded: {
         center: (
           <Voltra.VStack alignment="center" spacing={4}>
-            <Voltra.Text style={{ fontSize: 18, fontWeight: 'bold' } as any}>
-              {title}
+            <Voltra.Text style={{ fontSize: 18, fontWeight: '700', color: '#F0F9FF' } as any}>
+              Hello, Voltra!
             </Voltra.Text>
-            <Voltra.Text style={{ fontSize: 14, color: '#AAAAAA' } as any}>
-              {subtitle}
+            <Voltra.Text style={{ fontSize: 14, color: '#94A3B8' } as any}>
+              Welcome to your first Live Activity.
             </Voltra.Text>
           </Voltra.VStack>
         ),
-        leading: <Voltra.Symbol name="target" style={{ foregroundColor: '#FF3B30', fontSize: 24 } as any} />,
+        leading: (
+          <Voltra.Image
+            source={{ assetName: 'voltra-icon' }}
+            style={{ width: 40, height: 40, borderRadius: 10 } as any}
+            resizeMode="stretch"
+          />
+        ),
       },
-      minimal: <Voltra.Symbol name="target" style={{ foregroundColor: '#FF3B30' } as any} />,
+      minimal: (
+        <Voltra.Image
+          source={{ assetName: 'voltra-icon' }}
+          style={{ width: 16, height: 16, borderRadius: 4 } as any}
+          resizeMode="stretch"
+        />
+      ),
     },
   });
 }
