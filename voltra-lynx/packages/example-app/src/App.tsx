@@ -1,4 +1,6 @@
 import { useState, useCallback } from '@lynx-js/react';
+// Purple gradient background matching original Voltra splash
+const BG_GRADIENT = 'linear-gradient(160deg, #1a0533 0%, #0d0f1a 40%, #0a1628 60%, #0d1117 100%)';
 import {
   makeBasicLiveActivityPayload,
   makeMusicPlayerPayload,
@@ -145,7 +147,7 @@ function ActivityCard({ def }: { def: ActivityDef }) {
   return (
     <view style={{
       backgroundColor: '#0F172A',
-      borderRadius: 20, padding: 18,
+      borderRadius: '20px', padding: 18,
       borderWidth: 1, borderColor: 'rgba(148, 163, 184, 0.12)',
       marginTop: 16,
     }}>
@@ -156,7 +158,7 @@ function ActivityCard({ def }: { def: ActivityDef }) {
         </text>
         <view style={{
           paddingLeft: 10, paddingRight: 10, paddingTop: 4, paddingBottom: 4,
-          borderRadius: 999,
+          borderRadius: '999px',
           backgroundColor: isActive ? 'rgba(130, 50, 255, 0.2)' : 'rgba(148, 163, 184, 0.15)',
         }}>
           <text style={{ fontSize: 12, fontWeight: '600', color: isActive ? '#8232FF' : '#94A3B8' }}>
@@ -179,7 +181,7 @@ function ActivityCard({ def }: { def: ActivityDef }) {
             borderWidth: isActive ? 1 : 0,
             borderColor: 'rgba(130, 50, 255, 0.4)',
             paddingTop: 12, paddingBottom: 12, paddingLeft: 24, paddingRight: 24,
-            borderRadius: 12, alignItems: 'center',
+            borderRadius: '12px', alignItems: 'center',
           }}
         >
           <text style={{ fontSize: 14, fontWeight: '600', color: isActive ? '#E2E8F0' : '#FFFFFF' }}>
@@ -190,10 +192,10 @@ function ActivityCard({ def }: { def: ActivityDef }) {
           bindtap={handleUpdate}
           style={{
             marginLeft: 12,
-            borderWidth: 1, borderColor: isActive ? 'rgba(130, 50, 255, 0.6)' : 'rgba(130, 50, 255, 0.2)',
+            borderWidth: 1, borderColor: 'rgba(130, 50, 255, 0.6)',
             paddingTop: 12, paddingBottom: 12, paddingLeft: 24, paddingRight: 24,
-            borderRadius: 12, alignItems: 'center',
-            opacity: isActive ? 1 : 0.4,
+            borderRadius: '12px', alignItems: 'center',
+            opacity: isActive ? 1 : 0.5,
           }}
         >
           <text style={{ fontSize: 14, fontWeight: '600', color: '#E2E8F0' }}>Update</text>
@@ -241,7 +243,7 @@ function TestingGroundsScreen({ onBack }: { onBack: () => void }) {
               key={entry.id}
               bindtap={() => setActiveScreen(entry.id)}
               style={{
-                backgroundColor: '#0F172A', borderRadius: 12, padding: 16, marginBottom: 8,
+                backgroundColor: '#0F172A', borderRadius: '12px', padding: 16, marginBottom: 8,
                 borderWidth: 1, borderColor: 'rgba(148, 163, 184, 0.12)',
                 display: 'linear', linearDirection: 'row', alignItems: 'center',
               }}
@@ -266,7 +268,7 @@ export function App() {
   }
 
   return (
-    <view style={{ width: '100%', height: '100%', backgroundColor: '#0B0F19' }}>
+    <view style={{ width: '100%', height: '100%', backgroundImage: BG_GRADIENT } as any}>
       <scroll-view style={{ width: '100%', linearWeight: 1 }} scroll-orientation="vertical">
         <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 60, paddingBottom: 24 }}>
           {/* Header */}
@@ -283,7 +285,7 @@ export function App() {
                 backgroundColor: 'rgba(130, 50, 255, 0.1)',
                 borderWidth: 1, borderColor: 'rgba(130, 50, 255, 0.4)',
                 paddingTop: 12, paddingBottom: 12, paddingLeft: 24, paddingRight: 24,
-                borderRadius: 12, alignItems: 'center',
+                borderRadius: '12px', alignItems: 'center',
               }}
             >
               <text style={{ fontSize: 14, fontWeight: '600', color: '#E2E8F0' }}>Testing Grounds</text>
@@ -306,7 +308,7 @@ export function App() {
               borderWidth: 1, borderColor: 'rgba(130, 50, 255, 0.4)',
               backgroundColor: 'rgba(130, 50, 255, 0.1)',
               paddingTop: 12, paddingBottom: 12, paddingLeft: 24, paddingRight: 24,
-              borderRadius: 12, alignItems: 'center',
+              borderRadius: '12px', alignItems: 'center',
             }}
           >
             <text style={{ fontSize: 14, fontWeight: '600', color: '#8232FF' }}>End all live activities</text>
