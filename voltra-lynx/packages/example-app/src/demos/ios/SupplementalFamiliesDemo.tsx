@@ -1,118 +1,158 @@
-import { useState } from '@lynx-js/react';
+import { useState, useCallback } from '@lynx-js/react';
+import { makeSupplementalPayload } from '../../voltra-payload';
 
-type WidgetFamily = 'small' | 'medium' | 'large' | 'accessoryCircular' | 'accessoryRectangular' | 'accessoryInline';
-
-interface FamilyInfo {
-  id: WidgetFamily;
-  label: string;
-  width: number;
-  height: number;
-  description: string;
-}
-
-const families: FamilyInfo[] = [
-  { id: 'small', label: 'Small', width: 155, height: 155, description: 'Home screen small widget' },
-  { id: 'medium', label: 'Medium', width: 329, height: 155, description: 'Home screen medium widget' },
-  { id: 'large', label: 'Large', width: 329, height: 345, description: 'Home screen large widget' },
-  { id: 'accessoryCircular', label: 'Circular', width: 50, height: 50, description: 'Lock screen circular' },
-  { id: 'accessoryRectangular', label: 'Rectangular', width: 160, height: 50, description: 'Lock screen rectangular' },
-  { id: 'accessoryInline', label: 'Inline', width: 200, height: 20, description: 'Lock screen inline text' },
-];
+declare const NativeModules: {
+  VoltraModule: {
+    startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
+    updateLiveActivity: (id: string, json: string, options: any, callback: (r: any) => void) => void;
+    endLiveActivity: (id: string, options: any, callback: (r: any) => void) => void;
+  };
+};
 
 export function SupplementalFamiliesDemo() {
-  const [selectedFamily, setSelectedFamily] = useState<WidgetFamily>('medium');
-  const selected = families.find((f) => f.id === selectedFamily)!;
+  const [activityId, setActivityId] = useState<string | null>(null);
+  const [status, setStatus] = useState('Not started');
+  const isActive = activityId !== null;
 
-  // Scale factor for preview
-  const maxWidth = 300;
-  const scale = Math.min(1, maxWidth / selected.width);
-  const previewWidth = selected.width * scale;
-  const previewHeight = selected.height * scale;
+  const start = useCallback(() => {
+    'background only';
+    if (typeof NativeModules === 'undefined') {
+      setStatus('Error: NativeModules is undefined');
+      return;
+    }
+    if (!NativeModules.VoltraModule) {
+      setStatus('Error: VoltraModule not found');
+      return;
+    }
+
+    const payload = makeSupplementalPayload();
+    try {
+      NativeModules.VoltraModule.startLiveActivity(
+        payload,
+        { activityName: 'supplemental-families-demo', deepLinkUrl: '/voltraui/supplemental-families-demo' },
+        (id: any) => {
+          const result = String(id);
+          if (result.startsWith('ERROR:')) {
+            setStatus('Native error: ' + result.substring(6));
+          } else if (id && id !== null && result !== 'null') {
+            setActivityId(result);
+            setStatus('Active (id: ' + result.substring(0, 8) + '...)');
+          } else {
+            setStatus('Callback returned null');
+          }
+        }
+      );
+    } catch (e: any) {
+      setStatus('Catch: ' + (e?.message || String(e)));
+    }
+  }, []);
+
+  const update = useCallback(() => {
+    'background only';
+    if (!activityId) return;
+    const payload = makeSupplementalPayload();
+    NativeModules.VoltraModule.updateLiveActivity(
+      activityId, payload, {},
+      () => { setStatus('Updated at ' + new Date().toLocaleTimeString()); }
+    );
+  }, [activityId]);
+
+  const end = useCallback(() => {
+    'background only';
+    if (!activityId) return;
+    NativeModules.VoltraModule.endLiveActivity(
+      activityId, { dismissalPolicy: { type: 'immediate' } },
+      () => {
+        setActivityId(null);
+        setStatus('Ended');
+      }
+    );
+  }, [activityId]);
 
   return (
-    <view style={{ flex: 1, padding: 16 }}>
-      <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 16 }}>
-        Supplemental Widget Families
+    <view style={{ padding: 16 }}>
+      <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 8 }}>
+        Supplemental Families
       </text>
       <text style={{ color: '#666', marginBottom: 24 }}>
-        Preview different widget family sizes and their supplemental configurations.
+        Live Activity with supplementalActivityFamilies.small for watchOS Smart Stack and CarPlay. Shows a simplified "Watch" view alongside the lock screen and Dynamic Island regions.
       </text>
 
-      {/* Family selector */}
-      <scroll-view scroll-orientation="horizontal" style={{ marginBottom: 20 }}>
-        <view style={{ flexDirection: 'row', gap: 8 }}>
-          {families.map((family) => (
-            <view
-              key={family.id}
-              bindtap={() => setSelectedFamily(family.id)}
-              style={{
-                backgroundColor: selectedFamily === family.id ? '#007AFF' : '#e5e5e5',
-                paddingLeft: 14, paddingRight: 14,
-                paddingTop: 8, paddingBottom: 8,
-                borderRadius: 8,
-              }}
-            >
-              <text style={{
-                color: selectedFamily === family.id ? '#fff' : '#333',
-                fontSize: 13,
-                fontWeight: '600',
-              }}>
-                {family.label}
-              </text>
-            </view>
-          ))}
-        </view>
-      </scroll-view>
-
-      {/* Preview area */}
+      {/* Activity preview - lock screen */}
       <view style={{
-        alignItems: 'center',
-        marginBottom: 24,
-        padding: 20,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: '#1c1c1e',
         borderRadius: 16,
+        padding: 16,
+        marginBottom: 12,
       }}>
-        <text style={{ color: '#666', fontSize: 12, marginBottom: 12 }}>
-          {selected.width} x {selected.height} pt
-        </text>
-
-        {/* Widget preview */}
-        <view style={{
-          width: previewWidth,
-          height: previewHeight,
-          backgroundColor: '#1c1c1e',
-          borderRadius: selected.id.startsWith('accessory') ? 8 : 16,
-          padding: 12,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-          <text style={{ color: '#fff', fontSize: selected.id === 'accessoryInline' ? 11 : 14, fontWeight: '600' }}>
-            {selected.label} Widget
-          </text>
-          {selected.height > 50 && (
-            <text style={{ color: '#aaa', fontSize: 11, marginTop: 4 }}>
-              Content Area
-            </text>
-          )}
-        </view>
+        <text style={{ color: '#94A3B8', fontSize: 11, marginBottom: 6 }}>Lock Screen</text>
+        <text style={{ color: '#F0F9FF', fontSize: 24, fontWeight: '700' }}>Lock Screen</text>
       </view>
 
-      {/* Info */}
+      {/* Activity preview - supplemental small */}
       <view style={{
-        backgroundColor: '#f5f5f5',
-        borderRadius: 10,
-        padding: 14,
+        backgroundColor: '#1c1c1e',
+        borderRadius: 16,
+        padding: 16,
+        marginBottom: 12,
+        alignItems: 'center',
       }}>
-        <text style={{ fontSize: 14, fontWeight: '600', marginBottom: 4 }}>
-          {selected.label}
-        </text>
-        <text style={{ color: '#666', fontSize: 13 }}>
-          {selected.description}
-        </text>
-        <text style={{ color: '#999', fontSize: 12, marginTop: 8 }}>
-          Family ID: {selected.id}
-        </text>
+        <text style={{ color: '#94A3B8', fontSize: 11, marginBottom: 6 }}>Supplemental Small (watchOS)</text>
+        <text style={{ color: '#3B82F6', fontSize: 16, fontWeight: '700' }}>Watch</text>
+        <text style={{ color: '#94A3B8', fontSize: 11, marginTop: 2 }}>watchOS / CarPlay</text>
       </view>
+
+      {/* Activity preview - island compact */}
+      <view style={{
+        backgroundColor: '#1c1c1e',
+        borderRadius: 16,
+        padding: 16,
+        marginBottom: 24,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}>
+        <text style={{ color: '#94A3B8', fontSize: 11 }}>Compact:</text>
+        <text style={{ color: '#10B981', fontSize: 14, fontWeight: '700' }}>L</text>
+        <text style={{ color: '#666', fontSize: 12 }}>---</text>
+        <text style={{ color: '#10B981', fontSize: 14, fontWeight: '700' }}>R</text>
+      </view>
+
+      {/* Controls */}
+      <view
+        bindtap={start}
+        style={{
+          backgroundColor: isActive ? '#ccc' : '#007AFF',
+          padding: 14, borderRadius: 10, alignItems: 'center', marginBottom: 8,
+        }}
+      >
+        <text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>Start Activity</text>
+      </view>
+
+      <view
+        bindtap={update}
+        style={{
+          backgroundColor: isActive ? '#34C759' : '#ccc',
+          padding: 14, borderRadius: 10, alignItems: 'center', marginBottom: 8,
+        }}
+      >
+        <text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>Update Activity</text>
+      </view>
+
+      <view
+        bindtap={end}
+        style={{
+          backgroundColor: isActive ? '#FF3B30' : '#ccc',
+          padding: 14, borderRadius: 10, alignItems: 'center', marginBottom: 8,
+        }}
+      >
+        <text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>Stop Activity</text>
+      </view>
+
+      <text style={{ marginTop: 12, color: '#666', fontSize: 13 }}>
+        Status: {status}
+      </text>
     </view>
   );
 }

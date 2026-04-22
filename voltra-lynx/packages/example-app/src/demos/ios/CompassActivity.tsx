@@ -1,4 +1,14 @@
-import { useState, useEffect } from '@lynx-js/react';
+import { useState, useEffect, useCallback } from '@lynx-js/react';
+import { makeCompassPayload } from '../../voltra-payload';
+
+// Lynx NativeModules global (available on background thread)
+declare const NativeModules: {
+  VoltraModule: {
+    startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
+    updateLiveActivity: (id: string, json: string, options: any, callback: (r: any) => void) => void;
+    endLiveActivity: (id: string, options: any, callback: (r: any) => void) => void;
+  };
+};
 
 const cardinalDirections = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
 
@@ -10,23 +20,91 @@ function getCardinal(degrees: number): string {
 export function CompassActivity() {
   const [heading, setHeading] = useState(0);
   const [isSimulating, setIsSimulating] = useState(false);
+  const [activityId, setActivityId] = useState<string | null>(null);
+  const [status, setStatus] = useState('Not started');
+  const isActive = activityId !== null;
 
+  // Simulate heading cycling ~15 degrees per second (increment every 200ms)
   useEffect(() => {
     if (!isSimulating) return;
 
     const interval = setInterval(() => {
-      setHeading((h) => (h + 3 + Math.random() * 4) % 360);
+      setHeading((h) => (h + 3) % 360);
     }, 200);
 
     return () => clearInterval(interval);
   }, [isSimulating]);
+
+  // Auto-update the live activity when heading changes and activity is active
+  useEffect(() => {
+    if (!isActive || !isSimulating) return;
+
+    // Run on background thread for NativeModules access
+    const doUpdate = () => {
+      'background only';
+      if (!activityId) return;
+      const payload = makeCompassPayload(heading);
+      NativeModules.VoltraModule.updateLiveActivity(
+        activityId, payload, {},
+        () => {}
+      );
+    };
+    doUpdate();
+  }, [heading, activityId, isActive, isSimulating]);
+
+  const start = useCallback(() => {
+    'background only';
+    if (typeof NativeModules === 'undefined') {
+      setStatus('Error: NativeModules is undefined');
+      return;
+    }
+    if (!NativeModules.VoltraModule) {
+      setStatus('Error: VoltraModule not found');
+      return;
+    }
+
+    const payload = makeCompassPayload(heading);
+    try {
+      NativeModules.VoltraModule.startLiveActivity(
+        payload,
+        { activityName: 'compass' },
+        (id: any) => {
+          const result = String(id);
+          if (result.startsWith('ERROR:')) {
+            setStatus('Native error: ' + result.substring(6));
+          } else if (id && id !== null && result !== 'null') {
+            setActivityId(result);
+            setStatus('Active (id: ' + result.substring(0, 8) + '...)');
+            setIsSimulating(true);
+          } else {
+            setStatus('Callback returned null');
+          }
+        }
+      );
+    } catch (e: any) {
+      setStatus('Catch: ' + (e?.message || String(e)));
+    }
+  }, [heading]);
+
+  const stop = useCallback(() => {
+    'background only';
+    if (!activityId) return;
+    NativeModules.VoltraModule.endLiveActivity(
+      activityId, { dismissalPolicy: { type: 'immediate' } },
+      () => {
+        setActivityId(null);
+        setIsSimulating(false);
+        setStatus('Ended');
+      }
+    );
+  }, [activityId]);
 
   const cardinal = getCardinal(heading);
   const displayDegrees = Math.round(heading);
 
   return (
     <view style={{ flex: 1, padding: 16 }}>
-      <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 16 }}>
+      <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 8 }}>
         Compass Activity
       </text>
       <text style={{ color: '#666', marginBottom: 24 }}>
@@ -71,7 +149,7 @@ export function CompassActivity() {
             <text style={{ color: '#fff', fontSize: 42, fontWeight: 'bold' }}>
               {displayDegrees}°
             </text>
-            <text style={{ color: '#007AFF', fontSize: 20, fontWeight: '600', marginTop: 4 }}>
+            <text style={{ color: '#3B82F6', fontSize: 20, fontWeight: '600', marginTop: 4 }}>
               {cardinal}
             </text>
           </view>
@@ -88,7 +166,7 @@ export function CompassActivity() {
           <view style={{
             width: `${(heading / 360) * 100}%`,
             height: 4,
-            backgroundColor: '#007AFF',
+            backgroundColor: '#3B82F6',
             borderRadius: 2,
           }} />
         </view>
@@ -99,9 +177,9 @@ export function CompassActivity() {
 
       {/* Controls */}
       <view
-        bindtap={() => setIsSimulating(!isSimulating)}
+        bindtap={isActive ? stop : start}
         style={{
-          backgroundColor: isSimulating ? '#FF9500' : '#007AFF',
+          backgroundColor: isActive ? '#FF3B30' : '#007AFF',
           padding: 14,
           borderRadius: 10,
           alignItems: 'center',
@@ -109,7 +187,24 @@ export function CompassActivity() {
         }}
       >
         <text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>
-          {isSimulating ? 'Stop Simulation' : 'Start Simulation'}
+          {isActive ? 'Stop Activity' : 'Start Activity'}
+        </text>
+      </view>
+
+      <view
+        bindtap={() => {
+          setIsSimulating(!isSimulating);
+        }}
+        style={{
+          backgroundColor: isSimulating ? '#FF9500' : '#34C759',
+          padding: 14,
+          borderRadius: 10,
+          alignItems: 'center',
+          marginBottom: 12,
+        }}
+      >
+        <text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>
+          {isSimulating ? 'Pause Simulation' : 'Resume Simulation'}
         </text>
       </view>
 
@@ -126,6 +221,10 @@ export function CompassActivity() {
           Reset to North
         </text>
       </view>
+
+      <text style={{ marginTop: 16, color: '#666', fontSize: 13 }}>
+        Status: {status}
+      </text>
     </view>
   );
 }

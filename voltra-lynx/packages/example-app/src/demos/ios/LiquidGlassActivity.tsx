@@ -1,145 +1,141 @@
-import { useState } from '@lynx-js/react';
+import { useState, useCallback } from '@lynx-js/react';
+import { makeLiquidGlassPayload } from '../../voltra-payload';
 
-interface GlassElement {
-  id: string;
-  color: string;
-  label: string;
-  opacity: number;
-}
-
-const defaultElements: GlassElement[] = [
-  { id: '1', color: '#FF6B6B', label: 'Red', opacity: 0.6 },
-  { id: '2', color: '#4ECDC4', label: 'Teal', opacity: 0.5 },
-  { id: '3', color: '#45B7D1', label: 'Blue', opacity: 0.7 },
-  { id: '4', color: '#96CEB4', label: 'Green', opacity: 0.5 },
-];
+declare const NativeModules: {
+  VoltraModule: {
+    startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
+    updateLiveActivity: (id: string, json: string, options: any, callback: (r: any) => void) => void;
+    endLiveActivity: (id: string, options: any, callback: (r: any) => void) => void;
+  };
+};
 
 export function LiquidGlassActivity() {
-  const [elements, setElements] = useState(defaultElements);
-  const [blurIntensity, setBlurIntensity] = useState(2);
+  const [activityId, setActivityId] = useState<string | null>(null);
+  const [status, setStatus] = useState('Not started');
+  const isActive = activityId !== null;
 
-  const toggleElement = (id: string) => {
-    setElements(elements.map((el) =>
-      el.id === id ? { ...el, opacity: el.opacity > 0.3 ? 0.2 : 0.7 } : el
-    ));
-  };
+  const start = useCallback(() => {
+    'background only';
+    if (typeof NativeModules === 'undefined') {
+      setStatus('Error: NativeModules is undefined');
+      return;
+    }
+    if (!NativeModules.VoltraModule) {
+      setStatus('Error: VoltraModule not found');
+      return;
+    }
 
-  const cycleBlur = () => {
-    setBlurIntensity((blurIntensity % 3) + 1);
-  };
+    const payload = makeLiquidGlassPayload();
+    try {
+      NativeModules.VoltraModule.startLiveActivity(
+        payload,
+        { activityName: 'liquid-glass', deepLinkUrl: '/voltraui/glass' },
+        (id: any) => {
+          const result = String(id);
+          if (result.startsWith('ERROR:')) {
+            setStatus('Native error: ' + result.substring(6));
+          } else if (id && id !== null && result !== 'null') {
+            setActivityId(result);
+            setStatus('Active (id: ' + result.substring(0, 8) + '...)');
+          } else {
+            setStatus('Callback returned null');
+          }
+        }
+      );
+    } catch (e: any) {
+      setStatus('Catch: ' + (e?.message || String(e)));
+    }
+  }, []);
+
+  const update = useCallback(() => {
+    'background only';
+    if (!activityId) return;
+    const payload = makeLiquidGlassPayload();
+    NativeModules.VoltraModule.updateLiveActivity(
+      activityId, payload, {},
+      () => { setStatus('Updated at ' + new Date().toLocaleTimeString()); }
+    );
+  }, [activityId]);
+
+  const end = useCallback(() => {
+    'background only';
+    if (!activityId) return;
+    NativeModules.VoltraModule.endLiveActivity(
+      activityId, { dismissalPolicy: { type: 'immediate' } },
+      () => {
+        setActivityId(null);
+        setStatus('Ended');
+      }
+    );
+  }, [activityId]);
 
   return (
-    <view style={{ flex: 1, padding: 16 }}>
-      <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 16 }}>
-        Liquid Glass Activity
+    <view style={{ padding: 16 }}>
+      <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 8 }}>
+        Liquid Glass Live Activity
       </text>
       <text style={{ color: '#666', marginBottom: 24 }}>
-        iOS 26 glass container effect preview with colored translucent elements.
+        iOS 26 glass container effect with activityBackgroundTint set to 'clear'. Uses Voltra.GlassContainer and glassEffect for the frosted-glass look on the lock screen.
       </text>
 
-      {/* Glass container preview */}
+      {/* Activity preview */}
       <view style={{
         backgroundColor: '#1c1c1e',
         borderRadius: 20,
         padding: 20,
         marginBottom: 24,
+        alignItems: 'center',
       }}>
-        {/* Simulated glass effect container */}
         <view style={{
-          backgroundColor: `rgba(255, 255, 255, 0.${blurIntensity})`,
-          borderRadius: 16,
+          backgroundColor: 'rgba(255,255,255,0.1)',
+          borderRadius: 24,
+          padding: 20,
           borderWidth: 1,
-          borderColor: 'rgba(255, 255, 255, 0.2)',
-          padding: 16,
-          marginBottom: 16,
+          borderColor: 'rgba(255,255,255,0.2)',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}>
-          <text style={{ color: '#fff', fontSize: 14, fontWeight: '600', marginBottom: 12 }}>
-            Glass Container (Blur: {blurIntensity})
-          </text>
-
-          {/* Colored elements */}
-          <view style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-            {elements.map((el) => (
-              <view
-                key={el.id}
-                bindtap={() => toggleElement(el.id)}
-                style={{
-                  width: 70,
-                  height: 70,
-                  backgroundColor: el.color,
-                  opacity: el.opacity,
-                  borderRadius: 12,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <text style={{ color: '#fff', fontSize: 12, fontWeight: '600' }}>
-                  {el.label}
-                </text>
-              </view>
-            ))}
-          </view>
-        </view>
-
-        {/* Layered glass panels */}
-        <view style={{ flexDirection: 'row', gap: 8 }}>
-          <view style={{
-            flex: 1,
-            height: 60,
-            backgroundColor: 'rgba(255, 255, 255, 0.08)',
-            borderRadius: 10,
-            borderWidth: 1,
-            borderColor: 'rgba(255, 255, 255, 0.15)',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-            <text style={{ color: '#aaa', fontSize: 11 }}>Panel 1</text>
-          </view>
-          <view style={{
-            flex: 1,
-            height: 60,
-            backgroundColor: 'rgba(255, 255, 255, 0.12)',
-            borderRadius: 10,
-            borderWidth: 1,
-            borderColor: 'rgba(255, 255, 255, 0.2)',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-            <text style={{ color: '#aaa', fontSize: 11 }}>Panel 2</text>
-          </view>
-          <view style={{
-            flex: 1,
-            height: 60,
-            backgroundColor: 'rgba(255, 255, 255, 0.16)',
-            borderRadius: 10,
-            borderWidth: 1,
-            borderColor: 'rgba(255, 255, 255, 0.25)',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-            <text style={{ color: '#aaa', fontSize: 11 }}>Panel 3</text>
-          </view>
+          <text style={{ color: '#F8FAFC', fontSize: 20, fontWeight: '700' }}>Voltra</text>
+          <text style={{ color: '#FF0000', fontSize: 24, marginLeft: 8, marginRight: 8 }}>*</text>
+          <text style={{ color: '#F8FAFC', fontSize: 20, fontWeight: '700' }}>liquid glass</text>
         </view>
       </view>
 
       {/* Controls */}
       <view
-        bindtap={cycleBlur}
+        bindtap={start}
         style={{
-          backgroundColor: '#5856D6',
-          padding: 14,
-          borderRadius: 10,
-          alignItems: 'center',
-          marginBottom: 12,
+          backgroundColor: isActive ? '#ccc' : '#007AFF',
+          padding: 14, borderRadius: 10, alignItems: 'center', marginBottom: 8,
         }}
       >
-        <text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>
-          Cycle Blur Intensity
-        </text>
+        <text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>Start Activity</text>
       </view>
 
-      <text style={{ color: '#999', fontSize: 12 }}>
-        Tap colored elements to toggle opacity. In production, this uses iOS 26 UIGlassEffect.
+      <view
+        bindtap={update}
+        style={{
+          backgroundColor: isActive ? '#34C759' : '#ccc',
+          padding: 14, borderRadius: 10, alignItems: 'center', marginBottom: 8,
+        }}
+      >
+        <text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>Update Activity</text>
+      </view>
+
+      <view
+        bindtap={end}
+        style={{
+          backgroundColor: isActive ? '#FF3B30' : '#ccc',
+          padding: 14, borderRadius: 10, alignItems: 'center', marginBottom: 8,
+        }}
+      >
+        <text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>Stop Activity</text>
+      </view>
+
+      <text style={{ marginTop: 12, color: '#666', fontSize: 13 }}>
+        Status: {status}
       </text>
     </view>
   );
