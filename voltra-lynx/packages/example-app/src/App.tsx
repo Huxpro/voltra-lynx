@@ -166,7 +166,7 @@ function ActivityCard({ def }: { def: ActivityDef }) {
       </view>
 
       {/* Description */}
-      <text style={{ marginTop: 10, color: '#94A3B8', fontSize: 13, lineHeight: 18 }}>
+      <text style={{ marginTop: 10, color: '#94A3B8', fontSize: 13 }}>
         {def.description}
       </text>
 
@@ -267,11 +267,11 @@ export function App() {
 
   return (
     <view style={{ width: '100%', height: '100%', backgroundColor: '#0B0F19' }}>
-      <scroll-view style={{ width: '100%', height: '100%' }} scroll-orientation="vertical">
+      <scroll-view style={{ width: '100%', linearWeight: 1 }} scroll-orientation="vertical">
         <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}>
           {/* Header */}
           <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' }}>Voltra</text>
-          <text style={{ fontSize: 14, lineHeight: 20, color: '#CBD5F5', marginBottom: 8 }}>
+          <text style={{ fontSize: 14, color: '#CBD5F5', marginBottom: 8 }}>
             Voltra is a library that lets you build custom Live Activities and Dynamic Island layouts using Lynx — powered by the same rendering engine.
           </text>
 
