@@ -34,6 +34,7 @@ targets:
       - path: LynxVoltra/Voltra/target
       - path: LynxVoltra/Voltra/shared
       - path: LynxVoltra/Voltra/ui
+      - path: LynxVoltra/Assets.xcassets
     settings:
       base:
         INFOPLIST_FILE: LynxVoltra/Voltra/target/Info.plist
