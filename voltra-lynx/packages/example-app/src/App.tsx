@@ -27,6 +27,7 @@ import { WidgetSchedulingScreen } from './demos/testing/WidgetSchedulingScreen';
 import { ServerDrivenWidgetsScreen } from './demos/testing/ServerDrivenWidgetsScreen';
 import { CustomFontsScreen } from './demos/testing/CustomFontsScreen';
 import { ImageFallbackScreen } from './demos/testing/ImageFallbackScreen';
+import { WeatherWidgetScreen } from './demos/testing/WeatherWidgetScreen';
 
 type Tab = 'ios' | 'android' | 'testing';
 
@@ -65,6 +66,7 @@ const testingScreens = [
   { id: 'server-driven', title: 'Server-Driven Widgets' },
   { id: 'custom-fonts', title: 'Custom Fonts' },
   { id: 'image-fallback', title: 'Image Fallback' },
+  { id: 'weather-testing', title: 'Weather Widget Testing' },
 ];
 
 // Map demo IDs to components
@@ -98,6 +100,7 @@ const demoComponents: Record<string, () => JSX.Element> = {
   'server-driven': ServerDrivenWidgetsScreen,
   'custom-fonts': CustomFontsScreen,
   'image-fallback': ImageFallbackScreen,
+  'weather-testing': WeatherWidgetScreen,
 };
 
 function DemoScreen({ id, title, onBack }: { id: string; title: string; onBack: () => void }) {

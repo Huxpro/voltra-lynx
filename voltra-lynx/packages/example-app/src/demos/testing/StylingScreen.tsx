@@ -1,115 +1,330 @@
-import { useState } from '@lynx-js/react';
+import { Voltra, renderVoltraVariantToJson } from '@use-voltra/ios';
+
+interface StylingExample {
+  id: string;
+  title: string;
+  description: string;
+  renderJson: () => string;
+}
+
+const STYLING_DATA: StylingExample[] = [
+  {
+    id: 'padding',
+    title: 'Padding',
+    description: 'Demonstrates uniform padding on all edges.',
+    renderJson: () => {
+      try {
+        return JSON.stringify(
+          renderVoltraVariantToJson(
+            <Voltra.VStack style={{ backgroundColor: '#3B82F6', padding: 16 } as any}>
+              <Voltra.Text style={{ color: 'white' } as any}>Uniform Padding (16)</Voltra.Text>
+            </Voltra.VStack>
+          ),
+          null,
+          2
+        );
+      } catch { return '(render error)'; }
+    },
+  },
+  {
+    id: 'individual-padding',
+    title: 'Individual Edge Padding',
+    description: 'Padding applied to specific edges individually.',
+    renderJson: () => {
+      try {
+        return JSON.stringify(
+          renderVoltraVariantToJson(
+            <Voltra.VStack
+              style={{
+                backgroundColor: '#10B981',
+                paddingTop: 8,
+                paddingBottom: 16,
+                paddingLeft: 12,
+                paddingRight: 20,
+              } as any}
+            >
+              <Voltra.Text style={{ color: 'white' } as any}>T:8, B:16, L:12, R:20</Voltra.Text>
+            </Voltra.VStack>
+          ),
+          null,
+          2
+        );
+      } catch { return '(render error)'; }
+    },
+  },
+  {
+    id: 'horizontal-vertical-padding',
+    title: 'Horizontal & Vertical Padding',
+    description: 'Horizontal and vertical padding shortcuts.',
+    renderJson: () => {
+      try {
+        return JSON.stringify(
+          renderVoltraVariantToJson(
+            <Voltra.VStack style={{ backgroundColor: '#F59E0B', paddingLeft: 20, paddingRight: 20, paddingTop: 12, paddingBottom: 12 } as any}>
+              <Voltra.Text style={{ color: 'white' } as any}>Horizontal:20, Vertical:12</Voltra.Text>
+            </Voltra.VStack>
+          ),
+          null,
+          2
+        );
+      } catch { return '(render error)'; }
+    },
+  },
+  {
+    id: 'margin',
+    title: 'Margin',
+    description: 'Demonstrates uniform margin on all edges.',
+    renderJson: () => {
+      try {
+        return JSON.stringify(
+          renderVoltraVariantToJson(
+            <Voltra.VStack style={{ backgroundColor: '#8B5CF6', margin: 12 } as any}>
+              <Voltra.Text style={{ color: 'white' } as any}>Uniform Margin (12)</Voltra.Text>
+            </Voltra.VStack>
+          ),
+          null,
+          2
+        );
+      } catch { return '(render error)'; }
+    },
+  },
+  {
+    id: 'individual-margins',
+    title: 'Individual Edge Margins',
+    description: 'Margins applied to specific edges individually.',
+    renderJson: () => {
+      try {
+        return JSON.stringify(
+          renderVoltraVariantToJson(
+            <Voltra.VStack
+              style={{ backgroundColor: '#EF4444', marginTop: 8, marginBottom: 16, marginLeft: 12, marginRight: 20 } as any}
+            >
+              <Voltra.Text style={{ color: 'white' } as any}>T:8, B:16, L:12, R:20</Voltra.Text>
+            </Voltra.VStack>
+          ),
+          null,
+          2
+        );
+      } catch { return '(render error)'; }
+    },
+  },
+  {
+    id: 'text-colors',
+    title: 'Text Colors',
+    description: 'Different text colors using the color property.',
+    renderJson: () => {
+      try {
+        return JSON.stringify(
+          renderVoltraVariantToJson(
+            <Voltra.VStack>
+              <Voltra.Text style={{ color: '#FFFFFF' } as any}>White Text</Voltra.Text>
+              <Voltra.Text style={{ color: '#3B82F6' } as any}>Blue Text</Voltra.Text>
+              <Voltra.Text style={{ color: '#10B981' } as any}>Green Text</Voltra.Text>
+              <Voltra.Text style={{ color: '#F59E0B' } as any}>Orange Text</Voltra.Text>
+            </Voltra.VStack>
+          ),
+          null,
+          2
+        );
+      } catch { return '(render error)'; }
+    },
+  },
+  {
+    id: 'background-colors',
+    title: 'Background Colors',
+    description: 'Different background colors applied to containers.',
+    renderJson: () => {
+      try {
+        return JSON.stringify(
+          renderVoltraVariantToJson(
+            <Voltra.HStack>
+              <Voltra.VStack style={{ backgroundColor: '#3B82F6', flexGrowWidth: true, padding: 8 } as any}>
+                <Voltra.Text style={{ color: 'white' } as any}>Blue</Voltra.Text>
+              </Voltra.VStack>
+              <Voltra.VStack style={{ backgroundColor: '#10B981', flexGrowWidth: true, padding: 8 } as any}>
+                <Voltra.Text style={{ color: 'white' } as any}>Green</Voltra.Text>
+              </Voltra.VStack>
+              <Voltra.VStack style={{ backgroundColor: '#F59E0B', flexGrowWidth: true, padding: 8 } as any}>
+                <Voltra.Text style={{ color: 'white' } as any}>Orange</Voltra.Text>
+              </Voltra.VStack>
+            </Voltra.HStack>
+          ),
+          null,
+          2
+        );
+      } catch { return '(render error)'; }
+    },
+  },
+  {
+    id: 'borders',
+    title: 'Borders',
+    description: 'Border radius, width, and color properties.',
+    renderJson: () => {
+      try {
+        return JSON.stringify(
+          renderVoltraVariantToJson(
+            <Voltra.HStack>
+              <Voltra.VStack
+                style={{
+                  backgroundColor: '#3B82F6',
+                  borderRadius: 8,
+                  borderWidth: 2,
+                  borderColor: '#1E40AF',
+                  flexGrowWidth: true,
+                  padding: 12,
+                } as any}
+              >
+                <Voltra.Text style={{ color: 'white' } as any}>Rounded</Voltra.Text>
+              </Voltra.VStack>
+              <Voltra.VStack
+                style={{
+                  backgroundColor: '#10B981',
+                  borderRadius: 120,
+                  borderWidth: 3,
+                  borderColor: '#047857',
+                  flexGrowWidth: true,
+                  padding: 12,
+                } as any}
+              >
+                <Voltra.Text style={{ color: 'white' } as any}>More Rounded</Voltra.Text>
+              </Voltra.VStack>
+            </Voltra.HStack>
+          ),
+          null,
+          2
+        );
+      } catch { return '(render error)'; }
+    },
+  },
+  {
+    id: 'shadows',
+    title: 'Shadows',
+    description: 'Shadow effects with color, offset, opacity, and radius.',
+    renderJson: () => {
+      try {
+        return JSON.stringify(
+          renderVoltraVariantToJson(
+            <Voltra.VStack
+              style={{
+                backgroundColor: '#FFFFFF',
+                shadowColor: '#FF0000',
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.5,
+                shadowRadius: 8,
+                padding: 16,
+              } as any}
+            >
+              <Voltra.Text style={{ color: '#1F2937' } as any}>Shadow Effect</Voltra.Text>
+            </Voltra.VStack>
+          ),
+          null,
+          2
+        );
+      } catch { return '(render error)'; }
+    },
+  },
+  {
+    id: 'typography',
+    title: 'Typography',
+    description: 'Font size, weight, and letter spacing variations.',
+    renderJson: () => {
+      try {
+        return JSON.stringify(
+          renderVoltraVariantToJson(
+            <Voltra.VStack>
+              <Voltra.Text style={{ color: '#FFFFFF', fontSize: 12 } as any}>Small Text (12px)</Voltra.Text>
+              <Voltra.Text style={{ color: '#FFFFFF', fontSize: 16 } as any}>Normal Text (16px)</Voltra.Text>
+              <Voltra.Text style={{ color: '#FFFFFF', fontSize: 20, fontWeight: 'bold' } as any}>Large Bold (20px)</Voltra.Text>
+              <Voltra.Text style={{ color: '#3B82F6', letterSpacing: 2 } as any}>Spaced Letters</Voltra.Text>
+            </Voltra.VStack>
+          ),
+          null,
+          2
+        );
+      } catch { return '(render error)'; }
+    },
+  },
+  {
+    id: 'opacity',
+    title: 'Opacity',
+    description: 'Opacity values applied to containers.',
+    renderJson: () => {
+      try {
+        return JSON.stringify(
+          renderVoltraVariantToJson(
+            <Voltra.HStack>
+              <Voltra.VStack style={{ backgroundColor: '#3B82F6', opacity: 1.0, flexGrowWidth: true, padding: 8 } as any}>
+                <Voltra.Text style={{ color: 'white' } as any}>100%</Voltra.Text>
+              </Voltra.VStack>
+              <Voltra.VStack style={{ backgroundColor: '#3B82F6', opacity: 0.7, flexGrowWidth: true, padding: 8 } as any}>
+                <Voltra.Text style={{ color: 'white' } as any}>70%</Voltra.Text>
+              </Voltra.VStack>
+              <Voltra.VStack style={{ backgroundColor: '#3B82F6', opacity: 0.4, flexGrowWidth: true, padding: 8 } as any}>
+                <Voltra.Text style={{ color: 'white' } as any}>40%</Voltra.Text>
+              </Voltra.VStack>
+            </Voltra.HStack>
+          ),
+          null,
+          2
+        );
+      } catch { return '(render error)'; }
+    },
+  },
+];
 
 export function StylingScreen() {
-  const [activeSection, setActiveSection] = useState(0);
-
   return (
-    <scroll-view style={{ flex: 1 }}>
-      <view style={{ padding: 16 }}>
-        <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 16 }}>
-          CSS Styling Showcase
+    <scroll-view style={{ flex: 1 } as any} scroll-y>
+      <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}>
+        <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' } as any}>
+          Styling Examples
         </text>
-        <text style={{ color: '#666', marginBottom: 24 }}>
-          Demonstrating various CSS styling capabilities in Lynx.
+        <text style={{ fontSize: 14, lineHeight: 20, color: '#CBD5F5', marginBottom: 8 } as any}>
+          Explore Voltra's styling capabilities. Each example demonstrates different styling properties that can be applied to Voltra components.
         </text>
 
-        {/* Typography */}
-        <view style={{ marginBottom: 24 }}>
-          <text style={{ fontSize: 16, fontWeight: '600', marginBottom: 12 }}>Typography</text>
-          <text style={{ fontSize: 28, fontWeight: 'bold' }}>Heading 1</text>
-          <text style={{ fontSize: 22, fontWeight: '600' }}>Heading 2</text>
-          <text style={{ fontSize: 18, fontWeight: '500' }}>Heading 3</text>
-          <text style={{ fontSize: 16 }}>Body text</text>
-          <text style={{ fontSize: 14, color: '#666' }}>Secondary text</text>
-          <text style={{ fontSize: 12, color: '#999' }}>Caption text</text>
-          <text style={{ fontSize: 14, fontStyle: 'italic' }}>Italic text</text>
-          <text style={{ fontSize: 14, textDecorationLine: 'underline' }}>Underlined text</text>
-        </view>
+        <view style={{ gap: 12, marginTop: 8 }}>
+          {STYLING_DATA.map((item) => (
+            <view
+              key={item.id}
+              style={{
+                backgroundColor: '#1E293B',
+                borderRadius: 12,
+                padding: 16,
+                borderWidth: 1,
+                borderColor: '#334155',
+              } as any}
+            >
+              <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 } as any}>
+                {item.title}
+              </text>
+              <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 8 } as any}>
+                {item.description}
+              </text>
 
-        {/* Colors and backgrounds */}
-        <view style={{ marginBottom: 24 }}>
-          <text style={{ fontSize: 16, fontWeight: '600', marginBottom: 12 }}>Colors & Backgrounds</text>
-          <view style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-            {['#FF3B30', '#FF9500', '#FFCC00', '#34C759', '#007AFF', '#5856D6', '#AF52DE', '#FF2D55'].map((color) => (
-              <view key={color} style={{
-                width: 60,
-                height: 60,
-                backgroundColor: color,
+              <view style={{
+                backgroundColor: '#0F172A',
                 borderRadius: 8,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <text style={{ color: '#fff', fontSize: 9 }}>{color}</text>
-              </view>
-            ))}
-          </view>
-        </view>
-
-        {/* Border styles */}
-        <view style={{ marginBottom: 24 }}>
-          <text style={{ fontSize: 16, fontWeight: '600', marginBottom: 12 }}>Borders</text>
-          <view style={{ gap: 8 }}>
-            <view style={{ padding: 12, borderWidth: 1, borderColor: '#333', borderRadius: 0 }}>
-              <text>Square border</text>
-            </view>
-            <view style={{ padding: 12, borderWidth: 2, borderColor: '#007AFF', borderRadius: 8 }}>
-              <text>Rounded border</text>
-            </view>
-            <view style={{ padding: 12, borderWidth: 3, borderColor: '#FF3B30', borderRadius: 16 }}>
-              <text>Thick rounded border</text>
-            </view>
-            <view style={{ padding: 12, borderLeftWidth: 4, borderLeftColor: '#34C759', backgroundColor: '#f5f5f5' }}>
-              <text>Left border accent</text>
-            </view>
-          </view>
-        </view>
-
-        {/* Shadows and elevation */}
-        <view style={{ marginBottom: 24 }}>
-          <text style={{ fontSize: 16, fontWeight: '600', marginBottom: 12 }}>Elevation</text>
-          <view style={{ gap: 12 }}>
-            <view style={{ padding: 16, backgroundColor: '#fff', borderRadius: 8, borderWidth: 1, borderColor: '#eee' }}>
-              <text>Level 0 (flat)</text>
-            </view>
-            <view style={{ padding: 16, backgroundColor: '#fff', borderRadius: 8, borderWidth: 1, borderColor: '#ddd' }}>
-              <text>Level 1 (subtle)</text>
-            </view>
-            <view style={{ padding: 16, backgroundColor: '#fff', borderRadius: 12, borderWidth: 2, borderColor: '#ccc' }}>
-              <text>Level 2 (raised)</text>
-            </view>
-          </view>
-        </view>
-
-        {/* Opacity */}
-        <view style={{ marginBottom: 24 }}>
-          <text style={{ fontSize: 16, fontWeight: '600', marginBottom: 12 }}>Opacity</text>
-          <view style={{ flexDirection: 'row', gap: 8 }}>
-            {[1.0, 0.8, 0.6, 0.4, 0.2].map((opacity) => (
-              <view key={`op-${opacity}`} style={{
-                flex: 1,
-                height: 50,
-                backgroundColor: '#007AFF',
-                opacity,
-                borderRadius: 6,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <text style={{ color: '#fff', fontSize: 11 }}>{opacity}</text>
-              </view>
-            ))}
-          </view>
-        </view>
-
-        {/* Spacing */}
-        <view style={{ marginBottom: 24 }}>
-          <text style={{ fontSize: 16, fontWeight: '600', marginBottom: 12 }}>Spacing</text>
-          <view style={{ backgroundColor: '#e5e5e5', padding: 4 }}>
-            <view style={{ backgroundColor: '#007AFF', padding: 8, borderRadius: 4 }}>
-              <view style={{ backgroundColor: '#fff', padding: 16, borderRadius: 4 }}>
-                <text style={{ textAlign: 'center' }}>Nested padding: 4 &gt; 8 &gt; 16</text>
+                padding: 10,
+              } as any}>
+                <text style={{
+                  fontSize: 10,
+                  fontFamily: 'monospace',
+                  color: '#4ADE80',
+                  lineHeight: 14,
+                } as any}>
+                  {item.renderJson()}
+                </text>
               </view>
             </view>
-          </view>
+          ))}
+        </view>
+
+        {/* Summary */}
+        <view style={{ marginTop: 20, padding: 12, backgroundColor: '#1E293B', borderRadius: 8 }}>
+          <text style={{ fontSize: 13, color: '#94A3B8' } as any}>
+            Total styling examples: {STYLING_DATA.length}
+          </text>
         </view>
       </view>
     </scroll-view>
