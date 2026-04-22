@@ -1,45 +1,54 @@
-import { useState } from '@lynx-js/react';
+import { useState, useCallback } from '@lynx-js/react';
+import { makeFlightPayload } from '../../voltra-payload';
 
-type FlightStatus = 'On Time' | 'Delayed' | 'Boarding' | 'In Flight' | 'Landed';
-
-interface FlightInfo {
-  flightNumber: string;
-  departure: { code: string; city: string; time: string; gate: string };
-  arrival: { code: string; city: string; time: string; terminal: string };
-  status: FlightStatus;
-}
-
-const mockFlight: FlightInfo = {
-  flightNumber: 'UA 2487',
-  departure: { code: 'SFO', city: 'San Francisco', time: '10:30 AM', gate: 'B42' },
-  arrival: { code: 'JFK', city: 'New York', time: '6:45 PM', terminal: 'T4' },
-  status: 'On Time',
+declare const NativeModules: {
+  VoltraModule: {
+    startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
+    updateLiveActivity: (id: string, json: string, options: any, callback: (r: any) => void) => void;
+    endLiveActivity: (id: string, options: any, callback: (r: any) => void) => void;
+  };
 };
-
-const statusColors: Record<FlightStatus, string> = {
-  'On Time': '#34C759',
-  'Delayed': '#FF9500',
-  'Boarding': '#007AFF',
-  'In Flight': '#5856D6',
-  'Landed': '#34C759',
-};
-
-const statuses: FlightStatus[] = ['On Time', 'Delayed', 'Boarding', 'In Flight', 'Landed'];
 
 export function FlightTrackerActivity() {
-  const [flight, setFlight] = useState(mockFlight);
-  const [statusIndex, setStatusIndex] = useState(0);
+  const [activityId, setActivityId] = useState<string | null>(null);
+  const [status, setStatus] = useState('Not started');
+  const isActive = activityId !== null;
 
-  const cycleStatus = () => {
-    const nextIndex = (statusIndex + 1) % statuses.length;
-    setStatusIndex(nextIndex);
-    setFlight({ ...flight, status: statuses[nextIndex] });
-  };
+  const start = useCallback(() => {
+    'background only';
+    const payload = makeFlightPayload();
+    NativeModules.VoltraModule.startLiveActivity(
+      payload,
+      { activityName: 'flight' },
+      (id: any) => {
+        const result = String(id);
+        if (result.startsWith('ERROR:')) {
+          setStatus('Error: ' + result.substring(6));
+        } else {
+          setActivityId(result);
+          setStatus('Active');
+        }
+      }
+    );
+  }, []);
+
+  const stop = useCallback(() => {
+    'background only';
+    if (!activityId) return;
+    NativeModules.VoltraModule.endLiveActivity(
+      activityId,
+      { dismissalPolicy: { type: 'immediate' } },
+      () => {
+        setActivityId(null);
+        setStatus('Ended');
+      }
+    );
+  }, [activityId]);
 
   return (
-    <view style={{ flex: 1, padding: 16 }}>
-      <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 16 }}>
-        Flight Tracker Activity
+    <view style={{ padding: 16 }}>
+      <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 8 }}>
+        Flight Tracker
       </text>
       <text style={{ color: '#666', marginBottom: 24 }}>
         Live Activity displaying real-time flight information.
@@ -53,83 +62,113 @@ export function FlightTrackerActivity() {
         marginBottom: 24,
       }}>
         {/* Header */}
-        <view style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <view style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 16,
+        }}>
           <text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>
-            {flight.flightNumber}
+            UA2645
           </text>
           <view style={{
-            backgroundColor: statusColors[flight.status],
+            backgroundColor: '#34D399',
             paddingLeft: 10, paddingRight: 10,
             paddingTop: 4, paddingBottom: 4,
             borderRadius: 8,
           }}>
             <text style={{ color: '#fff', fontSize: 12, fontWeight: '600' }}>
-              {flight.status}
+              On Time
             </text>
           </view>
         </view>
 
         {/* Route */}
-        <view style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
+        <view style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginBottom: 16,
+        }}>
           {/* Departure */}
           <view style={{ flex: 1, alignItems: 'flex-start' }}>
             <text style={{ color: '#fff', fontSize: 28, fontWeight: 'bold' }}>
-              {flight.departure.code}
+              EWR
             </text>
-            <text style={{ color: '#aaa', fontSize: 12, marginTop: 2 }}>
-              {flight.departure.city}
+            <text style={{ color: '#34D399', fontSize: 14, marginTop: 2 }}>
+              8:45 PM
             </text>
-            <text style={{ color: '#fff', fontSize: 14, marginTop: 4 }}>
-              {flight.departure.time}
+            <text style={{ color: '#94A3B8', fontSize: 12, marginTop: 2 }}>
+              TC · On Time
             </text>
           </view>
 
           {/* Arrow */}
           <view style={{ alignItems: 'center', paddingLeft: 16, paddingRight: 16 }}>
-            <text style={{ color: '#666', fontSize: 20 }}>---&gt;</text>
+            <text style={{ color: '#94A3B8', fontSize: 16 }}>✈</text>
           </view>
 
           {/* Arrival */}
           <view style={{ flex: 1, alignItems: 'flex-end' }}>
             <text style={{ color: '#fff', fontSize: 28, fontWeight: 'bold' }}>
-              {flight.arrival.code}
+              FLL
             </text>
-            <text style={{ color: '#aaa', fontSize: 12, marginTop: 2 }}>
-              {flight.arrival.city}
+            <text style={{ color: '#F87171', fontSize: 14, marginTop: 2 }}>
+              12:02 AM
             </text>
-            <text style={{ color: '#fff', fontSize: 14, marginTop: 4 }}>
-              {flight.arrival.time}
+            <text style={{ color: '#F87171', fontSize: 12, marginTop: 2 }}>
+              3m late
             </text>
           </view>
         </view>
 
         {/* Details */}
-        <view style={{ flexDirection: 'row', justifyContent: 'space-between', borderTopWidth: 1, borderTopColor: '#333', paddingTop: 12 }}>
+        <view style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          borderTopWidth: 1,
+          borderTopColor: '#333',
+          paddingTop: 12,
+        }}>
           <view>
-            <text style={{ color: '#666', fontSize: 11 }}>GATE</text>
-            <text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>{flight.departure.gate}</text>
+            <text style={{ color: '#94A3B8', fontSize: 11 }}>DEPARTURE</text>
+            <text style={{ color: '#34D399', fontSize: 14, fontWeight: '600' }}>1h 42m</text>
           </view>
-          <view>
-            <text style={{ color: '#666', fontSize: 11 }}>TERMINAL</text>
-            <text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>{flight.arrival.terminal}</text>
+          <view style={{
+            backgroundColor: '#FCD34D',
+            paddingLeft: 10, paddingRight: 10,
+            paddingTop: 4, paddingBottom: 4,
+            borderRadius: 12,
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+            <text style={{ color: '#000', fontSize: 14, fontWeight: '600' }}>134</text>
           </view>
         </view>
       </view>
 
-      {/* Cycle status button */}
+      {/* Controls */}
       <view
-        bindtap={cycleStatus}
+        bindtap={isActive ? stop : start}
         style={{
-          backgroundColor: '#007AFF',
+          backgroundColor: isActive ? '#EF4444' : '#007AFF',
           padding: 14,
           borderRadius: 10,
           alignItems: 'center',
+          marginBottom: 8,
         }}
       >
-        <text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>
-          Simulate Status Change
+        <text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>
+          {isActive ? 'Stop Activity' : 'Start Activity'}
         </text>
       </view>
+
+      <text style={{ marginTop: 12, color: '#666', fontSize: 13 }}>
+        Status: {status}
+      </text>
     </view>
   );
 }
