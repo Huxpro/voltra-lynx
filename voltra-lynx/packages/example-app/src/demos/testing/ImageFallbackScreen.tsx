@@ -1,120 +1,303 @@
 import { useState, useCallback } from '@lynx-js/react';
+import { Voltra, renderLiveActivityToString } from '@use-voltra/ios';
 
-// Lynx NativeModules global
+// ─── NativeModules declaration ──────────────────────────────────────────────
+
 declare const NativeModules: {
   VoltraModule: {
     startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
   };
 };
 
-interface FallbackScenario {
+// ─── Payload builders (Voltra JSX rendered to string) ───────────────────────
+
+function bgColorPayload(): string {
+  return renderLiveActivityToString({
+    lockScreen: (
+      <Voltra.VStack style={{ padding: 16, backgroundColor: '#1E293B' } as any} spacing={12}>
+        <Voltra.Text style={{ fontSize: 18, fontWeight: 'bold', color: '#FFFFFF' } as any}>
+          Missing Image Test
+        </Voltra.Text>
+        <Voltra.HStack spacing={8}>
+          <Voltra.Image
+            source={{ assetName: 'nonexistent-image' }}
+            style={{
+              width: 60,
+              height: 60,
+              backgroundColor: '#EF4444',
+              borderRadius: 12,
+            } as any}
+          />
+          <Voltra.VStack spacing={4}>
+            <Voltra.Text style={{ fontSize: 14, fontWeight: '600', color: '#F1F5F9' } as any}>
+              Red Background
+            </Voltra.Text>
+            <Voltra.Text style={{ fontSize: 12, color: '#94A3B8' } as any}>
+              backgroundColor: '#EF4444'
+            </Voltra.Text>
+          </Voltra.VStack>
+        </Voltra.HStack>
+      </Voltra.VStack>
+    ),
+  });
+}
+
+function multipleColorsPayload(): string {
+  return renderLiveActivityToString({
+    lockScreen: (
+      <Voltra.VStack style={{ padding: 16, backgroundColor: '#0F172A' } as any} spacing={12}>
+        <Voltra.Text style={{ fontSize: 18, fontWeight: 'bold', color: '#FFFFFF' } as any}>
+          Color Palette
+        </Voltra.Text>
+        <Voltra.HStack spacing={8}>
+          <Voltra.Image
+            source={{ assetName: 'missing-1' }}
+            style={{ width: 50, height: 50, backgroundColor: '#EF4444', borderRadius: 8 } as any}
+          />
+          <Voltra.Image
+            source={{ assetName: 'missing-2' }}
+            style={{ width: 50, height: 50, backgroundColor: '#F59E0B', borderRadius: 8 } as any}
+          />
+          <Voltra.Image
+            source={{ assetName: 'missing-3' }}
+            style={{ width: 50, height: 50, backgroundColor: '#10B981', borderRadius: 8 } as any}
+          />
+          <Voltra.Image
+            source={{ assetName: 'missing-4' }}
+            style={{ width: 50, height: 50, backgroundColor: '#3B82F6', borderRadius: 8 } as any}
+          />
+        </Voltra.HStack>
+      </Voltra.VStack>
+    ),
+  });
+}
+
+function transparentPayload(): string {
+  return renderLiveActivityToString({
+    lockScreen: (
+      <Voltra.VStack style={{ padding: 16, backgroundColor: '#6366F1' } as any} spacing={12}>
+        <Voltra.Text style={{ fontSize: 18, fontWeight: 'bold', color: '#FFFFFF' } as any}>
+          Transparent Fallback
+        </Voltra.Text>
+        <Voltra.Image
+          source={{ assetName: 'nonexistent' }}
+          style={{
+            width: 100,
+            height: 100,
+            borderRadius: 16,
+            borderWidth: 2,
+            borderColor: '#FFFFFF',
+          } as any}
+        />
+        <Voltra.Text style={{ fontSize: 12, color: '#E0E7FF' } as any}>
+          No backgroundColor - parent color shows through
+        </Voltra.Text>
+      </Voltra.VStack>
+    ),
+  });
+}
+
+function combinedStylesPayload(): string {
+  return renderLiveActivityToString({
+    lockScreen: (
+      <Voltra.VStack style={{ padding: 16, backgroundColor: '#1E293B' } as any} spacing={12}>
+        <Voltra.Text style={{ fontSize: 18, fontWeight: 'bold', color: '#FFFFFF' } as any}>
+          Styled Fallback
+        </Voltra.Text>
+        <Voltra.Image
+          source={{ assetName: 'missing-styled' }}
+          style={{
+            width: 120,
+            height: 80,
+            backgroundColor: '#8B5CF6',
+            borderRadius: 20,
+            borderWidth: 3,
+            borderColor: '#A78BFA',
+          } as any}
+        />
+        <Voltra.Text style={{ fontSize: 11, color: '#94A3B8' } as any}>
+          backgroundColor + borderRadius + borders
+        </Voltra.Text>
+      </Voltra.VStack>
+    ),
+  });
+}
+
+function customFallbackPayload(): string {
+  return renderLiveActivityToString({
+    lockScreen: (
+      <Voltra.VStack style={{ padding: 16, backgroundColor: '#0F172A' } as any} spacing={12}>
+        <Voltra.Text style={{ fontSize: 18, fontWeight: 'bold', color: '#FFFFFF' } as any}>
+          Custom Fallback
+        </Voltra.Text>
+        <Voltra.Image
+          source={{ assetName: 'missing-custom' }}
+          fallback={
+            <Voltra.VStack style={{ flex: 1 } as any} spacing={4} alignment="center">
+              <Voltra.Symbol name="photo" size={32} tintColor="#64748B" />
+              <Voltra.Text style={{ fontSize: 10, color: '#64748B' } as any}>No Image</Voltra.Text>
+            </Voltra.VStack>
+          }
+          style={{
+            width: 100,
+            height: 100,
+            backgroundColor: '#1E293B',
+            borderRadius: 12,
+            borderWidth: 2,
+            borderColor: '#334155',
+          } as any}
+        />
+      </Voltra.VStack>
+    ),
+  });
+}
+
+function mixedImagesPayload(): string {
+  return renderLiveActivityToString({
+    lockScreen: (
+      <Voltra.VStack style={{ padding: 16, backgroundColor: '#111827' } as any} spacing={12}>
+        <Voltra.Text style={{ fontSize: 18, fontWeight: 'bold', color: '#FFFFFF' } as any}>
+          Image Grid
+        </Voltra.Text>
+        <Voltra.HStack spacing={8}>
+          <Voltra.Image
+            source={{ assetName: 'missing-1' }}
+            style={{ width: 50, height: 50, backgroundColor: '#DC2626', borderRadius: 8 } as any}
+          />
+          <Voltra.Image
+            source={{ assetName: 'missing-2' }}
+            style={{ width: 50, height: 50, backgroundColor: '#059669', borderRadius: 8 } as any}
+          />
+          <Voltra.Image
+            source={{ assetName: 'missing-3' }}
+            style={{ width: 50, height: 50, backgroundColor: '#2563EB', borderRadius: 8 } as any}
+          />
+        </Voltra.HStack>
+        <Voltra.Text style={{ fontSize: 11, color: '#6B7280' } as any}>
+          All missing - styled with different colors
+        </Voltra.Text>
+      </Voltra.VStack>
+    ),
+  });
+}
+
+// ─── Scenario definitions ───────────────────────────────────────────────────
+
+interface Scenario {
   id: string;
   title: string;
   description: string;
-  bgColor: string | null; // null = transparent fallback
-  borderColor: string | null;
-  borderWidth: number;
-  borderRadius: number;
+  previewColors: string[];
+  previewSize: { w: number; h: number };
+  previewBorderColor: string | null;
+  previewBorderWidth: number;
+  previewBorderRadius: string;
   hasCustomFallback: boolean;
+  getPayload: () => string;
 }
 
-const scenarios: FallbackScenario[] = [
+const SCENARIOS: Scenario[] = [
   {
-    id: '1',
+    id: 'bg-color',
     title: '1. Missing Image with Background Color',
-    description: 'When an image is missing and no fallback component is provided, the backgroundColor from styles is used.',
-    bgColor: '#EF4444',
-    borderColor: null,
-    borderWidth: 0,
-    borderRadius: '12px' as any,
+    description:
+      'When an image is missing and no fallback component is provided, the backgroundColor from styles is used.',
+    previewColors: ['#EF4444'],
+    previewSize: { w: 60, h: 60 },
+    previewBorderColor: null,
+    previewBorderWidth: 0,
+    previewBorderRadius: '12px',
     hasCustomFallback: false,
+    getPayload: bgColorPayload,
   },
   {
-    id: '2',
+    id: 'multi-colors',
     title: '2. Multiple Fallback Colors',
-    description: 'Multiple missing images with different background colors to demonstrate the style-based approach.',
-    bgColor: '#F59E0B',
-    borderColor: null,
-    borderWidth: 0,
-    borderRadius: '8px' as any,
+    description:
+      'Display multiple missing images with different background colors to demonstrate the style-based approach.',
+    previewColors: ['#EF4444', '#F59E0B', '#10B981', '#3B82F6'],
+    previewSize: { w: 50, h: 50 },
+    previewBorderColor: null,
+    previewBorderWidth: 0,
+    previewBorderRadius: '8px',
     hasCustomFallback: false,
+    getPayload: multipleColorsPayload,
   },
   {
-    id: '3',
+    id: 'transparent',
     title: '3. Transparent Fallback (No Background)',
-    description: 'No backgroundColor is specified. The fallback is transparent, allowing the parent background to show through.',
-    bgColor: null,
-    borderColor: '#FFFFFF',
-    borderWidth: 2,
-    borderRadius: '16px' as any,
+    description:
+      'When no backgroundColor is specified, the fallback is transparent, allowing the parent background to show through.',
+    previewColors: [],
+    previewSize: { w: 100, h: 100 },
+    previewBorderColor: '#FFFFFF',
+    previewBorderWidth: 2,
+    previewBorderRadius: '16px',
     hasCustomFallback: false,
+    getPayload: transparentPayload,
   },
   {
-    id: '4',
+    id: 'combined',
     title: '4. Combined Style Properties',
-    description: 'Apply multiple style properties: backgroundColor, borderRadius, borders, and shadows.',
-    bgColor: '#8B5CF6',
-    borderColor: '#A78BFA',
-    borderWidth: 3,
-    borderRadius: '20px' as any,
+    description:
+      'Apply multiple style properties to the fallback including backgroundColor, borderRadius, borders, and shadows.',
+    previewColors: ['#8B5CF6'],
+    previewSize: { w: 120, h: 80 },
+    previewBorderColor: '#A78BFA',
+    previewBorderWidth: 3,
+    previewBorderRadius: '20px',
     hasCustomFallback: false,
+    getPayload: combinedStylesPayload,
   },
   {
-    id: '5',
+    id: 'custom',
     title: '5. Custom Fallback Component',
-    description: 'Uses a custom fallback component with icons or text. Styles apply to the container, not the fallback content.',
-    bgColor: '#1E293B',
-    borderColor: '#334155',
-    borderWidth: 2,
-    borderRadius: '12px' as any,
+    description:
+      'Use a custom fallback component with icons or text. The styles apply to the container, not the fallback content.',
+    previewColors: ['#1E293B'],
+    previewSize: { w: 100, h: 100 },
+    previewBorderColor: '#334155',
+    previewBorderWidth: 2,
+    previewBorderRadius: '12px',
     hasCustomFallback: true,
+    getPayload: customFallbackPayload,
   },
   {
-    id: '6',
+    id: 'mixed',
     title: '6. Mixed: Valid and Missing Images',
-    description: 'A mix of valid and missing images showing consistent styling behavior.',
-    bgColor: '#DC2626',
-    borderColor: null,
-    borderWidth: 0,
-    borderRadius: '8px' as any,
+    description:
+      'Display a mix of valid and missing images to show consistent styling behavior. Valid images display normally while missing ones show the styled fallback.',
+    previewColors: ['#DC2626', '#059669', '#2563EB'],
+    previewSize: { w: 50, h: 50 },
+    previewBorderColor: null,
+    previewBorderWidth: 0,
+    previewBorderRadius: '8px',
     hasCustomFallback: false,
+    getPayload: mixedImagesPayload,
   },
 ];
 
-const colorPalette = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6'];
+// ─── Screen ─────────────────────────────────────────────────────────────────
 
 export function ImageFallbackScreen() {
-  const [activeScenario, setActiveScenario] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState('Select a scenario to preview.');
 
-  const handleShowExample = useCallback((scenario: FallbackScenario) => {
+  const handleShowExample = useCallback((scenario: Scenario) => {
     'background only';
-    setActiveScenario(scenario.id);
-    setStatusMessage('Showing: ' + scenario.title);
-
-    // In a real implementation, this would call startLiveActivity
-    // with a Voltra.Image using backgroundColor fallback.
-    // Since we cannot render Voltra JSX in Lynx directly, we show the scenario
-    // description and simulate the native call.
     try {
+      const payload = scenario.getPayload();
       if (typeof NativeModules !== 'undefined' && NativeModules.VoltraModule) {
-        // Build a mock payload representing the fallback scenario
-        const mockPayload = JSON.stringify({
-          scenario: scenario.id,
-          backgroundColor: scenario.bgColor,
-          borderRadius: scenario.borderRadius,
-        });
         NativeModules.VoltraModule.startLiveActivity(
-          mockPayload,
+          payload,
           { activityName: `image-fallback-${scenario.id}` },
           (result: any) => {
-            const resultStr = String(result);
-            if (resultStr.startsWith('ERROR:')) {
-              setStatusMessage('Error: ' + resultStr.substring(6));
+            const r = String(result);
+            if (r.startsWith('ERROR:')) {
+              setStatusMessage('Error: ' + r.substring(6));
             } else {
-              setStatusMessage('Activity started for: ' + scenario.title);
+              setStatusMessage('Started: ' + scenario.title);
             }
-          }
+          },
         );
       } else {
         setStatusMessage('NativeModules not available. Showing preview only.');
@@ -125,116 +308,121 @@ export function ImageFallbackScreen() {
   }, []);
 
   return (
-    <scroll-view style={{ flex: 1, backgroundColor: '#0B0F1A' } as any} scroll-orientation="vertical">
-      <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 } as any}>
-        <text style={{ fontSize: 24, fontWeight: 'bold', color: '#FFFFFF' } as any}>
+    <scroll-view scroll-orientation="vertical" style={{ linearWeight: 1 } as any}>
+      <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}>
+        {/* Header */}
+        <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' }}>
           Image Fallback with Styles
         </text>
-        <text style={{ fontSize: 14, color: '#CBD5F5', marginBottom: 16 } as any}>
-          Test the image fallback behavior using backgroundColor from styles instead of the
+        <text style={{ fontSize: 14, color: '#CBD5F5', marginBottom: 8 }}>
+          Test the new image fallback behavior using backgroundColor from styles instead of the
           deprecated fallbackColor prop.
         </text>
 
         {/* Status bar */}
-        <view style={{
-          backgroundColor: '#1E293B',
-          borderRadius: '10px' as any,
-          padding: 12,
-          marginBottom: 16,
-        } as any}>
-          <text style={{ fontSize: 12, color: '#94A3B8' } as any}>{statusMessage}</text>
+        <view
+          style={{
+            backgroundColor: '#1E293B',
+            borderRadius: '10px',
+            padding: 12,
+            marginBottom: 16,
+          }}
+        >
+          <text style={{ fontSize: 12, color: '#94A3B8' }}>{statusMessage}</text>
         </view>
 
         {/* Scenario cards */}
-        {scenarios.map((scenario) => (
-          <view key={scenario.id} style={{
-            backgroundColor: '#1E293B',
-            borderRadius: '12px' as any,
-            padding: 16,
-            marginBottom: 12,
-            borderWidth: activeScenario === scenario.id ? 1 : 0,
-            borderColor: '#3B82F6',
-          } as any}>
-            <text style={{ fontSize: 16, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 4 } as any}>
+        {SCENARIOS.map((scenario) => (
+          <view
+            key={scenario.id}
+            style={{
+              backgroundColor: '#1E293B',
+              borderRadius: '12px',
+              padding: 16,
+              marginBottom: 12,
+            }}
+          >
+            <text
+              style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 }}
+            >
               {scenario.title}
             </text>
-            <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 12 } as any}>
+            <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 12 }}>
               {scenario.description}
             </text>
 
             {/* Fallback preview */}
-            <view style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginBottom: 12,
-            } as any}>
-              {scenario.id === '2' ? (
-                // Multiple colors scenario
-                colorPalette.map((color, i) => (
-                  <view key={`color-${i}`} style={{
-                    width: 50,
-                    height: 50,
-                    backgroundColor: color,
-                    borderRadius: scenario.borderRadius,
-                    marginRight: 8,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  } as any}>
-                    <text style={{ color: '#fff', fontSize: 10 } as any}>IMG</text>
-                  </view>
-                ))
-              ) : scenario.id === '6' ? (
-                // Mixed images scenario
-                ['#DC2626', '#059669', '#2563EB'].map((color, i) => (
-                  <view key={`mixed-${i}`} style={{
-                    width: 50,
-                    height: 50,
-                    backgroundColor: color,
-                    borderRadius: scenario.borderRadius,
-                    marginRight: 8,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  } as any}>
-                    <text style={{ color: '#fff', fontSize: 10 } as any}>IMG</text>
+            <view
+              style={{
+                display: 'linear',
+                linearDirection: 'row',
+                alignItems: 'center',
+                marginBottom: 12,
+              }}
+            >
+              {scenario.previewColors.length > 1 ? (
+                scenario.previewColors.map((color, i) => (
+                  <view
+                    key={`${scenario.id}-${i}`}
+                    style={{
+                      width: scenario.previewSize.w,
+                      height: scenario.previewSize.h,
+                      backgroundColor: color,
+                      borderRadius: scenario.previewBorderRadius,
+                      marginRight: 8,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <text style={{ color: '#FFFFFF', fontSize: 10 }}>IMG</text>
                   </view>
                 ))
               ) : (
-                // Single image preview
-                <view style={{
-                  width: scenario.id === '4' ? 120 : 100,
-                  height: scenario.id === '4' ? 80 : 100,
-                  backgroundColor: scenario.bgColor || 'transparent',
-                  borderRadius: scenario.borderRadius,
-                  borderWidth: scenario.borderWidth,
-                  borderColor: scenario.borderColor || 'transparent',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                } as any}>
+                <view
+                  style={{
+                    width: scenario.previewSize.w,
+                    height: scenario.previewSize.h,
+                    backgroundColor:
+                      scenario.previewColors.length > 0
+                        ? scenario.previewColors[0]
+                        : 'transparent',
+                    borderRadius: scenario.previewBorderRadius,
+                    borderWidth: scenario.previewBorderWidth,
+                    borderColor: scenario.previewBorderColor || 'transparent',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
                   {scenario.hasCustomFallback ? (
-                    <view style={{ alignItems: 'center' } as any}>
-                      <text style={{ fontSize: 24, color: '#64748B' } as any}>?</text>
-                      <text style={{ fontSize: 10, color: '#64748B' } as any}>No Image</text>
+                    <view style={{ alignItems: 'center' }}>
+                      <text style={{ fontSize: 24, color: '#64748B' }}>?</text>
+                      <text style={{ fontSize: 10, color: '#64748B' }}>No Image</text>
                     </view>
                   ) : (
-                    <text style={{ color: scenario.bgColor ? '#fff' : '#666', fontSize: 11 } as any}>
-                      {scenario.bgColor ? 'Fallback' : 'Transparent'}
+                    <text
+                      style={{
+                        color: scenario.previewColors.length > 0 ? '#FFFFFF' : '#666666',
+                        fontSize: 11,
+                      }}
+                    >
+                      {scenario.previewColors.length > 0 ? 'Fallback' : 'Transparent'}
                     </text>
                   )}
                 </view>
               )}
             </view>
 
-            {/* Show example button */}
+            {/* Show Example button */}
             <view
               bindtap={() => handleShowExample(scenario)}
               style={{
                 backgroundColor: '#007AFF',
                 padding: 12,
-                borderRadius: '8px' as any,
+                borderRadius: '8px',
                 alignItems: 'center',
-              } as any}
+              }}
             >
-              <text style={{ color: '#fff', fontSize: 14, fontWeight: '600' } as any}>
+              <text style={{ color: '#FFFFFF', fontSize: 14, fontWeight: '600' }}>
                 Show Example
               </text>
             </view>
@@ -242,24 +430,29 @@ export function ImageFallbackScreen() {
         ))}
 
         {/* Migration note */}
-        <view style={{
-          backgroundColor: '#1E293B',
-          borderRadius: '12px' as any,
-          padding: 16,
-          marginTop: 8,
-          borderLeftWidth: 4,
-          borderLeftColor: '#3B82F6',
-        } as any}>
-          <text style={{ fontSize: 16, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 8 } as any}>
+        <view
+          style={{
+            backgroundColor: '#1E293B',
+            borderRadius: '12px',
+            padding: 16,
+            marginTop: 8,
+            borderLeftWidth: 4,
+            borderLeftColor: '#3B82F6',
+          }}
+        >
+          <text
+            style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 8 }}
+          >
             Migration Note
           </text>
-          <text style={{ fontSize: 13, color: '#CBD5E1' } as any}>
-            The fallbackColor prop has been removed. Use backgroundColor in the style prop instead.
+          <text style={{ fontSize: 13, color: '#CBD5E1' }}>
+            The fallbackColor prop has been removed. Use backgroundColor in the style prop
+            instead.
           </text>
-          <text style={{ fontSize: 13, color: '#CBD5E1', marginTop: 8 } as any}>
+          <text style={{ fontSize: 13, color: '#CBD5E1', marginTop: 8 }}>
             Before: fallbackColor="#E0E0E0"
           </text>
-          <text style={{ fontSize: 13, color: '#60A5FA' } as any}>
+          <text style={{ fontSize: 13, color: '#60A5FA' }}>
             After: style={'{'}backgroundColor: "#E0E0E0"{'}'}
           </text>
         </view>

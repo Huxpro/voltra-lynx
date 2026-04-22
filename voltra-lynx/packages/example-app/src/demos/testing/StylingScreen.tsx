@@ -270,6 +270,55 @@ const STYLING_DATA: StylingExample[] = [
       } catch { return '(render error)'; }
     },
   },
+  {
+    id: 'combined-styling',
+    title: 'Combined Styling',
+    description: 'A complex example combining multiple styling properties.',
+    renderJson: () => {
+      try {
+        return JSON.stringify(
+          renderVoltraVariantToJson(
+            <Voltra.VStack
+              style={{
+                backgroundColor: '#8B5CF6',
+                borderRadius: '12px',
+                borderWidth: 2,
+                borderColor: '#7C3AED',
+                shadowColor: '#000000',
+                shadowOffset: { width: 0, height: 3 },
+                shadowOpacity: 0.2,
+                shadowRadius: 6,
+                padding: 16,
+                margin: 8,
+              } as any}
+            >
+              <Voltra.Text
+                style={{
+                  color: '#FFFFFF',
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                  letterSpacing: 0.5,
+                } as any}
+              >
+                Complex Example
+              </Voltra.Text>
+              <Voltra.Text
+                style={{
+                  color: '#E9D5FF',
+                  fontSize: 12,
+                  marginTop: 4,
+                } as any}
+              >
+                Multiple properties combined
+              </Voltra.Text>
+            </Voltra.VStack>
+          ),
+          null,
+          2
+        );
+      } catch { return '(render error)'; }
+    },
+  },
 ];
 
 export function StylingScreen() {
@@ -279,20 +328,21 @@ export function StylingScreen() {
         <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' } as any}>
           Styling Examples
         </text>
-        <text style={{ fontSize: 14,  color: '#CBD5F5', marginBottom: 8 } as any}>
+        <text style={{ fontSize: 14, color: '#CBD5F5', marginBottom: 8 } as any}>
           Explore Voltra's styling capabilities. Each example demonstrates different styling properties that can be applied to Voltra components.
         </text>
 
-        <view style={{ gap: 12, marginTop: 8 }}>
+        <view style={{ marginTop: 8 }}>
           {STYLING_DATA.map((item) => (
             <view
               key={item.id}
               style={{
-                backgroundColor: '#1E293B',
-                borderRadius: '12px',
-                padding: 16,
+                backgroundColor: '#0F172A',
+                borderRadius: '20px',
+                padding: 18,
+                marginBottom: 12,
                 borderWidth: 1,
-                borderColor: '#334155',
+                borderColor: 'rgba(148, 163, 184, 0.12)',
               } as any}
             >
               <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 } as any}>
@@ -303,15 +353,14 @@ export function StylingScreen() {
               </text>
 
               <view style={{
-                backgroundColor: '#0F172A',
-                borderRadius: '8px',
+                backgroundColor: '#1E293B',
+                borderRadius: '12px',
                 padding: 10,
               } as any}>
                 <text style={{
                   fontSize: 10,
                   fontFamily: 'monospace',
                   color: '#4ADE80',
-                  
                 } as any}>
                   {item.renderJson()}
                 </text>
@@ -321,7 +370,14 @@ export function StylingScreen() {
         </view>
 
         {/* Summary */}
-        <view style={{ marginTop: 20, padding: 12, backgroundColor: '#1E293B', borderRadius: '8px' }}>
+        <view style={{
+          marginTop: 20,
+          padding: 12,
+          backgroundColor: '#0F172A',
+          borderRadius: '12px',
+          borderWidth: 1,
+          borderColor: 'rgba(148, 163, 184, 0.12)',
+        } as any}>
           <text style={{ fontSize: 13, color: '#94A3B8' } as any}>
             Total styling examples: {STYLING_DATA.length}
           </text>

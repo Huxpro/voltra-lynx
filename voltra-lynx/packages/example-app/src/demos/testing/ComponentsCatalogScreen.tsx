@@ -433,20 +433,21 @@ export function ComponentsCatalogScreen() {
         <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' } as any}>
           Components Showcase
         </text>
-        <text style={{ fontSize: 14,  color: '#CBD5F5', marginBottom: 8 } as any}>
-          Explore all available Voltra components. Each card shows the component name, description, and rendered JSON output. Tap a card to expand the JSON preview.
+        <text style={{ fontSize: 14, color: '#CBD5F5', marginBottom: 8 } as any}>
+          Explore all available Voltra components. Each example demonstrates the component's functionality and styling capabilities within Live Activities.
         </text>
 
-        <view style={{ gap: 12, marginTop: 8 }}>
+        <view style={{ marginTop: 8 }}>
           {COMPONENTS_DATA.map((item) => (
             <view
               key={item.id}
               style={{
-                backgroundColor: '#1E293B',
-                borderRadius: '12px',
-                padding: 16,
+                backgroundColor: '#0F172A',
+                borderRadius: '20px',
+                padding: 18,
+                marginBottom: 12,
                 borderWidth: 1,
-                borderColor: expandedId === item.id ? '#3B82F6' : '#334155',
+                borderColor: expandedId === item.id ? '#3B82F6' : 'rgba(148, 163, 184, 0.12)',
               } as any}
               bindtap={() => toggleExpand(item.id)}
             >
@@ -457,10 +458,9 @@ export function ComponentsCatalogScreen() {
                 {item.description}
               </text>
 
-              {/* Always show a compact indicator */}
               <view style={{
-                backgroundColor: '#0F172A',
-                borderRadius: '8px',
+                backgroundColor: '#1E293B',
+                borderRadius: '12px',
                 padding: 10,
               } as any}>
                 {expandedId === item.id ? (
@@ -468,7 +468,6 @@ export function ComponentsCatalogScreen() {
                     fontSize: 10,
                     fontFamily: 'monospace',
                     color: '#4ADE80',
-                    
                   } as any}>
                     {item.renderJson()}
                   </text>
@@ -483,7 +482,14 @@ export function ComponentsCatalogScreen() {
         </view>
 
         {/* Summary */}
-        <view style={{ marginTop: 20, padding: 12, backgroundColor: '#1E293B', borderRadius: '8px' }}>
+        <view style={{
+          marginTop: 20,
+          padding: 12,
+          backgroundColor: '#0F172A',
+          borderRadius: '12px',
+          borderWidth: 1,
+          borderColor: 'rgba(148, 163, 184, 0.12)',
+        } as any}>
           <text style={{ fontSize: 13, color: '#94A3B8' } as any}>
             Total components: {COMPONENTS_DATA.length}
           </text>
