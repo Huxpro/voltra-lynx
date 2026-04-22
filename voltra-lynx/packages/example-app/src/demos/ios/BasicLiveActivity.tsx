@@ -10,23 +10,45 @@ declare const NativeModules: {
   };
 };
 
-// A minimal Voltra JSON payload for a basic Live Activity
-// This is what renderLiveActivityToString() would produce
+// Component type IDs (from ComponentTypeID.swift)
+const T = {
+  TEXT: 0, BUTTON: 1, LABEL: 2, IMAGE: 3, SYMBOL: 4,
+  TOGGLE: 5, LINEAR_PROGRESS: 6, CIRCULAR_PROGRESS: 7,
+  GAUGE: 8, TIMER: 9, LINEAR_GRADIENT: 10,
+  V_STACK: 11, H_STACK: 12, Z_STACK: 13,
+  GROUP_BOX: 14, GLASS_CONTAINER: 15, SPACER: 16, DIVIDER: 17,
+};
+
+// Region JSON keys (from VoltraRegion.swift)
+// ls, isl_exp_c, isl_exp_l, isl_exp_t, isl_exp_b, isl_cmp_l, isl_cmp_t, isl_min
+
 function makeBasicPayload(title: string, subtitle: string) {
   'background only';
   return JSON.stringify({
     v: 1,
-    expanded: {
-      t: 'VStack',
-      p: { alignment: 'center', spacing: 8 },
+    // Lock screen
+    ls: {
+      t: T.V_STACK, p: { alignment: 'center', spacing: 8 },
       c: [
-        { t: 'Symbol', p: { name: 'target', color: '#FF3B30' } },
-        { t: 'Text', p: { content: title, style: { fontSize: 16, fontWeight: 'bold', color: '#FFFFFF' } } },
-        { t: 'Text', p: { content: subtitle, style: { fontSize: 14, color: '#AAAAAA' } } },
+        { t: T.SYMBOL, p: { name: 'target', color: '#FF3B30' } },
+        { t: T.TEXT, c: title, p: { fontSize: 16, fontWeight: 'bold', foregroundColor: '#FFFFFF' } },
+        { t: T.TEXT, c: subtitle, p: { fontSize: 14, foregroundColor: '#AAAAAA' } },
       ],
     },
-    compactLeading: { t: 'Symbol', p: { name: 'target', color: '#FF3B30' } },
-    compactTrailing: { t: 'Text', p: { content: title, style: { fontSize: 12, color: '#FFFFFF' } } },
+    // Dynamic Island compact
+    isl_cmp_l: { t: T.SYMBOL, p: { name: 'target', color: '#FF3B30' } },
+    isl_cmp_t: { t: T.TEXT, c: title, p: { fontSize: 12, foregroundColor: '#FFFFFF' } },
+    // Dynamic Island expanded
+    isl_exp_c: {
+      t: T.V_STACK, p: { alignment: 'center', spacing: 4 },
+      c: [
+        { t: T.TEXT, c: title, p: { fontSize: 18, fontWeight: 'bold', foregroundColor: '#FFFFFF' } },
+        { t: T.TEXT, c: subtitle, p: { fontSize: 14, foregroundColor: '#AAAAAA' } },
+      ],
+    },
+    isl_exp_l: { t: T.SYMBOL, p: { name: 'target', color: '#FF3B30', fontSize: 24 } },
+    // Minimal
+    isl_min: { t: T.SYMBOL, p: { name: 'target', color: '#FF3B30' } },
   });
 }
 
