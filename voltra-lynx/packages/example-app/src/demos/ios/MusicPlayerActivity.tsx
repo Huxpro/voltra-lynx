@@ -1,143 +1,147 @@
-import { useState } from '@lynx-js/react';
+import { useState, useCallback } from '@lynx-js/react';
+import { makeMusicPlayerPayload, SONGS, type Song } from '../../voltra-payload';
 
-const mockUseLiveActivity = () => {
-  const [isActive, setIsActive] = useState(false);
-  return {
-    isActive,
-    start: async () => { setIsActive(true); },
-    update: async () => {},
-    end: async () => { setIsActive(false); },
+declare const NativeModules: {
+  VoltraModule: {
+    startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
+    updateLiveActivity: (id: string, json: string, options: any, callback: (r: any) => void) => void;
+    endLiveActivity: (id: string, options: any, callback: (r: any) => void) => void;
   };
 };
 
-const mockSongs = [
-  { title: 'Bohemian Rhapsody', artist: 'Queen', album: 'A Night at the Opera', duration: '5:55' },
-  { title: 'Hotel California', artist: 'Eagles', album: 'Hotel California', duration: '6:30' },
-  { title: 'Stairway to Heaven', artist: 'Led Zeppelin', album: 'Led Zeppelin IV', duration: '8:02' },
-];
-
 export function MusicPlayerActivity() {
-  const { isActive, start, end } = mockUseLiveActivity();
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [activityId, setActivityId] = useState<string | null>(null);
+  const [songIndex, setSongIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [status, setStatus] = useState('Not started');
 
-  const song = mockSongs[currentIndex];
+  const isActive = activityId !== null;
+  const currentSong = SONGS[songIndex];
 
-  const prev = () => {
-    setCurrentIndex((currentIndex - 1 + mockSongs.length) % mockSongs.length);
-  };
-
-  const next = () => {
-    setCurrentIndex((currentIndex + 1) % mockSongs.length);
-  };
-
-  const togglePlay = () => {
-    if (!isActive) {
-      start();
+  const startOrUpdate = useCallback((song: Song, playing: boolean, existingId?: string) => {
+    'background only';
+    const payload = makeMusicPlayerPayload(song, playing);
+    if (existingId) {
+      NativeModules.VoltraModule.updateLiveActivity(existingId, payload, {}, () => {
+        setStatus(`Playing: ${song.title}`);
+      });
+    } else {
+      NativeModules.VoltraModule.startLiveActivity(payload, { activityName: 'music-player' }, (id: any) => {
+        const result = String(id);
+        if (result.startsWith('ERROR:')) {
+          setStatus('Error: ' + result.substring(6));
+        } else {
+          setActivityId(result);
+          setStatus(`Playing: ${song.title}`);
+        }
+      });
     }
-    setIsPlaying(!isPlaying);
-  };
+  }, []);
+
+  const start = useCallback(() => {
+    'background only';
+    startOrUpdate(SONGS[songIndex], true);
+    setIsPlaying(true);
+  }, [songIndex, startOrUpdate]);
+
+  const prev = useCallback(() => {
+    'background only';
+    const newIndex = songIndex === 0 ? SONGS.length - 1 : songIndex - 1;
+    setSongIndex(newIndex);
+    if (activityId) startOrUpdate(SONGS[newIndex], isPlaying, activityId);
+  }, [songIndex, activityId, isPlaying, startOrUpdate]);
+
+  const next = useCallback(() => {
+    'background only';
+    const newIndex = songIndex === SONGS.length - 1 ? 0 : songIndex + 1;
+    setSongIndex(newIndex);
+    if (activityId) startOrUpdate(SONGS[newIndex], isPlaying, activityId);
+  }, [songIndex, activityId, isPlaying, startOrUpdate]);
+
+  const togglePlay = useCallback(() => {
+    'background only';
+    const newPlaying = !isPlaying;
+    setIsPlaying(newPlaying);
+    if (activityId) startOrUpdate(SONGS[songIndex], newPlaying, activityId);
+  }, [isPlaying, songIndex, activityId, startOrUpdate]);
+
+  const stop = useCallback(() => {
+    'background only';
+    if (!activityId) return;
+    NativeModules.VoltraModule.endLiveActivity(activityId, { dismissalPolicy: { type: 'immediate' } }, () => {
+      setActivityId(null);
+      setIsPlaying(false);
+      setStatus('Stopped');
+    });
+  }, [activityId]);
 
   return (
-    <view style={{ flex: 1, padding: 16 }}>
+    <view style={{ padding: 16 }}>
       <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 16 }}>
-        Music Player Activity
-      </text>
-      <text style={{ color: '#666', marginBottom: 24 }}>
-        Live Activity showing now-playing info with playback controls.
+        Music Player
       </text>
 
-      {/* Album art mock */}
+      {/* Now Playing Card */}
       <view style={{
-        backgroundColor: '#1c1c1e',
+        backgroundColor: '#0F172A',
         borderRadius: 16,
         padding: 20,
-        marginBottom: 24,
-        alignItems: 'center',
+        marginBottom: 16,
       }}>
-        {/* Album art placeholder */}
-        <view style={{
-          width: 180,
-          height: 180,
-          backgroundColor: '#333',
-          borderRadius: 12,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: 16,
-        }}>
-          <text style={{ fontSize: 48 }}>♫</text>
-        </view>
-
-        {/* Song info */}
-        <text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold', marginBottom: 4 }}>
-          {song.title}
+        <text style={{ color: '#F0F9FF', fontSize: 22, fontWeight: 'bold' }}>
+          {currentSong.title}
         </text>
-        <text style={{ color: '#aaa', fontSize: 14, marginBottom: 4 }}>
-          {song.artist}
+        <text style={{ color: '#94A3B8', fontSize: 15, marginTop: 4 }}>
+          {currentSong.artist}
         </text>
-        <text style={{ color: '#666', fontSize: 12, marginBottom: 16 }}>
-          {song.album} - {song.duration}
-        </text>
-
-        {/* Progress bar mock */}
-        <view style={{
-          width: '100%',
-          height: 4,
-          backgroundColor: '#444',
-          borderRadius: 2,
-          marginBottom: 16,
-        }}>
-          <view style={{
-            width: '35%',
-            height: 4,
-            backgroundColor: '#1DB954',
-            borderRadius: 2,
-          }} />
-        </view>
 
         {/* Controls */}
-        <view style={{ flexDirection: 'row', alignItems: 'center', gap: 32 }}>
-          <view bindtap={prev} style={{ padding: 8 }}>
-            <text style={{ color: '#fff', fontSize: 24 }}>⏮</text>
+        <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
+          <view bindtap={prev} style={{ padding: 12 }}>
+            <text style={{ color: '#F0F9FF', fontSize: 24 }}>⏮</text>
           </view>
-          <view bindtap={togglePlay} style={{
-            width: 56,
-            height: 56,
-            backgroundColor: '#1DB954',
-            borderRadius: 28,
-            alignItems: 'center',
-            justifyContent: 'center',
+          <view bindtap={isActive ? togglePlay : start} style={{
+            backgroundColor: '#3B82F6',
+            width: 56, height: 56, borderRadius: 28,
+            alignItems: 'center', justifyContent: 'center',
+            marginLeft: 24, marginRight: 24,
           }}>
-            <text style={{ color: '#fff', fontSize: 24 }}>
-              {isPlaying ? '⏸' : '▶'}
-            </text>
+            <text style={{ color: '#fff', fontSize: 24 }}>{isPlaying ? '⏸' : '▶️'}</text>
           </view>
-          <view bindtap={next} style={{ padding: 8 }}>
-            <text style={{ color: '#fff', fontSize: 24 }}>⏭</text>
+          <view bindtap={next} style={{ padding: 12 }}>
+            <text style={{ color: '#F0F9FF', fontSize: 24 }}>⏭</text>
           </view>
         </view>
       </view>
 
-      {/* Status */}
-      <text style={{ color: '#666', fontSize: 13 }}>
-        Activity: {isActive ? 'Active' : 'Inactive'} | {isPlaying ? 'Playing' : 'Paused'}
-      </text>
+      {/* Stop Button */}
+      {isActive ? (
+        <view bindtap={stop} style={{
+          backgroundColor: '#EF4444',
+          padding: 14, borderRadius: 10, alignItems: 'center', marginBottom: 12,
+        }}>
+          <text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>Stop Activity</text>
+        </view>
+      ) : null}
 
-      {/* Stop button */}
-      <view
-        bindtap={() => { setIsPlaying(false); end(); }}
-        style={{
-          backgroundColor: '#FF3B30',
-          padding: 14,
-          borderRadius: 10,
-          alignItems: 'center',
-          marginTop: 16,
-        }}
-      >
-        <text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>
-          End Activity
-        </text>
-      </view>
+      {/* Song List */}
+      <text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8, marginTop: 8 }}>Queue</text>
+      {SONGS.map((song, i) => (
+        <view key={song.title} style={{
+          display: 'flex', flexDirection: 'row', alignItems: 'center',
+          padding: 12, borderBottomWidth: 1, borderBottomColor: '#f0f0f0',
+          backgroundColor: i === songIndex ? '#EFF6FF' : '#fff',
+        }}>
+          <text style={{ fontSize: 14, color: i === songIndex ? '#3B82F6' : '#333' }}>
+            {i === songIndex ? '► ' : '  '}{song.title}
+          </text>
+          <text style={{ fontSize: 12, color: '#999', marginLeft: 8 }}>{song.artist}</text>
+        </view>
+      ))}
+
+      <text style={{ marginTop: 12, color: '#666', fontSize: 13 }}>
+        Status: {status}
+      </text>
     </view>
   );
 }
