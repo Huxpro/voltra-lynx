@@ -11,8 +11,14 @@ declare const NativeModules: {
 
 type WeatherCondition = 'sunny' | 'cloudy' | 'rainy';
 
-type WidgetFamily = 'systemSmall' | 'systemMedium' | 'systemLarge' | 'systemExtraLarge'
-  | 'accessoryCircular' | 'accessoryRectangular' | 'accessoryInline';
+type WidgetFamily =
+  | 'systemSmall'
+  | 'systemMedium'
+  | 'systemLarge'
+  | 'systemExtraLarge'
+  | 'accessoryCircular'
+  | 'accessoryRectangular'
+  | 'accessoryInline';
 
 interface WeatherData {
   condition: WeatherCondition;
@@ -210,251 +216,253 @@ export function WeatherWidgetScreen() {
   const gradientColor = GRADIENT_COLORS[selectedWeather];
 
   return (
-    <scroll-view style={{ flex: 1, backgroundColor: '#0B0F1A' } as any} scroll-orientation="vertical">
-      <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 } as any}>
-        <text style={{ fontSize: 24, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 8 } as any}>
-          Weather Widget Testing
+    <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}>
+      {/* Header */}
+      <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF', marginBottom: 8 }}>
+        Weather Widget Testing
+      </text>
+      <text style={{ fontSize: 14, color: '#CBD5F5', lineHeight: '20px', marginBottom: 24 } as any}>
+        Test the weather widget with different conditions and widget sizes.
+        Choose from Sunny, Cloudy, or Rainy weather with gradient backgrounds.
+      </text>
+
+      {/* Status bar */}
+      <view style={{
+        backgroundColor: '#1E293B',
+        borderRadius: '10px',
+        padding: 12,
+        marginBottom: 16,
+      } as any}>
+        <text style={{ fontSize: 12, color: '#94A3B8' }}>{statusMessage}</text>
+      </view>
+
+      {/* Current Weather Display card */}
+      <view style={{
+        backgroundColor: '#1E293B',
+        borderRadius: '12px',
+        padding: 16,
+        marginBottom: 16,
+      } as any}>
+        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 8 }}>
+          Current Weather: {WEATHER_CONDITIONS.find((c) => c.id === selectedWeather)?.label}
         </text>
-        <text style={{ fontSize: 14, color: '#CBD5F5', marginBottom: 24 } as any}>
-          Test the weather widget with different conditions and widget sizes. Choose from Sunny,
-          Cloudy, or Rainy weather with gradient backgrounds.
+        <text style={{ fontSize: 13, color: '#94A3B8' }}>
+          Temperature: {currentWeather.temperature}F | High: {currentWeather.highTemp}F | Low: {currentWeather.lowTemp}F | {currentWeather.location}
         </text>
+      </view>
 
-        {/* Status */}
-        <view style={{
-          backgroundColor: '#1E293B',
-          borderRadius: '10px',
-          padding: 12,
-          marginBottom: 16,
-        } as any}>
-          <text style={{ fontSize: 12, color: '#94A3B8' } as any}>{statusMessage}</text>
-        </view>
-
-        {/* Current Weather Display */}
-        <view style={{
-          backgroundColor: '#1E293B',
-          borderRadius: '12px',
-          padding: 16,
-          marginBottom: 16,
-        } as any}>
-          <text style={{ fontSize: 16, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 8 } as any}>
-            Current Weather: {WEATHER_CONDITIONS.find((c) => c.id === selectedWeather)?.label}
-          </text>
-          <text style={{ fontSize: 13, color: '#94A3B8' } as any}>
-            Temperature: {currentWeather.temperature}F | High: {currentWeather.highTemp}F | Low: {currentWeather.lowTemp}F | {currentWeather.location}
-          </text>
-        </view>
-
-        {/* Widget Family Selection */}
-        <view style={{
-          backgroundColor: '#1E293B',
-          borderRadius: '12px',
-          padding: 16,
-          marginBottom: 16,
-        } as any}>
-          <text style={{ fontSize: 16, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 4 } as any}>
-            Widget Family: {WIDGET_FAMILIES.find((f) => f.id === selectedFamily)?.title}
-          </text>
-          <text style={{ fontSize: 12, color: '#94A3B8', marginBottom: 12 } as any}>
-            {WIDGET_FAMILIES.find((f) => f.id === selectedFamily)?.description}
-          </text>
-          <view style={{ flexDirection: 'row', flexWrap: 'wrap' } as any}>
-            {WIDGET_FAMILIES.map((family) => (
-              <view
-                key={family.id}
-                bindtap={() => setSelectedFamily(family.id)}
-                style={{
-                  backgroundColor: selectedFamily === family.id ? '#007AFF' : 'rgba(255,255,255,0.1)',
-                  paddingLeft: 10, paddingRight: 10,
-                  paddingTop: 8, paddingBottom: 8,
-                  borderRadius: '8px',
-                  marginRight: 6,
-                  marginBottom: 6,
-                } as any}
-              >
-                <text style={{
-                  color: selectedFamily === family.id ? '#fff' : '#CBD5F5',
-                  fontSize: 12,
-                  fontWeight: '600',
-                } as any}>
-                  {family.title}
-                </text>
-              </view>
-            ))}
-          </view>
-        </view>
-
-        {/* Weather Condition Buttons */}
-        <view style={{
-          backgroundColor: '#1E293B',
-          borderRadius: '12px',
-          padding: 16,
-          marginBottom: 16,
-        } as any}>
-          <text style={{ fontSize: 16, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 4 } as any}>
-            Weather Conditions
-          </text>
-          <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 12 } as any}>
-            Select a weather condition to update the widget:
-          </text>
-          <view style={{ flexDirection: 'row' } as any}>
-            {WEATHER_CONDITIONS.map((condition) => (
-              <view
-                key={condition.id}
-                bindtap={() => handleWeatherChange(condition.id)}
-                style={{
-                  flex: 1,
-                  backgroundColor: selectedWeather === condition.id ? '#007AFF' : 'rgba(255,255,255,0.1)',
-                  padding: 12,
-                  borderRadius: '8px',
-                  alignItems: 'center',
-                  marginRight: condition.id !== 'rainy' ? 8 : 0,
-                } as any}
-              >
-                <text style={{ fontSize: 18, marginBottom: 4 } as any}>{condition.emoji}</text>
-                <text style={{
-                  color: selectedWeather === condition.id ? '#fff' : '#CBD5F5',
-                  fontSize: 13,
-                  fontWeight: '600',
-                } as any}>
-                  {condition.label}
-                </text>
-              </view>
-            ))}
-          </view>
-        </view>
-
-        {/* Quick Actions */}
-        <view style={{
-          backgroundColor: '#1E293B',
-          borderRadius: '12px',
-          padding: 16,
-          marginBottom: 16,
-        } as any}>
-          <text style={{ fontSize: 16, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 12 } as any}>
-            Quick Actions
-          </text>
-          <view style={{ flexDirection: 'row' } as any}>
+      {/* Widget Family Selection card */}
+      <view style={{
+        backgroundColor: '#1E293B',
+        borderRadius: '12px',
+        padding: 16,
+        marginBottom: 16,
+      } as any}>
+        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 }}>
+          Widget Family: {WIDGET_FAMILIES.find((f) => f.id === selectedFamily)?.title}
+        </text>
+        <text style={{ fontSize: 12, color: '#94A3B8', marginBottom: 12 }}>
+          {WIDGET_FAMILIES.find((f) => f.id === selectedFamily)?.description}
+        </text>
+        <view style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' } as any}>
+          {WIDGET_FAMILIES.map((family) => (
             <view
-              bindtap={handleRandomWeather}
+              key={family.id}
+              bindtap={() => setSelectedFamily(family.id)}
               style={{
-                flex: 1,
-                backgroundColor: isUpdating ? '#555' : 'rgba(255,255,255,0.1)',
+                backgroundColor: selectedFamily === family.id ? '#007AFF' : 'rgba(255,255,255,0.1)',
+                paddingLeft: 10,
+                paddingRight: 10,
+                paddingTop: 8,
+                paddingBottom: 8,
+                borderRadius: '8px',
+                marginRight: 6,
+                marginBottom: 6,
+              } as any}
+            >
+              <text style={{
+                color: selectedFamily === family.id ? '#fff' : '#CBD5F5',
+                fontSize: 12,
+                fontWeight: '600',
+              }}>
+                {family.title}
+              </text>
+            </view>
+          ))}
+        </view>
+      </view>
+
+      {/* Weather Condition Buttons card */}
+      <view style={{
+        backgroundColor: '#1E293B',
+        borderRadius: '12px',
+        padding: 16,
+        marginBottom: 16,
+      } as any}>
+        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 }}>
+          Weather Conditions
+        </text>
+        <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 12 }}>
+          Select a weather condition to update the widget:
+        </text>
+        <view style={{ display: 'linear', linearDirection: 'row' } as any}>
+          {WEATHER_CONDITIONS.map((condition, index) => (
+            <view
+              key={condition.id}
+              bindtap={() => handleWeatherChange(condition.id)}
+              style={{
+                linearWeight: 1,
+                backgroundColor: selectedWeather === condition.id ? '#007AFF' : 'rgba(255,255,255,0.1)',
                 padding: 12,
                 borderRadius: '8px',
                 alignItems: 'center',
-                marginRight: 8,
+                marginRight: index < WEATHER_CONDITIONS.length - 1 ? 8 : 0,
               } as any}
             >
-              <text style={{ color: '#CBD5F5', fontSize: 14, fontWeight: '600' } as any}>
-                Random Weather
+              <text style={{ fontSize: 16, marginBottom: 4 }}>{condition.emoji}</text>
+              <text style={{
+                color: selectedWeather === condition.id ? '#fff' : '#CBD5F5',
+                fontSize: 13,
+                fontWeight: '600',
+              }}>
+                {condition.label}
               </text>
             </view>
-            <view
-              bindtap={handleCustomWeather}
-              style={{
-                flex: 1,
-                backgroundColor: isUpdating ? '#555' : 'rgba(255,255,255,0.1)',
-                padding: 12,
-                borderRadius: '8px',
-                alignItems: 'center',
-              } as any}
-            >
-              <text style={{ color: '#CBD5F5', fontSize: 14, fontWeight: '600' } as any}>
-                Custom Weather
-              </text>
-            </view>
-          </view>
+          ))}
         </view>
+      </view>
 
-        {/* Timeline Scheduling */}
-        <view style={{
-          backgroundColor: '#1E293B',
-          borderRadius: '12px',
-          padding: 16,
-          marginBottom: 16,
-        } as any}>
-          <text style={{ fontSize: 16, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 4 } as any}>
-            Timeline Scheduling
-          </text>
-          <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 12 } as any}>
-            Schedule multiple weather updates in advance. iOS will automatically display each
-            forecast at the scheduled time, even when the app is closed.
-          </text>
+      {/* Quick Actions card */}
+      <view style={{
+        backgroundColor: '#1E293B',
+        borderRadius: '12px',
+        padding: 16,
+        marginBottom: 16,
+      } as any}>
+        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 12 }}>
+          Quick Actions
+        </text>
+        <view style={{ display: 'linear', linearDirection: 'row' } as any}>
           <view
-            bindtap={handleScheduleForecast}
+            bindtap={handleRandomWeather}
             style={{
-              backgroundColor: isUpdating ? '#555' : '#007AFF',
-              padding: 14,
-              borderRadius: '10px',
+              linearWeight: 1,
+              backgroundColor: isUpdating ? '#555' : 'rgba(255,255,255,0.1)',
+              padding: 12,
+              borderRadius: '8px',
               alignItems: 'center',
-              marginBottom: 8,
+              marginRight: 8,
             } as any}
           >
-            <text style={{ color: '#fff', fontSize: 16, fontWeight: '600' } as any}>
-              Schedule Timeline
+            <text style={{ color: '#CBD5F5', fontSize: 14, fontWeight: '600' }}>
+              Random Weather
             </text>
           </view>
-          <text style={{ fontSize: 12, color: '#64748B', fontStyle: 'italic' } as any}>
-            Schedules 4 entries: 1 (+5sec), 2 (+1min), 3 (+2min), 4 (+3min). Each has a different
-            background color. Note: iOS may delay updates based on battery/visibility.
-          </text>
+          <view
+            bindtap={handleCustomWeather}
+            style={{
+              linearWeight: 1,
+              backgroundColor: isUpdating ? '#555' : 'rgba(255,255,255,0.1)',
+              padding: 12,
+              borderRadius: '8px',
+              alignItems: 'center',
+            } as any}
+          >
+            <text style={{ color: '#CBD5F5', fontSize: 14, fontWeight: '600' }}>
+              Custom Weather
+            </text>
+          </view>
         </view>
+      </view>
 
-        {/* Widget Preview */}
-        <view style={{
-          backgroundColor: '#1E293B',
-          borderRadius: '12px',
-          padding: 16,
-          marginBottom: 16,
-        } as any}>
-          <text style={{ fontSize: 16, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 4 } as any}>
-            Widget Preview
-          </text>
-          <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 16 } as any}>
-            This shows how the weather widget will appear on your home screen.
-          </text>
-
-          {/* Simulated widget preview */}
-          <view style={{
-            backgroundColor: gradientColor.from,
-            borderRadius: '16px',
-            padding: 20,
+      {/* Timeline Scheduling card */}
+      <view style={{
+        backgroundColor: '#1E293B',
+        borderRadius: '12px',
+        padding: 16,
+        marginBottom: 16,
+      } as any}>
+        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 }}>
+          Timeline Scheduling
+        </text>
+        <text style={{ fontSize: 13, color: '#94A3B8', lineHeight: '20px', marginBottom: 12 } as any}>
+          Schedule multiple weather updates in advance. iOS will automatically
+          display each forecast at the scheduled time, even when the app is closed.
+        </text>
+        <view
+          bindtap={handleScheduleForecast}
+          style={{
+            backgroundColor: isUpdating ? '#555' : '#007AFF',
+            padding: 14,
+            borderRadius: '10px',
             alignItems: 'center',
-          } as any}>
-            <text style={{ fontSize: 48, fontWeight: 'bold', color: '#FFFFFF' } as any}>
-              {currentWeather.temperature}°
-            </text>
-            <text style={{ fontSize: 16, color: 'rgba(255,255,255,0.9)', marginTop: 4 } as any}>
-              {currentWeather.description}
-            </text>
-            <text style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', marginTop: 4 } as any}>
-              H:{currentWeather.highTemp}° L:{currentWeather.lowTemp}°
-            </text>
-            <text style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 8 } as any}>
-              {currentWeather.location} | {selectedFamily}
-            </text>
-          </view>
-        </view>
-
-        {/* How to Test */}
-        <view style={{
-          backgroundColor: '#1E293B',
-          borderRadius: '12px',
-          padding: 16,
-        } as any}>
-          <text style={{ fontSize: 16, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 8 } as any}>
-            How to Test
+            marginBottom: 8,
+          } as any}
+        >
+          <text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>
+            Schedule Timeline
           </text>
-          <text style={{ fontSize: 13, color: '#94A3B8' } as any}>
-            1. Select a widget family (size) above{'\n'}
-            2. Choose different weather conditions (Sunny, Cloudy, Rainy){'\n'}
-            3. Notice how the gradient background changes{'\n'}
-            4. Check your home screen to see the live widget update{'\n'}
-            5. Try the random weather button for variety
+        </view>
+        <text style={{ fontSize: 12, color: '#64748B', lineHeight: '18px' } as any}>
+          Schedules 4 entries: 1 (+5sec), 2 (+1min), 3 (+2min), 4 (+3min).
+          Each has a different background color. Note: iOS may delay updates
+          based on battery/visibility.
+        </text>
+      </view>
+
+      {/* Widget Preview card */}
+      <view style={{
+        backgroundColor: '#1E293B',
+        borderRadius: '12px',
+        padding: 16,
+        marginBottom: 16,
+      } as any}>
+        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 }}>
+          Widget Preview
+        </text>
+        <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 16 }}>
+          This shows how the weather widget will appear on your home screen.
+        </text>
+
+        {/* Simulated widget preview */}
+        <view style={{
+          backgroundColor: gradientColor.from,
+          borderRadius: '16px',
+          padding: 20,
+          alignItems: 'center',
+        } as any}>
+          <text style={{ fontSize: 48, fontWeight: '700', color: '#FFFFFF' }}>
+            {currentWeather.temperature}deg
+          </text>
+          <text style={{ fontSize: 16, color: 'rgba(255,255,255,0.9)', marginTop: 4 }}>
+            {currentWeather.description}
+          </text>
+          <text style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', marginTop: 4 }}>
+            H:{currentWeather.highTemp} L:{currentWeather.lowTemp}
+          </text>
+          <text style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 8 }}>
+            {currentWeather.location} | {selectedFamily}
           </text>
         </view>
       </view>
-    </scroll-view>
+
+      {/* How to Test card */}
+      <view style={{
+        backgroundColor: '#1E293B',
+        borderRadius: '12px',
+        padding: 16,
+      } as any}>
+        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 8 }}>
+          How to Test
+        </text>
+        <text style={{ fontSize: 13, color: '#94A3B8', lineHeight: '20px' } as any}>
+          1. Select a widget family (size) above{'\n'}
+          2. Choose different weather conditions (Sunny, Cloudy, Rainy){'\n'}
+          3. Notice how the gradient background changes{'\n'}
+          4. Check your home screen to see the live widget update{'\n'}
+          5. Try the random weather button for variety
+        </text>
+      </view>
+    </view>
   );
 }

@@ -94,7 +94,7 @@ export function GradientPlaygroundScreen() {
       style={{
         height: '100%',
         backgroundColor: 'linear-gradient(to right, red 10%, yellow 50%, blue 90%)',
-        borderRadius: '8px',
+        borderRadius: 8,
         width: '100%',
       } as any}
     />
@@ -105,7 +105,7 @@ export function GradientPlaygroundScreen() {
       style={{
         height: '100%',
         backgroundColor: 'linear-gradient(to right, rgba(255,0,0,0.8) 0%, rgba(0,0,255,0.3) 100%)',
-        borderRadius: '8px',
+        borderRadius: 8,
         width: '100%',
       } as any}
     />
@@ -116,7 +116,7 @@ export function GradientPlaygroundScreen() {
       style={{
         height: '100%',
         backgroundColor: '#3B82F6',
-        borderRadius: '8px',
+        borderRadius: 8,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
@@ -129,100 +129,49 @@ export function GradientPlaygroundScreen() {
   const truncate = (json: string) => json.length > 400 ? json.slice(0, 400) + '...' : json;
 
   return (
-    <scroll-view scroll-orientation="vertical" style={{ linearWeight: 1 } as any}>
-      <view style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 20, paddingBottom: 24 }}>
-        <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 8 }}>
-          Gradient Playground
-        </text>
-        <text style={{ color: '#666', marginBottom: 8, fontSize: 13 }}>
-          Test CSS gradient strings as backgroundColor on Voltra views.
-        </text>
-        <text style={{ color: '#FCA5A5', fontSize: 11, marginBottom: 16 }}>
-          Playground uses parser-compatible CSS syntax only. If a preview is blank, this indicates a gradient parser bug in iOS rendering.
-        </text>
+    <view style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 20, paddingBottom: 24 }}>
+      <text style={{ fontSize: 20, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 8 }}>
+        Gradient Playground
+      </text>
+      <text style={{ color: '#CBD5F5', marginBottom: 8, fontSize: 13 }}>
+        Test CSS gradient strings as backgroundColor on Voltra views.
+      </text>
+      <text style={{ color: '#FCA5A5', fontSize: 11, marginBottom: 16 }}>
+        Playground uses parser-compatible CSS syntax only. If a preview is blank, this indicates a gradient parser bug in iOS rendering.
+      </text>
 
-        {/* Controls */}
-        <view style={{
-          backgroundColor: '#1c1c1e',
-          borderRadius: '16px',
-          padding: 16,
-          marginBottom: 16,
-        }}>
-          <text style={{ color: '#fff', fontSize: 16, fontWeight: '600', marginBottom: 12 }}>Controls</text>
+      {/* Controls */}
+      <view style={{
+        backgroundColor: '#1c1c1e',
+        borderRadius: '16px',
+        padding: 16,
+        marginBottom: 16,
+      }}>
+        <text style={{ color: '#fff', fontSize: 16, fontWeight: '600', marginBottom: 12 }}>Controls</text>
 
-          {/* Gradient Type */}
-          <view style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <text style={{ color: '#CBD5F5', fontSize: 14 }}>Type:</text>
-            <view
-              bindtap={cycleGradientType}
-              style={{
-                paddingLeft: 12, paddingRight: 12,
-                paddingTop: 6, paddingBottom: 6,
-                backgroundColor: '#333',
-                borderRadius: '6px',
-              }}
-            >
-              <text style={{ color: '#fff', fontSize: 13 }}>{gradientType}</text>
-            </view>
+        {/* Gradient Type */}
+        <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <text style={{ color: '#CBD5F5', fontSize: 14 }}>Type:</text>
+          <view
+            bindtap={cycleGradientType}
+            style={{
+              paddingLeft: 12, paddingRight: 12,
+              paddingTop: 6, paddingBottom: 6,
+              backgroundColor: '#333',
+              borderRadius: '6px',
+            }}
+          >
+            <text style={{ color: '#fff', fontSize: 13 }}>{gradientType}</text>
           </view>
+        </view>
 
-          {/* Direction (linear only) */}
-          {gradientType === 'linear' && (
-            <view>
-              <view style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                <text style={{ color: '#CBD5F5', fontSize: 14 }}>Mode:</text>
-                <view
-                  bindtap={() => setUseAngle((v) => !v)}
-                  style={{
-                    paddingLeft: 12, paddingRight: 12,
-                    paddingTop: 6, paddingBottom: 6,
-                    backgroundColor: '#333',
-                    borderRadius: '6px',
-                  }}
-                >
-                  <text style={{ color: '#fff', fontSize: 13 }}>{useAngle ? 'angle' : 'direction'}</text>
-                </view>
-              </view>
-              {useAngle ? (
-                <view style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                  <text style={{ color: '#CBD5F5', fontSize: 14 }}>Angle: {angle}deg</text>
-                  <view
-                    bindtap={cycleAngle}
-                    style={{
-                      paddingLeft: 12, paddingRight: 12,
-                      paddingTop: 6, paddingBottom: 6,
-                      backgroundColor: '#333',
-                      borderRadius: '6px',
-                    }}
-                  >
-                    <text style={{ color: '#fff', fontSize: 13 }}>cycle</text>
-                  </view>
-                </view>
-              ) : (
-                <view style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                  <text style={{ color: '#CBD5F5', fontSize: 14 }}>Direction:</text>
-                  <view
-                    bindtap={cycleDirection}
-                    style={{
-                      paddingLeft: 12, paddingRight: 12,
-                      paddingTop: 6, paddingBottom: 6,
-                      backgroundColor: '#333',
-                      borderRadius: '6px',
-                    }}
-                  >
-                    <text style={{ color: '#fff', fontSize: 13 }}>{direction}</text>
-                  </view>
-                </view>
-              )}
-            </view>
-          )}
-
-          {/* Angle for conic */}
-          {gradientType === 'conic' && (
-            <view style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <text style={{ color: '#CBD5F5', fontSize: 14 }}>Start angle: {angle}deg</text>
+        {/* Direction (linear only) */}
+        {gradientType === 'linear' && (
+          <view>
+            <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <text style={{ color: '#CBD5F5', fontSize: 14 }}>Mode:</text>
               <view
-                bindtap={cycleAngle}
+                bindtap={() => setUseAngle((v) => !v)}
                 style={{
                   paddingLeft: 12, paddingRight: 12,
                   paddingTop: 6, paddingBottom: 6,
@@ -230,16 +179,49 @@ export function GradientPlaygroundScreen() {
                   borderRadius: '6px',
                 }}
               >
-                <text style={{ color: '#fff', fontSize: 13 }}>cycle</text>
+                <text style={{ color: '#fff', fontSize: 13 }}>{useAngle ? 'angle' : 'direction'}</text>
               </view>
             </view>
-          )}
+            {useAngle ? (
+              <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <text style={{ color: '#CBD5F5', fontSize: 14 }}>Angle: {angle}deg</text>
+                <view
+                  bindtap={cycleAngle}
+                  style={{
+                    paddingLeft: 12, paddingRight: 12,
+                    paddingTop: 6, paddingBottom: 6,
+                    backgroundColor: '#333',
+                    borderRadius: '6px',
+                  }}
+                >
+                  <text style={{ color: '#fff', fontSize: 13 }}>cycle</text>
+                </view>
+              </view>
+            ) : (
+              <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <text style={{ color: '#CBD5F5', fontSize: 14 }}>Direction:</text>
+                <view
+                  bindtap={cycleDirection}
+                  style={{
+                    paddingLeft: 12, paddingRight: 12,
+                    paddingTop: 6, paddingBottom: 6,
+                    backgroundColor: '#333',
+                    borderRadius: '6px',
+                  }}
+                >
+                  <text style={{ color: '#fff', fontSize: 13 }}>{direction}</text>
+                </view>
+              </view>
+            )}
+          </view>
+        )}
 
-          {/* Color Preset */}
-          <view style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <text style={{ color: '#CBD5F5', fontSize: 14 }}>Colors: {PRESETS[preset].label}</text>
+        {/* Angle for conic */}
+        {gradientType === 'conic' && (
+          <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <text style={{ color: '#CBD5F5', fontSize: 14 }}>Start angle: {angle}deg</text>
             <view
-              bindtap={cyclePreset}
+              bindtap={cycleAngle}
               style={{
                 paddingLeft: 12, paddingRight: 12,
                 paddingTop: 6, paddingBottom: 6,
@@ -250,99 +232,116 @@ export function GradientPlaygroundScreen() {
               <text style={{ color: '#fff', fontSize: 13 }}>cycle</text>
             </view>
           </view>
+        )}
 
-          {/* Border Radius */}
-          <view style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <text style={{ color: '#CBD5F5', fontSize: 14 }}>borderRadius: {borderRadius}px</text>
-            <view style={{ flexDirection: 'row', gap: 8 }}>
-              <view
-                bindtap={() => setBorderRadius((prev) => Math.max(prev - 8, 0))}
-                style={{
-                  paddingLeft: 14, paddingRight: 14,
-                  paddingTop: 6, paddingBottom: 6,
-                  backgroundColor: '#333',
-                  borderRadius: '6px',
-                }}
-              >
-                <text style={{ color: '#fff', fontSize: 15 }}>-</text>
-              </view>
-              <view
-                bindtap={() => setBorderRadius((prev) => Math.min(prev + 8, 80))}
-                style={{
-                  paddingLeft: 14, paddingRight: 14,
-                  paddingTop: 6, paddingBottom: 6,
-                  backgroundColor: '#333',
-                  borderRadius: '6px',
-                }}
-              >
-                <text style={{ color: '#fff', fontSize: 15 }}>+</text>
-              </view>
-            </view>
+        {/* Color Preset */}
+        <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <text style={{ color: '#CBD5F5', fontSize: 14 }}>Colors: {PRESETS[preset].label}</text>
+          <view
+            bindtap={cyclePreset}
+            style={{
+              paddingLeft: 12, paddingRight: 12,
+              paddingTop: 6, paddingBottom: 6,
+              backgroundColor: '#333',
+              borderRadius: '6px',
+            }}
+          >
+            <text style={{ color: '#fff', fontSize: 13 }}>cycle</text>
           </view>
         </view>
 
-        {/* Live Preview */}
-        <view style={{
-          backgroundColor: '#1c1c1e',
-          borderRadius: '16px',
-          padding: 16,
-          marginBottom: 16,
-        }}>
-          <text style={{ color: '#fff', fontSize: 16, fontWeight: '600', marginBottom: 8 }}>Live Preview</text>
-          <text style={{ color: '#94A3B8', fontSize: 11, marginBottom: 8 }}>CSS: {gradient}</text>
-          <text style={{ color: '#6E6E73', fontSize: 10, fontFamily: 'monospace' }}>
-            {truncate(livePreviewJson)}
-          </text>
-        </view>
-
-        {/* Color Stop Positions */}
-        <view style={{
-          backgroundColor: '#1c1c1e',
-          borderRadius: '16px',
-          padding: 16,
-          marginBottom: 16,
-        }}>
-          <text style={{ color: '#fff', fontSize: 15, fontWeight: '600', marginBottom: 4 }}>Color Stop Positions</text>
-          <text style={{ color: '#94A3B8', fontSize: 11, marginBottom: 8 }}>
-            Explicit percentage stops: red 10%, yellow 50%, blue 90%
-          </text>
-          <text style={{ color: '#6E6E73', fontSize: 10, fontFamily: 'monospace' }}>
-            {truncate(colorStopJson)}
-          </text>
-        </view>
-
-        {/* RGBA Inside Gradient */}
-        <view style={{
-          backgroundColor: '#1c1c1e',
-          borderRadius: '16px',
-          padding: 16,
-          marginBottom: 16,
-        }}>
-          <text style={{ color: '#fff', fontSize: 15, fontWeight: '600', marginBottom: 4 }}>RGBA Inside Gradient</text>
-          <text style={{ color: '#94A3B8', fontSize: 11, marginBottom: 8 }}>
-            linear-gradient(to right, rgba(255,0,0,0.8) 0%, rgba(0,0,255,0.3) 100%)
-          </text>
-          <text style={{ color: '#6E6E73', fontSize: 10, fontFamily: 'monospace' }}>
-            {truncate(rgbaGradientJson)}
-          </text>
-        </view>
-
-        {/* Solid Color */}
-        <view style={{
-          backgroundColor: '#1c1c1e',
-          borderRadius: '16px',
-          padding: 16,
-          marginBottom: 16,
-        }}>
-          <text style={{ color: '#fff', fontSize: 15, fontWeight: '600', marginBottom: 4 }}>Solid Color (Unchanged)</text>
-          <text style={{ color: '#94A3B8', fontSize: 11, marginBottom: 8 }}>
-            backgroundColor: "#3B82F6" - plain colors still work
-          </text>
-          <text style={{ color: '#6E6E73', fontSize: 10, fontFamily: 'monospace' }}>
-            {truncate(solidColorJson)}
-          </text>
+        {/* Border Radius */}
+        <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <text style={{ color: '#CBD5F5', fontSize: 14 }}>borderRadius: {borderRadius}px</text>
+          <view style={{ display: 'linear', linearDirection: 'row' }}>
+            <view
+              bindtap={() => setBorderRadius((prev) => Math.max(prev - 8, 0))}
+              style={{
+                paddingLeft: 14, paddingRight: 14,
+                paddingTop: 6, paddingBottom: 6,
+                backgroundColor: '#333',
+                borderRadius: '6px',
+              }}
+            >
+              <text style={{ color: '#fff', fontSize: 15 }}>-</text>
+            </view>
+            <view
+              bindtap={() => setBorderRadius((prev) => Math.min(prev + 8, 80))}
+              style={{
+                paddingLeft: 14, paddingRight: 14,
+                paddingTop: 6, paddingBottom: 6,
+                backgroundColor: '#333',
+                borderRadius: '6px',
+                marginLeft: 8,
+              }}
+            >
+              <text style={{ color: '#fff', fontSize: 15 }}>+</text>
+            </view>
+          </view>
         </view>
       </view>
-    </scroll-view>
+
+      {/* Live Preview */}
+      <view style={{
+        backgroundColor: '#1c1c1e',
+        borderRadius: '16px',
+        padding: 16,
+        marginBottom: 16,
+      }}>
+        <text style={{ color: '#fff', fontSize: 16, fontWeight: '600', marginBottom: 8 }}>Live Preview</text>
+        <text style={{ color: '#94A3B8', fontSize: 11, marginBottom: 8 }}>CSS: {gradient}</text>
+        <text style={{ color: '#6E6E73', fontSize: 10, fontFamily: 'monospace' }}>
+          {truncate(livePreviewJson)}
+        </text>
+      </view>
+
+      {/* Color Stop Positions */}
+      <view style={{
+        backgroundColor: '#1c1c1e',
+        borderRadius: '16px',
+        padding: 16,
+        marginBottom: 16,
+      }}>
+        <text style={{ color: '#fff', fontSize: 15, fontWeight: '600', marginBottom: 4 }}>Color Stop Positions</text>
+        <text style={{ color: '#94A3B8', fontSize: 11, marginBottom: 8 }}>
+          Explicit percentage stops: red 10%, yellow 50%, blue 90%
+        </text>
+        <text style={{ color: '#6E6E73', fontSize: 10, fontFamily: 'monospace' }}>
+          {truncate(colorStopJson)}
+        </text>
+      </view>
+
+      {/* RGBA Inside Gradient */}
+      <view style={{
+        backgroundColor: '#1c1c1e',
+        borderRadius: '16px',
+        padding: 16,
+        marginBottom: 16,
+      }}>
+        <text style={{ color: '#fff', fontSize: 15, fontWeight: '600', marginBottom: 4 }}>RGBA Inside Gradient</text>
+        <text style={{ color: '#94A3B8', fontSize: 11, marginBottom: 8 }}>
+          linear-gradient(to right, rgba(255,0,0,0.8) 0%, rgba(0,0,255,0.3) 100%)
+        </text>
+        <text style={{ color: '#6E6E73', fontSize: 10, fontFamily: 'monospace' }}>
+          {truncate(rgbaGradientJson)}
+        </text>
+      </view>
+
+      {/* Solid Color */}
+      <view style={{
+        backgroundColor: '#1c1c1e',
+        borderRadius: '16px',
+        padding: 16,
+        marginBottom: 16,
+      }}>
+        <text style={{ color: '#fff', fontSize: 15, fontWeight: '600', marginBottom: 4 }}>Solid Color (Unchanged)</text>
+        <text style={{ color: '#94A3B8', fontSize: 11, marginBottom: 8 }}>
+          backgroundColor: "#3B82F6" - plain colors still work
+        </text>
+        <text style={{ color: '#6E6E73', fontSize: 10, fontFamily: 'monospace' }}>
+          {truncate(solidColorJson)}
+        </text>
+      </view>
+    </view>
   );
 }

@@ -42,6 +42,47 @@ function renderChartPreview(element: React.ReactNode): string {
   }
 }
 
+// ─── chart card component ───────────────────────────────────────────────────
+
+function ChartCard({ title, description, json, onRandomize }: {
+  title: string;
+  description: string;
+  json: string;
+  onRandomize?: () => void;
+}) {
+  const truncated = json.length > 300 ? json.slice(0, 300) + '...' : json;
+
+  return (
+    <view style={{
+      backgroundColor: '#1c1c1e',
+      borderRadius: '16px',
+      padding: 16,
+      marginBottom: 16,
+    }}>
+      <text style={{ color: '#fff', fontSize: 15, fontWeight: '600', marginBottom: 4 }}>{title}</text>
+      <text style={{ color: '#8E8E93', fontSize: 12, marginBottom: 8 }}>{description}</text>
+      {onRandomize && (
+        <view style={{ alignItems: 'flex-end', marginBottom: 8 }}>
+          <view
+            bindtap={onRandomize}
+            style={{
+              paddingLeft: 12, paddingRight: 12,
+              paddingTop: 6, paddingBottom: 6,
+              backgroundColor: '#333',
+              borderRadius: '6px',
+            }}
+          >
+            <text style={{ color: '#fff', fontSize: 12 }}>Randomize</text>
+          </view>
+        </view>
+      )}
+      <text style={{ color: '#6E6E73', fontSize: 10, fontFamily: 'monospace' }}>
+        {truncated}
+      </text>
+    </view>
+  );
+}
+
 // ─── screen ─────────────────────────────────────────────────────────────────
 
 export function ChartPlaygroundScreen() {
@@ -168,147 +209,107 @@ export function ChartPlaygroundScreen() {
     </Voltra.Chart>
   );
 
-  const truncate = (json: string) => json.length > 300 ? json.slice(0, 300) + '...' : json;
-
-  // Chart card component
-  const ChartCard = ({ title, description, json, onRandomize }: {
-    title: string;
-    description: string;
-    json: string;
-    onRandomize?: () => void;
-  }) => (
-    <view style={{
-      backgroundColor: '#1c1c1e',
-      borderRadius: '16px',
-      padding: 16,
-      marginBottom: 16,
-    }}>
-      <text style={{ color: '#fff', fontSize: 15, fontWeight: '600', marginBottom: 4 }}>{title}</text>
-      <text style={{ color: '#8E8E93', fontSize: 12, marginBottom: 8 }}>{description}</text>
-      {onRandomize && (
-        <view style={{ alignItems: 'flex-end', marginBottom: 8 }}>
-          <view
-            bindtap={onRandomize}
-            style={{
-              paddingLeft: 12, paddingRight: 12,
-              paddingTop: 6, paddingBottom: 6,
-              backgroundColor: '#333',
-              borderRadius: '6px',
-            }}
-          >
-            <text style={{ color: '#fff', fontSize: 12 }}>Randomize</text>
-          </view>
-        </view>
-      )}
-      <text style={{ color: '#6E6E73', fontSize: 10, fontFamily: 'monospace' }}>
-        {truncate(json)}
-      </text>
-    </view>
-  );
-
   return (
-    <scroll-view scroll-orientation="vertical" style={{ linearWeight: 1 } as any}>
-      <view style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 20, paddingBottom: 24 }}>
-        <text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 8 }}>
-          Chart Playground
-        </text>
-        <text style={{ color: '#666', marginBottom: 16, fontSize: 13 }}>
-          All SwiftUI chart mark types powered by Voltra. Tap Randomize to animate between data sets.
-        </text>
+    <view style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 20, paddingBottom: 24 }}>
+      <text style={{ fontSize: 20, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 8 }}>
+        Chart Playground
+      </text>
+      <text style={{ color: '#CBD5F5', marginBottom: 16, fontSize: 13 }}>
+        All SwiftUI chart mark types powered by Voltra. Tap Randomize to animate between data sets.
+      </text>
 
-        <view
-          bindtap={randomizeAll}
-          style={{
-            backgroundColor: '#007AFF',
-            padding: 12,
-            borderRadius: '10px',
-            alignItems: 'center',
-            marginBottom: 16,
-          }}
-        >
-          <text style={{ color: '#fff', fontSize: 15, fontWeight: '600' }}>Randomize All</text>
-        </view>
-
-        <ChartCard
-          title="BarMark"
-          description="Single series bar chart with rounded corners."
-          json={barChartJson}
-          onRandomize={() => setBarData(randomBarData())}
-        />
-
-        <ChartCard
-          title="BarMark - Multi-series"
-          description="Two series (A and B) rendered as grouped bars."
-          json={multiBarChartJson}
-          onRandomize={() => setMultiData(randomMultiSeriesData())}
-        />
-
-        <ChartCard
-          title="LineMark"
-          description="Smooth monotone line chart."
-          json={lineChartJson}
-          onRandomize={() => setLineData(randomLineData())}
-        />
-
-        <ChartCard
-          title="AreaMark"
-          description="Filled area chart - the classic stocks-app look."
-          json={areaChartJson}
-          onRandomize={() => setAreaData(randomAreaData())}
-        />
-
-        <ChartCard
-          title="PointMark"
-          description="Scatter plot with numeric axes plus reference lines."
-          json={pointChartJson}
-          onRandomize={() => {
-            setPointData(randomPointData());
-            setPointRuleY(randomPointRuleY());
-            setPointRuleX(randomPointRuleX());
-          }}
-        />
-
-        <ChartCard
-          title="RuleMark"
-          description="Bar chart with horizontal and vertical reference lines."
-          json={ruleChartJson}
-          onRandomize={() => {
-            setBarData(randomBarData());
-            setRuleY(randomRuleY());
-            setRuleX(randomRuleX());
-          }}
-        />
-
-        <ChartCard
-          title="SectorMark - Pie"
-          description="Pie chart built with SectorMark (iOS 17+)."
-          json={sectorPieJson}
-          onRandomize={() => setSectorData(randomSectorData())}
-        />
-
-        <ChartCard
-          title="SectorMark - Donut"
-          description="Same data with inner radius for donut chart."
-          json={sectorDonutJson}
-          onRandomize={() => setSectorData(randomSectorData())}
-        />
-
-        <ChartCard
-          title="Combo - Bar + Line"
-          description="Multiple mark types composited in one chart."
-          json={comboChartJson}
-          onRandomize={() => {
-            setComboBarData(randomBarData());
-            setComboLineData(randomLineData());
-          }}
-        />
-
-        <ChartCard
-          title="Hidden Axes"
-          description="Chart with both axes hidden - clean minimal look."
-          json={hiddenAxesJson}
-        />
+      <view
+        bindtap={randomizeAll}
+        style={{
+          backgroundColor: '#007AFF',
+          padding: 12,
+          borderRadius: '10px',
+          alignItems: 'center',
+          marginBottom: 16,
+        }}
+      >
+        <text style={{ color: '#fff', fontSize: 15, fontWeight: '600' }}>Randomize All</text>
       </view>
-    </scroll-view>
+
+      <ChartCard
+        title="BarMark"
+        description="Single series bar chart with rounded corners."
+        json={barChartJson}
+        onRandomize={() => setBarData(randomBarData())}
+      />
+
+      <ChartCard
+        title="BarMark - Multi-series"
+        description="Two series (A and B) rendered as grouped bars using the supported stacking grouped mode."
+        json={multiBarChartJson}
+        onRandomize={() => setMultiData(randomMultiSeriesData())}
+      />
+
+      <ChartCard
+        title="LineMark"
+        description="Smooth monotone line chart."
+        json={lineChartJson}
+        onRandomize={() => setLineData(randomLineData())}
+      />
+
+      <ChartCard
+        title="AreaMark"
+        description="Filled area chart - the classic stocks-app look."
+        json={areaChartJson}
+        onRandomize={() => setAreaData(randomAreaData())}
+      />
+
+      <ChartCard
+        title="PointMark"
+        description="Scatter plot with numeric x and y axes plus both vertical and horizontal reference lines."
+        json={pointChartJson}
+        onRandomize={() => {
+          setPointData(randomPointData());
+          setPointRuleY(randomPointRuleY());
+          setPointRuleX(randomPointRuleX());
+        }}
+      />
+
+      <ChartCard
+        title="RuleMark"
+        description="Bar chart with both horizontal and vertical reference lines. When both xValue and yValue are set, both lines render."
+        json={ruleChartJson}
+        onRandomize={() => {
+          setBarData(randomBarData());
+          setRuleY(randomRuleY());
+          setRuleX(randomRuleX());
+        }}
+      />
+
+      <ChartCard
+        title="SectorMark - Pie"
+        description="Pie chart built with SectorMark (iOS 17+)."
+        json={sectorPieJson}
+        onRandomize={() => setSectorData(randomSectorData())}
+      />
+
+      <ChartCard
+        title="SectorMark - Donut"
+        description="Same data as above but with an inner radius to create a donut chart."
+        json={sectorDonutJson}
+        onRandomize={() => setSectorData(randomSectorData())}
+      />
+
+      <ChartCard
+        title="Combo - Bar + Line"
+        description="Multiple mark types composited in one chart."
+        json={comboChartJson}
+        onRandomize={() => {
+          setComboBarData(randomBarData());
+          setComboLineData(randomLineData());
+        }}
+      />
+
+      <ChartCard
+        title="Hidden Axes"
+        description="Chart with both axes hidden - clean minimal look."
+        json={hiddenAxesJson}
+      />
+    </view>
   );
 }
