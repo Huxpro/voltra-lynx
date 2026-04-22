@@ -1,36 +1,30 @@
 import { useState, useCallback } from '@lynx-js/react';
-import { Button, StatusPill } from './components';
-import { BasicLiveActivityDemo } from './demos/ios/BasicLiveActivity';
-import { MusicPlayerActivity } from './demos/ios/MusicPlayerActivity';
-import { FlightTrackerActivity } from './demos/ios/FlightTrackerActivity';
-import { WorkoutTrackerActivity } from './demos/ios/WorkoutTrackerActivity';
-import { CompassActivity } from './demos/ios/CompassActivity';
-import { DeepLinksActivity } from './demos/ios/DeepLinksActivity';
-import { LiquidGlassActivity } from './demos/ios/LiquidGlassActivity';
-import { SupplementalFamiliesDemo } from './demos/ios/SupplementalFamiliesDemo';
-import { WeatherWidgetDemo } from './demos/ios/WeatherWidgetDemo';
-import { PortfolioWidgetDemo } from './demos/ios/PortfolioWidgetDemo';
-import { VoltraWidgetLogo } from './demos/android/VoltraWidgetLogo';
-import { ChartWidgets } from './demos/android/ChartWidgets';
-import { MaterialColorsWidget } from './demos/android/MaterialColorsWidget';
-import { InteractiveTodosWidget } from './demos/android/InteractiveTodosWidget';
-import { OngoingNotificationDemo } from './demos/android/OngoingNotificationDemo';
-import { TimerScreen } from './demos/testing/TimerScreen';
-import { ProgressIndicatorsScreen } from './demos/testing/ProgressIndicatorsScreen';
+import {
+  makeBasicLiveActivityPayload,
+  makeMusicPlayerPayload,
+  makeFlightPayload,
+  makeWorkoutPayload,
+  makeCompassPayload,
+  makeDeepLinksPayload,
+  makeLiquidGlassPayload,
+  makeSupplementalPayload,
+  SONGS,
+} from './voltra-payload';
+
+// ─── Demo screens (for sub-navigation) ─────────────────────────
+import { ComponentsCatalogScreen } from './demos/testing/ComponentsCatalogScreen';
 import { StylingScreen } from './demos/testing/StylingScreen';
 import { FlexPlaygroundScreen } from './demos/testing/FlexPlaygroundScreen';
+import { TimerScreen } from './demos/testing/TimerScreen';
+import { ProgressIndicatorsScreen } from './demos/testing/ProgressIndicatorsScreen';
 import { ChartPlaygroundScreen } from './demos/testing/ChartPlaygroundScreen';
 import { GradientPlaygroundScreen } from './demos/testing/GradientPlaygroundScreen';
 import { PositioningScreen } from './demos/testing/PositioningScreen';
-import { ComponentsCatalogScreen } from './demos/testing/ComponentsCatalogScreen';
 import { ImagePreloadingScreen } from './demos/testing/ImagePreloadingScreen';
-import { WidgetSchedulingScreen } from './demos/testing/WidgetSchedulingScreen';
-import { ServerDrivenWidgetsScreen } from './demos/testing/ServerDrivenWidgetsScreen';
-import { CustomFontsScreen } from './demos/testing/CustomFontsScreen';
 import { ImageFallbackScreen } from './demos/testing/ImageFallbackScreen';
+import { WidgetSchedulingScreen } from './demos/testing/WidgetSchedulingScreen';
 import { WeatherWidgetScreen } from './demos/testing/WeatherWidgetScreen';
 
-// NativeModules global (available on background thread)
 declare const NativeModules: {
   VoltraModule: {
     startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
@@ -40,420 +34,285 @@ declare const NativeModules: {
   };
 };
 
-// ─── Theme ──────────────────────────────────────────────────────────────────
+// ─── Activity definitions ───────────────────────────────────────
 
-const colors = {
-  primary: '#8232FF',
-  headerBg: '#0F172A',
-  screenBg: '#0B0F19',
-  cardBg: '#0F172A',
-  cardBorder: 'rgba(148, 163, 184, 0.12)',
-  textPrimary: '#E2E8F0',
-  textSecondary: '#94A3B8',
-  textMuted: '#64748B',
-  tabBarBg: '#0F172A',
-  tabBarBorder: 'rgba(148, 163, 184, 0.15)',
-  backButton: '#8232FF',
-  chevron: '#64748B',
+type ActivityDef = {
+  key: string;
+  title: string;
+  description: string;
+  makePayload: () => string;
+  activityName: string;
 };
 
-// ─── Data ───────────────────────────────────────────────────────────────────
-
-type Tab = 'ios' | 'android' | 'testing';
-
-const iosActivities = [
-  { id: 'basic', title: 'Basic Live Activity', active: false },
-  { id: 'music', title: 'Music Player', active: false },
-  { id: 'flight', title: 'Flight Tracker', active: false },
-  { id: 'workout', title: 'Workout Tracker', active: false },
-  { id: 'compass', title: 'Compass', active: false },
-  { id: 'deeplinks', title: 'Deep Links', active: false },
-  { id: 'liquid-glass', title: 'Liquid Glass', active: false },
-  { id: 'supplemental', title: 'Supplemental Families', active: false },
-  { id: 'weather-widget', title: 'Weather Widget', active: false },
-  { id: 'portfolio-widget', title: 'Portfolio Widget', active: false },
-];
-
-const androidWidgets = [
-  { id: 'logo', title: 'Voltra Widget (Logo)' },
-  { id: 'charts', title: 'Chart Widgets' },
-  { id: 'material-colors', title: 'Material Colors' },
-  { id: 'todos', title: 'Interactive Todos' },
-  { id: 'ongoing', title: 'Ongoing Notification' },
-];
-
-type TestingEntry = { id: string; title: string };
-type TestingSection = { header: string; entries: TestingEntry[] };
-
-const testingSections: TestingSection[] = [
+const ACTIVITIES: ActivityDef[] = [
   {
-    header: 'Components & Styling',
-    entries: [
-      { id: 'components', title: 'Components Catalog' },
-      { id: 'styling', title: 'Styling' },
-      { id: 'flex', title: 'Flex Playground' },
-    ],
+    key: 'basic', title: 'Basic live activity',
+    description: 'Inline JSX styles with core stacks, labels, and buttons.',
+    makePayload: () => makeBasicLiveActivityPayload('Live Activity', 'Running...'),
+    activityName: 'basic',
   },
   {
-    header: 'Timers & Progress',
-    entries: [
-      { id: 'timer', title: 'Timer' },
-      { id: 'progress', title: 'Progress Indicators' },
-    ],
+    key: 'music', title: 'Music Player',
+    description: 'Provides info about current song and allows interaction with playback controls.',
+    makePayload: () => makeMusicPlayerPayload(SONGS[0], true),
+    activityName: 'music-player',
   },
   {
-    header: 'Charts & Gradients',
-    entries: [
-      { id: 'charts', title: 'Chart Playground' },
-      { id: 'gradients', title: 'Gradient Playground' },
-    ],
+    key: 'glass', title: 'Liquid Glass',
+    description: 'GlassContainer + VStack with glassEffect style property.',
+    makePayload: () => makeLiquidGlassPayload(),
+    activityName: 'liquid-glass',
   },
   {
-    header: 'Layout',
-    entries: [
-      { id: 'positioning', title: 'Positioning' },
-    ],
+    key: 'deepLinks', title: 'Links & Navigation',
+    description: 'Link component for URL navigation. Supports absolute/relative URLs.',
+    makePayload: () => makeDeepLinksPayload(),
+    activityName: 'deep-links',
   },
   {
-    header: 'Images',
-    entries: [
-      { id: 'preloading', title: 'Image Preloading' },
-      { id: 'image-fallback', title: 'Image Fallback' },
-    ],
+    key: 'flight', title: 'Flight Tracker',
+    description: 'Flight information widget with departure/arrival times, gate info, and status updates.',
+    makePayload: () => makeFlightPayload(),
+    activityName: 'flight',
   },
   {
-    header: 'Widgets',
-    entries: [
-      { id: 'scheduling', title: 'Widget Scheduling' },
-      { id: 'weather-testing', title: 'Weather Widget' },
-    ],
+    key: 'workout', title: 'Workout Tracker',
+    description: 'Fitness tracking widget with heart rate zones, timer, distance, and pace metrics.',
+    makePayload: () => makeWorkoutPayload(120, '2.4 km', '5:30 /km', Date.now()),
+    activityName: 'workout',
+  },
+  {
+    key: 'compass', title: 'Compass',
+    description: 'Real-time compass using magnetometer with rotating arrow indicator.',
+    makePayload: () => makeCompassPayload(45),
+    activityName: 'compass',
+  },
+  {
+    key: 'supplemental', title: 'Supplemental Families (iOS 18+)',
+    description: 'Demonstrates supplemental activity families: small (Watch/CarPlay) with compact Dynamic Island fallback.',
+    makePayload: () => makeSupplementalPayload(),
+    activityName: 'supplemental',
   },
 ];
 
-// Map demo IDs to components
-const demoComponents: Record<string, () => JSX.Element> = {
-  'basic': BasicLiveActivityDemo,
-  'music': MusicPlayerActivity,
-  'flight': FlightTrackerActivity,
-  'workout': WorkoutTrackerActivity,
-  'compass': CompassActivity,
-  'deeplinks': DeepLinksActivity,
-  'liquid-glass': LiquidGlassActivity,
-  'supplemental': SupplementalFamiliesDemo,
-  'weather-widget': WeatherWidgetDemo,
-  'portfolio-widget': PortfolioWidgetDemo,
-  'logo': VoltraWidgetLogo,
-  // Note: 'charts' conflicts between android and testing tabs
-  'android-charts': ChartWidgets,
-  'material-colors': MaterialColorsWidget,
-  'todos': InteractiveTodosWidget,
-  'ongoing': OngoingNotificationDemo,
-  'timer': TimerScreen,
-  'progress': ProgressIndicatorsScreen,
-  'styling': StylingScreen,
-  'flex': FlexPlaygroundScreen,
-  'testing-charts': ChartPlaygroundScreen,
-  'gradients': GradientPlaygroundScreen,
-  'positioning': PositioningScreen,
-  'components': ComponentsCatalogScreen,
-  'preloading': ImagePreloadingScreen,
-  'scheduling': WidgetSchedulingScreen,
-  'server-driven': ServerDrivenWidgetsScreen,
-  'custom-fonts': CustomFontsScreen,
-  'image-fallback': ImageFallbackScreen,
-  'weather-testing': WeatherWidgetScreen,
-};
+// ─── Testing ground entries ─────────────────────────────────────
 
-// ─── Demo Screen (detail view) ─────────────────────────────────────────────
+const TESTING_ENTRIES: { id: string; title: string; component: () => JSX.Element }[] = [
+  { id: 'components', title: 'Components Catalog', component: ComponentsCatalogScreen },
+  { id: 'styling', title: 'Styling', component: StylingScreen },
+  { id: 'flex', title: 'Flex Playground', component: FlexPlaygroundScreen },
+  { id: 'timer', title: 'Timer', component: TimerScreen },
+  { id: 'progress', title: 'Progress Indicators', component: ProgressIndicatorsScreen },
+  { id: 'charts', title: 'Chart Playground', component: ChartPlaygroundScreen },
+  { id: 'gradients', title: 'Gradient Playground', component: GradientPlaygroundScreen },
+  { id: 'positioning', title: 'Positioning', component: PositioningScreen },
+  { id: 'preloading', title: 'Image Preloading', component: ImagePreloadingScreen },
+  { id: 'image-fallback', title: 'Image Fallback', component: ImageFallbackScreen },
+  { id: 'scheduling', title: 'Widget Scheduling', component: WidgetSchedulingScreen },
+  { id: 'weather', title: 'Weather Widget', component: WeatherWidgetScreen },
+];
 
-function DemoScreen({ id, title, onBack }: { id: string; title: string; onBack: () => void }) {
-  'background only';
-  const DemoComponent = demoComponents[id];
+// ─── Activity Card ──────────────────────────────────────────────
+
+function ActivityCard({ def }: { def: ActivityDef }) {
+  const [activityId, setActivityId] = useState<string | null>(null);
+  const isActive = activityId !== null;
+
+  const handleStartEnd = useCallback(() => {
+    'background only';
+    if (isActive && activityId) {
+      NativeModules.VoltraModule.endLiveActivity(activityId, { dismissalPolicy: { type: 'immediate' } }, () => {
+        setActivityId(null);
+      });
+    } else {
+      const payload = def.makePayload();
+      NativeModules.VoltraModule.startLiveActivity(payload, { activityName: def.activityName }, (id: any) => {
+        const result = String(id);
+        if (id && !result.startsWith('ERROR:') && result !== 'null') {
+          setActivityId(result);
+        }
+      });
+    }
+  }, [isActive, activityId, def]);
+
+  const handleUpdate = useCallback(() => {
+    'background only';
+    if (!activityId) return;
+    const payload = def.makePayload();
+    NativeModules.VoltraModule.updateLiveActivity(activityId, payload, {}, () => {});
+  }, [activityId, def]);
 
   return (
-    <view style={{ width: '100%', height: '100%', backgroundColor: colors.screenBg }}>
-      {/* Header */}
-      <view
-        style={{
-          display: 'linear',
-          linearDirection: 'row',
-          alignItems: 'center',
-          padding: 12,
-          paddingTop: 16,
-          backgroundColor: colors.headerBg,
-          borderBottomWidth: 1,
-          borderBottomColor: colors.tabBarBorder,
-        }}
-      >
-        <view bindtap={onBack} style={{ paddingRight: 12, paddingLeft: 4, paddingTop: 4, paddingBottom: 4 }}>
-          <text style={{ fontSize: 16, fontWeight: '600', color: colors.backButton }}>Back</text>
+    <view style={{
+      backgroundColor: '#0F172A',
+      borderRadius: 20, padding: 18,
+      borderWidth: 1, borderColor: 'rgba(148, 163, 184, 0.12)',
+      marginTop: 16,
+    }}>
+      {/* Header row */}
+      <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' }}>
+        <text style={{ fontSize: 18, fontWeight: '600', color: '#E2E8F0', linearWeight: 1 } as any}>
+          {def.title}
+        </text>
+        <view style={{
+          paddingLeft: 10, paddingRight: 10, paddingTop: 4, paddingBottom: 4,
+          borderRadius: 999,
+          backgroundColor: isActive ? 'rgba(130, 50, 255, 0.2)' : 'rgba(148, 163, 184, 0.15)',
+        }}>
+          <text style={{ fontSize: 12, fontWeight: '600', color: isActive ? '#8232FF' : '#94A3B8' }}>
+            {isActive ? 'Active' : 'Idle'}
+          </text>
         </view>
-        <text style={{ fontSize: 17, fontWeight: 'bold', color: colors.textPrimary }}>{title}</text>
       </view>
 
-      {/* Demo Content */}
-      <scroll-view style={{ width: '100%', linearWeight: 1 }} scroll-orientation="vertical">
-        {DemoComponent ? <DemoComponent /> : (
-          <view style={{ padding: 16 }}>
-            <text style={{ color: colors.textMuted }}>No demo component for "{id}"</text>
+      {/* Description */}
+      <text style={{ marginTop: 10, color: '#94A3B8', fontSize: 13, lineHeight: 18 }}>
+        {def.description}
+      </text>
+
+      {/* Button row */}
+      <view style={{ display: 'linear', linearDirection: 'row', marginTop: 16 }}>
+        <view
+          bindtap={handleStartEnd}
+          style={{
+            backgroundColor: isActive ? 'rgba(130, 50, 255, 0.1)' : '#8232FF',
+            borderWidth: isActive ? 1 : 0,
+            borderColor: 'rgba(130, 50, 255, 0.4)',
+            paddingTop: 12, paddingBottom: 12, paddingLeft: 24, paddingRight: 24,
+            borderRadius: 12, alignItems: 'center',
+          }}
+        >
+          <text style={{ fontSize: 14, fontWeight: '600', color: isActive ? '#E2E8F0' : '#FFFFFF' }}>
+            {isActive ? 'End live activity' : 'Start live activity'}
+          </text>
+        </view>
+        <view
+          bindtap={handleUpdate}
+          style={{
+            marginLeft: 12,
+            borderWidth: 1, borderColor: isActive ? 'rgba(130, 50, 255, 0.6)' : 'rgba(130, 50, 255, 0.2)',
+            paddingTop: 12, paddingBottom: 12, paddingLeft: 24, paddingRight: 24,
+            borderRadius: 12, alignItems: 'center',
+            opacity: isActive ? 1 : 0.4,
+          }}
+        >
+          <text style={{ fontSize: 14, fontWeight: '600', color: '#E2E8F0' }}>Update</text>
+        </view>
+      </view>
+    </view>
+  );
+}
+
+// ─── Testing Grounds Screen ─────────────────────────────────────
+
+function TestingGroundsScreen({ onBack }: { onBack: () => void }) {
+  const [activeScreen, setActiveScreen] = useState<string | null>(null);
+
+  if (activeScreen) {
+    const entry = TESTING_ENTRIES.find(e => e.id === activeScreen);
+    const DemoComponent = entry?.component;
+    return (
+      <view style={{ width: '100%', height: '100%', backgroundColor: '#0B0F19' }}>
+        <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center', padding: 12, paddingTop: 16, backgroundColor: '#0F172A', borderBottomWidth: 1, borderBottomColor: 'rgba(148, 163, 184, 0.12)' }}>
+          <view bindtap={() => setActiveScreen(null)} style={{ paddingRight: 12 }}>
+            <text style={{ fontSize: 16, fontWeight: '600', color: '#8232FF' }}>Back</text>
           </view>
-        )}
+          <text style={{ fontSize: 17, fontWeight: 'bold', color: '#E2E8F0' }}>{entry?.title}</text>
+        </view>
+        <scroll-view style={{ width: '100%', linearWeight: 1 }} scroll-orientation="vertical">
+          {DemoComponent ? <DemoComponent /> : null}
+        </scroll-view>
+      </view>
+    );
+  }
+
+  return (
+    <view style={{ width: '100%', height: '100%', backgroundColor: '#0B0F19' }}>
+      <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center', padding: 12, paddingTop: 16, backgroundColor: '#0F172A', borderBottomWidth: 1, borderBottomColor: 'rgba(148, 163, 184, 0.12)' }}>
+        <view bindtap={onBack} style={{ paddingRight: 12 }}>
+          <text style={{ fontSize: 16, fontWeight: '600', color: '#8232FF' }}>Back</text>
+        </view>
+        <text style={{ fontSize: 17, fontWeight: 'bold', color: '#E2E8F0' }}>Testing Grounds</text>
+      </view>
+      <scroll-view style={{ width: '100%', linearWeight: 1 }} scroll-orientation="vertical">
+        <view style={{ padding: 16 }}>
+          {TESTING_ENTRIES.map((entry) => (
+            <view
+              key={entry.id}
+              bindtap={() => setActiveScreen(entry.id)}
+              style={{
+                backgroundColor: '#0F172A', borderRadius: 12, padding: 16, marginBottom: 8,
+                borderWidth: 1, borderColor: 'rgba(148, 163, 184, 0.12)',
+                display: 'linear', linearDirection: 'row', alignItems: 'center',
+              }}
+            >
+              <text style={{ color: '#E2E8F0', fontSize: 16, linearWeight: 1 } as any}>{entry.title}</text>
+              <text style={{ color: '#94A3B8', fontSize: 16 }}>›</text>
+            </view>
+          ))}
+        </view>
       </scroll-view>
     </view>
   );
 }
 
-// ─── iOS Live Activities Hub ────────────────────────────────────────────────
-
-function IOSActivityList({
-  onSelect,
-}: {
-  onSelect: (id: string, title: string) => void;
-}) {
-  'background only';
-
-  const handleEndAll = useCallback(() => {
-    'background only';
-    if (typeof NativeModules !== 'undefined' && NativeModules.VoltraModule) {
-      NativeModules.VoltraModule.endAllLiveActivities(() => {
-        // Activities ended
-      });
-    }
-  }, []);
-
-  return (
-    <scroll-view style={{ width: '100%', linearWeight: 1, backgroundColor: colors.screenBg }} scroll-orientation="vertical">
-      <view style={{ padding: 16 }}>
-        {iosActivities.map((entry) => (
-          <view
-            key={entry.id}
-            bindtap={() => onSelect(entry.id, entry.title)}
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              backgroundColor: colors.cardBg,
-              borderRadius: 16,
-              padding: 16,
-              marginBottom: 10,
-              borderWidth: 1,
-              borderColor: colors.cardBorder,
-            }}
-          >
-            <view style={{ flex: 1 }}>
-              <text style={{ fontSize: 16, fontWeight: '600', color: colors.textPrimary }}>
-                {entry.title}
-              </text>
-            </view>
-            <view style={{ marginRight: 10 }}>
-              <StatusPill active={entry.active} />
-            </view>
-            <text style={{ color: colors.chevron, fontSize: 18 }}>›</text>
-          </view>
-        ))}
-
-        {/* End All Activities Button */}
-        <view style={{ marginTop: 12, marginBottom: 24 }}>
-          <Button title="End All Activities" variant="ghost" onPress={handleEndAll} />
-        </view>
-      </view>
-    </scroll-view>
-  );
-}
-
-// ─── Android Widgets List ───────────────────────────────────────────────────
-
-function AndroidWidgetList({
-  onSelect,
-}: {
-  onSelect: (id: string, title: string) => void;
-}) {
-  'background only';
-  return (
-    <scroll-view style={{ width: '100%', linearWeight: 1, backgroundColor: colors.screenBg }} scroll-orientation="vertical">
-      <view style={{ padding: 16 }}>
-        {androidWidgets.map((entry) => {
-          const resolvedId = entry.id === 'charts' ? 'android-charts' : entry.id;
-          return (
-            <view
-              key={entry.id}
-              bindtap={() => onSelect(resolvedId, entry.title)}
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: colors.cardBg,
-                borderRadius: 16,
-                padding: 16,
-                marginBottom: 10,
-                borderWidth: 1,
-                borderColor: colors.cardBorder,
-              }}
-            >
-              <text style={{ flex: 1, fontSize: 16, fontWeight: '600', color: colors.textPrimary }}>
-                {entry.title}
-              </text>
-              <text style={{ color: colors.chevron, fontSize: 18 }}>›</text>
-            </view>
-          );
-        })}
-      </view>
-    </scroll-view>
-  );
-}
-
-// ─── Testing Grounds Hub ────────────────────────────────────────────────────
-
-function TestingList({
-  onSelect,
-}: {
-  onSelect: (id: string, title: string) => void;
-}) {
-  'background only';
-  return (
-    <scroll-view style={{ width: '100%', linearWeight: 1, backgroundColor: colors.screenBg }} scroll-orientation="vertical">
-      <view style={{ padding: 16 }}>
-        {testingSections.map((section) => (
-          <view key={section.header} style={{ marginBottom: 16 }}>
-            {/* Section Header */}
-            <text
-              style={{
-                fontSize: 12,
-                fontWeight: '700',
-                color: colors.textMuted,
-                letterSpacing: 0.8,
-                marginBottom: 8,
-                marginLeft: 4,
-              }}
-            >
-              {section.header.toUpperCase()}
-            </text>
-
-            {/* Section Entries */}
-            <view
-              style={{
-                backgroundColor: colors.cardBg,
-                borderRadius: 16,
-                borderWidth: 1,
-                borderColor: colors.cardBorder,
-                overflow: 'hidden',
-              }}
-            >
-              {section.entries.map((entry, idx) => {
-                const resolvedId = entry.id === 'charts' ? 'testing-charts' : entry.id;
-                return (
-                  <view
-                    key={entry.id}
-                    bindtap={() => onSelect(resolvedId, entry.title)}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      padding: 14,
-                      paddingLeft: 16,
-                      paddingRight: 16,
-                      borderBottomWidth: idx < section.entries.length - 1 ? 1 : 0,
-                      borderBottomColor: colors.cardBorder,
-                    }}
-                  >
-                    <text style={{ flex: 1, fontSize: 15, color: colors.textPrimary }}>
-                      {entry.title}
-                    </text>
-                    <text style={{ color: colors.chevron, fontSize: 18 }}>›</text>
-                  </view>
-                );
-              })}
-            </view>
-          </view>
-        ))}
-      </view>
-    </scroll-view>
-  );
-}
-
-// ─── App Root ───────────────────────────────────────────────────────────────
+// ─── Main App ───────────────────────────────────────────────────
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<Tab>('ios');
-  const [currentScreen, setCurrentScreen] = useState<{ id: string; title: string } | null>(null);
+  const [screen, setScreen] = useState<'home' | 'testing'>('home');
 
-  if (currentScreen) {
-    return (
-      <DemoScreen
-        id={currentScreen.id}
-        title={currentScreen.title}
-        onBack={() => setCurrentScreen(null)}
-      />
-    );
+  if (screen === 'testing') {
+    return <TestingGroundsScreen onBack={() => setScreen('home')} />;
   }
 
-  const handleSelect = (id: string, title: string) => setCurrentScreen({ id, title });
-
   return (
-    <view style={{ width: '100%', height: '100%', backgroundColor: colors.screenBg }}>
-      {/* Header */}
-      <view style={{ padding: 16, paddingTop: 20, backgroundColor: colors.headerBg, borderBottomWidth: 1, borderBottomColor: colors.tabBarBorder }}>
-        <text style={{ fontSize: 24, fontWeight: 'bold', color: '#FFFFFF' }}>Voltra Lynx Demo</text>
-      </view>
+    <view style={{ width: '100%', height: '100%', backgroundColor: '#0B0F19' }}>
+      <scroll-view style={{ width: '100%', height: '100%' }} scroll-orientation="vertical">
+        <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}>
+          {/* Header */}
+          <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' }}>Voltra</text>
+          <text style={{ fontSize: 14, lineHeight: 20, color: '#CBD5F5', marginBottom: 8 }}>
+            Voltra is a library that lets you build custom Live Activities and Dynamic Island layouts using Lynx — powered by the same rendering engine.
+          </text>
 
-      {/* Content */}
-      {activeTab === 'ios' && <IOSActivityList onSelect={handleSelect} />}
-      {activeTab === 'android' && <AndroidWidgetList onSelect={handleSelect} />}
-      {activeTab === 'testing' && <TestingList onSelect={handleSelect} />}
+          {/* Navigation */}
+          <view style={{ marginTop: 16, display: 'linear', linearDirection: 'row' }}>
+            <view
+              bindtap={() => setScreen('testing')}
+              style={{
+                backgroundColor: 'rgba(130, 50, 255, 0.1)',
+                borderWidth: 1, borderColor: 'rgba(130, 50, 255, 0.4)',
+                paddingTop: 12, paddingBottom: 12, paddingLeft: 24, paddingRight: 24,
+                borderRadius: 12, alignItems: 'center',
+              }}
+            >
+              <text style={{ fontSize: 14, fontWeight: '600', color: '#E2E8F0' }}>Testing Grounds</text>
+            </view>
+          </view>
 
-      {/* Tab Bar */}
-      <view
-        style={{
-          display: 'linear',
-          linearDirection: 'row',
-          backgroundColor: colors.tabBarBg,
-          borderTopWidth: 1,
-          borderTopColor: colors.tabBarBorder,
-        }}
-      >
-        <view
-          style={{ linearWeight: 1, padding: 12, alignItems: 'center' }}
-          bindtap={() => setActiveTab('ios')}
-        >
-          <text
+          {/* Live Activity Cards */}
+          {ACTIVITIES.map((def) => (
+            <ActivityCard key={def.key} def={def} />
+          ))}
+
+          {/* End All */}
+          <view
+            bindtap={() => {
+              'background only';
+              NativeModules.VoltraModule.endAllLiveActivities(() => {});
+            }}
             style={{
-              color: activeTab === 'ios' ? colors.primary : colors.textMuted,
-              fontWeight: activeTab === 'ios' ? 'bold' : 'normal',
-              fontSize: 13,
+              marginTop: 12,
+              borderWidth: 1, borderColor: 'rgba(130, 50, 255, 0.4)',
+              backgroundColor: 'rgba(130, 50, 255, 0.1)',
+              paddingTop: 12, paddingBottom: 12, paddingLeft: 24, paddingRight: 24,
+              borderRadius: 12, alignItems: 'center',
             }}
           >
-            Live Activities
-          </text>
+            <text style={{ fontSize: 14, fontWeight: '600', color: '#8232FF' }}>End all live activities</text>
+          </view>
         </view>
-        <view
-          style={{ linearWeight: 1, padding: 12, alignItems: 'center' }}
-          bindtap={() => setActiveTab('android')}
-        >
-          <text
-            style={{
-              color: activeTab === 'android' ? colors.primary : colors.textMuted,
-              fontWeight: activeTab === 'android' ? 'bold' : 'normal',
-              fontSize: 13,
-            }}
-          >
-            Android Widgets
-          </text>
-        </view>
-        <view
-          style={{ linearWeight: 1, padding: 12, alignItems: 'center' }}
-          bindtap={() => setActiveTab('testing')}
-        >
-          <text
-            style={{
-              color: activeTab === 'testing' ? colors.primary : colors.textMuted,
-              fontWeight: activeTab === 'testing' ? 'bold' : 'normal',
-              fontSize: 13,
-            }}
-          >
-            Testing
-          </text>
-        </view>
-      </view>
+      </scroll-view>
     </view>
   );
 }
