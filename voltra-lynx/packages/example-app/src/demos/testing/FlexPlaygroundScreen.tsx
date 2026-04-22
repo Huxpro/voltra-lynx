@@ -90,7 +90,7 @@ export function FlexPlaygroundScreen() {
         <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF', marginBottom: 8 } as any}>
           Flex Layout Playground
         </text>
-        <text style={{ fontSize: 14, lineHeight: 20, color: '#CBD5F5', marginBottom: 20 } as any}>
+        <text style={{ fontSize: 14,  color: '#CBD5F5', marginBottom: 20 } as any}>
           Experiment with flex properties using the Voltra View component with dynamic flexDirection.
         </text>
 
@@ -229,7 +229,7 @@ export function FlexPlaygroundScreen() {
               fontSize: 10,
               fontFamily: 'monospace',
               color: '#4ADE80',
-              lineHeight: 14,
+              
             } as any}>
               {getPreviewJson()}
             </text>

@@ -25,7 +25,7 @@ Card.Title = function CardTitle({ children }: { children?: ReactNode }) {
 
 Card.Text = function CardText({ children }: { children?: ReactNode }) {
   return (
-    <text style={{ marginTop: 10, color: '#94A3B8', fontSize: 13, lineHeight: 18 }}>
+    <text style={{ marginTop: 10, color: '#94A3B8', fontSize: 13 }}>
       {children}
     </text>
   );

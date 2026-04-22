@@ -433,7 +433,7 @@ export function ComponentsCatalogScreen() {
         <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' } as any}>
           Components Showcase
         </text>
-        <text style={{ fontSize: 14, lineHeight: 20, color: '#CBD5F5', marginBottom: 8 } as any}>
+        <text style={{ fontSize: 14,  color: '#CBD5F5', marginBottom: 8 } as any}>
           Explore all available Voltra components. Each card shows the component name, description, and rendered JSON output. Tap a card to expand the JSON preview.
         </text>
 
@@ -468,7 +468,7 @@ export function ComponentsCatalogScreen() {
                     fontSize: 10,
                     fontFamily: 'monospace',
                     color: '#4ADE80',
-                    lineHeight: 14,
+                    
                   } as any}>
                     {item.renderJson()}
                   </text>

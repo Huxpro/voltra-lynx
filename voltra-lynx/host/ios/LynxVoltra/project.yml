@@ -35,6 +35,7 @@ targets:
       - path: LynxVoltra/Voltra/shared
       - path: LynxVoltra/Voltra/ui
       - path: LynxVoltra/Assets.xcassets
+      - path: LynxVoltra/Fonts
     settings:
       base:
         INFOPLIST_FILE: LynxVoltra/Voltra/target/Info.plist

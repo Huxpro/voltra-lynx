@@ -279,7 +279,7 @@ export function StylingScreen() {
         <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' } as any}>
           Styling Examples
         </text>
-        <text style={{ fontSize: 14, lineHeight: 20, color: '#CBD5F5', marginBottom: 8 } as any}>
+        <text style={{ fontSize: 14,  color: '#CBD5F5', marginBottom: 8 } as any}>
           Explore Voltra's styling capabilities. Each example demonstrates different styling properties that can be applied to Voltra components.
         </text>
 
@@ -311,7 +311,7 @@ export function StylingScreen() {
                   fontSize: 10,
                   fontFamily: 'monospace',
                   color: '#4ADE80',
-                  lineHeight: 14,
+                  
                 } as any}>
                   {item.renderJson()}
                 </text>

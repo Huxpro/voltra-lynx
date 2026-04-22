@@ -295,7 +295,7 @@ export function TimerScreen() {
               fontSize: 10,
               fontFamily: 'monospace',
               color: '#4ADE80',
-              lineHeight: 14,
+              
             } as any}>
               {getTimerJson()}
             </text>

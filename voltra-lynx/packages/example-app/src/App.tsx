@@ -213,7 +213,7 @@ function TestingGroundsScreen({ onBack }: { onBack: () => void }) {
     const DemoComponent = entry?.component;
     return (
       <view style={{ width: '100%', height: '100%', backgroundColor: '#0B0F19' }}>
-        <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center', padding: 12, paddingTop: 16, backgroundColor: '#0F172A', borderBottomWidth: 1, borderBottomColor: 'rgba(148, 163, 184, 0.12)' }}>
+        <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center', padding: 12, paddingTop: 60, backgroundColor: '#0F172A', borderBottomWidth: 1, borderBottomColor: 'rgba(148, 163, 184, 0.12)' }}>
           <view bindtap={() => setActiveScreen(null)} style={{ paddingRight: 12 }}>
             <text style={{ fontSize: 16, fontWeight: '600', color: '#8232FF' }}>Back</text>
           </view>
@@ -228,7 +228,7 @@ function TestingGroundsScreen({ onBack }: { onBack: () => void }) {
 
   return (
     <view style={{ width: '100%', height: '100%', backgroundColor: '#0B0F19' }}>
-      <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center', padding: 12, paddingTop: 16, backgroundColor: '#0F172A', borderBottomWidth: 1, borderBottomColor: 'rgba(148, 163, 184, 0.12)' }}>
+      <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center', padding: 12, paddingTop: 60, backgroundColor: '#0F172A', borderBottomWidth: 1, borderBottomColor: 'rgba(148, 163, 184, 0.12)' }}>
         <view bindtap={onBack} style={{ paddingRight: 12 }}>
           <text style={{ fontSize: 16, fontWeight: '600', color: '#8232FF' }}>Back</text>
         </view>
@@ -268,7 +268,7 @@ export function App() {
   return (
     <view style={{ width: '100%', height: '100%', backgroundColor: '#0B0F19' }}>
       <scroll-view style={{ width: '100%', linearWeight: 1 }} scroll-orientation="vertical">
-        <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}>
+        <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 60, paddingBottom: 24 }}>
           {/* Header */}
           <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' }}>Voltra</text>
           <text style={{ fontSize: 14, color: '#CBD5F5', marginBottom: 8 }}>
