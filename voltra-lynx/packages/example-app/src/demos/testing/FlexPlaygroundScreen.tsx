@@ -1,5 +1,6 @@
 import { useState, useCallback } from '@lynx-js/react';
-import { Voltra, renderVoltraVariantToJson } from '@use-voltra/ios';
+import { Voltra } from '@use-voltra/ios';
+import { VoltraPreview } from '../../components/VoltraPreview';
 
 type FlexDirection = 'row' | 'column';
 type AlignItems = 'flex-start' | 'center' | 'flex-end' | 'stretch';
@@ -75,285 +76,146 @@ export function FlexPlaygroundScreen() {
     [],
   );
 
-  // Render a Voltra.View preview as JSON to show the output
-  const getPreviewJson = () => {
-    try {
-      return JSON.stringify(
-        renderVoltraVariantToJson(
-          <Voltra.View
-            style={
-              {
-                backgroundColor: '#334155',
-                padding: containerPadding,
-                width: '100%',
-                height: '100%',
-                flexDirection,
-                alignItems,
-                justifyContent,
-                gap,
-              } as any
-            }
-          >
-            <Voltra.View
-              style={
-                {
-                  backgroundColor: '#EF4444',
-                  padding: 12,
-                  borderRadius: '8px',
-                } as any
-              }
-            >
-              <Voltra.Text
-                style={
-                  {
-                    color: '#FFFFFF',
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                  } as any
-                }
-              >
-                Item 1
-              </Voltra.Text>
-            </Voltra.View>
-            <Voltra.View
-              style={
-                {
-                  backgroundColor: '#3B82F6',
-                  padding: 12,
-                  borderRadius: '8px',
-                } as any
-              }
-            >
-              <Voltra.Text
-                style={
-                  {
-                    color: '#FFFFFF',
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                  } as any
-                }
-              >
-                Item 2
-              </Voltra.Text>
-            </Voltra.View>
-            <Voltra.View
-              style={
-                {
-                  backgroundColor: '#22C55E',
-                  padding: 12,
-                  borderRadius: '8px',
-                } as any
-              }
-            >
-              <Voltra.Text
-                style={
-                  {
-                    color: '#FFFFFF',
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                  } as any
-                }
-              >
-                Item 3
-              </Voltra.Text>
-            </Voltra.View>
-          </Voltra.View>,
-        ),
-        null,
-        2,
-      );
-    } catch {
-      return '(render error)';
-    }
-  };
-
   return (
-    <view
-      style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}
-    >
-      <text
-        style={
-          {
+    <scroll-view style={{ linearWeight: 1 } as any} scroll-orientation="vertical">
+      <view
+        style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}
+      >
+        <text
+          style={{
             fontSize: 24,
             fontWeight: '700',
             color: '#FFFFFF',
             marginBottom: 8,
-          } as any
-        }
-      >
-        Flex Layout Playground
-      </text>
-      <text
-        style={
-          {
+          } as any}
+        >
+          Flex Layout Playground
+        </text>
+        <text
+          style={{
             fontSize: 14,
             color: '#CBD5F5',
             marginBottom: 20,
-          } as any
-        }
-      >
-        Experiment with flex properties using the Voltra View component with
-        dynamic flexDirection.
-      </text>
+          } as any}
+        >
+          Experiment with flex properties using the new View component with
+          dynamic flexDirection.
+        </text>
 
-      {/* ── Controls Card ─────────────────────────────────────── */}
-      <view
-        style={
-          {
-            backgroundColor: '#1E293B',
-            borderRadius: '12px',
-            padding: 16,
-            marginBottom: 16,
+        {/* ── Controls Card ─────────────────────────────────────── */}
+        <view
+          style={{
+            backgroundColor: '#0F172A',
+            borderRadius: '20px',
+            padding: 18,
+            marginBottom: 12,
             borderWidth: 1,
-            borderColor: '#334155',
-          } as any
-        }
-      >
-        <text
-          style={
-            {
+            borderColor: 'rgba(148, 163, 184, 0.12)',
+          } as any}
+        >
+          <text
+            style={{
               fontSize: 16,
               fontWeight: '700',
               color: '#FFFFFF',
               marginBottom: 12,
-            } as any
-          }
-        >
-          Controls
-        </text>
-
-        {/* Flex Direction */}
-        <view
-          style={{
-            display: 'linear',
-            linearDirection: 'row',
-            alignItems: 'center',
-            marginBottom: 12,
-          }}
-        >
-          <text
-            style={
-              { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
-            }
+            } as any}
           >
-            Flex Direction:
+            Controls
           </text>
+
+          {/* Flex Direction */}
           <view
-            bindtap={cycleFlexDirection}
             style={{
-              paddingLeft: 14,
-              paddingRight: 14,
-              paddingTop: 7,
-              paddingBottom: 7,
-              backgroundColor: '#334155',
-              borderRadius: '8px',
+              display: 'linear',
+              linearDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 12,
             }}
           >
             <text
               style={
-                { color: '#3B82F6', fontSize: 13, fontWeight: '600' } as any
+                { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
               }
             >
-              {flexDirection}
+              Flex Direction:
             </text>
+            <view
+              bindtap={cycleFlexDirection}
+              style={{
+                paddingLeft: 14,
+                paddingRight: 14,
+                paddingTop: 7,
+                paddingBottom: 7,
+                backgroundColor: '#334155',
+                borderRadius: '8px',
+              }}
+            >
+              <text
+                style={
+                  { color: '#3B82F6', fontSize: 13, fontWeight: '600' } as any
+                }
+              >
+                {flexDirection}
+              </text>
+            </view>
           </view>
-        </view>
 
-        {/* Align Items */}
-        <view
-          style={{
-            display: 'linear',
-            linearDirection: 'row',
-            alignItems: 'center',
-            marginBottom: 12,
-          }}
-        >
-          <text
-            style={
-              { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
-            }
-          >
-            Align Items:
-          </text>
+          {/* Align Items */}
           <view
-            bindtap={cycleAlignItems}
             style={{
-              paddingLeft: 14,
-              paddingRight: 14,
-              paddingTop: 7,
-              paddingBottom: 7,
-              backgroundColor: '#334155',
-              borderRadius: '8px',
+              display: 'linear',
+              linearDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 12,
             }}
           >
             <text
               style={
-                { color: '#3B82F6', fontSize: 13, fontWeight: '600' } as any
+                { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
               }
             >
-              {alignItems}
+              Align Items:
             </text>
+            <view
+              bindtap={cycleAlignItems}
+              style={{
+                paddingLeft: 14,
+                paddingRight: 14,
+                paddingTop: 7,
+                paddingBottom: 7,
+                backgroundColor: '#334155',
+                borderRadius: '8px',
+              }}
+            >
+              <text
+                style={
+                  { color: '#3B82F6', fontSize: 13, fontWeight: '600' } as any
+                }
+              >
+                {alignItems}
+              </text>
+            </view>
           </view>
-        </view>
 
-        {/* Justify Content */}
-        <view
-          style={{
-            display: 'linear',
-            linearDirection: 'row',
-            alignItems: 'center',
-            marginBottom: 12,
-          }}
-        >
-          <text
-            style={
-              { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
-            }
-          >
-            Justify Content:
-          </text>
+          {/* Justify Content */}
           <view
-            bindtap={cycleJustifyContent}
             style={{
-              paddingLeft: 14,
-              paddingRight: 14,
-              paddingTop: 7,
-              paddingBottom: 7,
-              backgroundColor: '#334155',
-              borderRadius: '8px',
+              display: 'linear',
+              linearDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 12,
             }}
           >
             <text
               style={
-                { color: '#3B82F6', fontSize: 13, fontWeight: '600' } as any
+                { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
               }
             >
-              {justifyContent}
+              Justify Content:
             </text>
-          </view>
-        </view>
-
-        {/* Gap */}
-        <view
-          style={{
-            display: 'linear',
-            linearDirection: 'row',
-            alignItems: 'center',
-            marginBottom: 12,
-          }}
-        >
-          <text
-            style={
-              { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
-            }
-          >
-            Gap: {gap}px
-          </text>
-          <view
-            style={{ display: 'linear', linearDirection: 'row', gap: 8 }}
-          >
             <view
-              bindtap={decreaseGap}
+              bindtap={cycleJustifyContent}
               style={{
                 paddingLeft: 14,
                 paddingRight: 14,
@@ -365,369 +227,297 @@ export function FlexPlaygroundScreen() {
             >
               <text
                 style={
-                  {
-                    color: '#FFFFFF',
-                    fontSize: 13,
-                    fontWeight: '600',
-                  } as any
+                  { color: '#3B82F6', fontSize: 13, fontWeight: '600' } as any
                 }
               >
-                -
-              </text>
-            </view>
-            <view
-              bindtap={increaseGap}
-              style={{
-                paddingLeft: 14,
-                paddingRight: 14,
-                paddingTop: 7,
-                paddingBottom: 7,
-                backgroundColor: '#334155',
-                borderRadius: '8px',
-              }}
-            >
-              <text
-                style={
-                  {
-                    color: '#FFFFFF',
-                    fontSize: 13,
-                    fontWeight: '600',
-                  } as any
-                }
-              >
-                +
+                {justifyContent}
               </text>
             </view>
           </view>
-        </view>
 
-        {/* Container Padding */}
-        <view
-          style={{
-            display: 'linear',
-            linearDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          <text
-            style={
-              { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
-            }
-          >
-            Padding: {containerPadding}px
-          </text>
+          {/* Gap */}
           <view
-            style={{ display: 'linear', linearDirection: 'row', gap: 8 }}
-          >
-            <view
-              bindtap={decreasePadding}
-              style={{
-                paddingLeft: 14,
-                paddingRight: 14,
-                paddingTop: 7,
-                paddingBottom: 7,
-                backgroundColor: '#334155',
-                borderRadius: '8px',
-              }}
-            >
-              <text
-                style={
-                  {
-                    color: '#FFFFFF',
-                    fontSize: 13,
-                    fontWeight: '600',
-                  } as any
-                }
-              >
-                -
-              </text>
-            </view>
-            <view
-              bindtap={increasePadding}
-              style={{
-                paddingLeft: 14,
-                paddingRight: 14,
-                paddingTop: 7,
-                paddingBottom: 7,
-                backgroundColor: '#334155',
-                borderRadius: '8px',
-              }}
-            >
-              <text
-                style={
-                  {
-                    color: '#FFFFFF',
-                    fontSize: 13,
-                    fontWeight: '600',
-                  } as any
-                }
-              >
-                +
-              </text>
-            </view>
-          </view>
-        </view>
-      </view>
-
-      {/* ── Live Preview Card ─────────────────────────────────── */}
-      <view
-        style={
-          {
-            backgroundColor: '#1E293B',
-            borderRadius: '12px',
-            padding: 16,
-            marginBottom: 16,
-            borderWidth: 1,
-            borderColor: '#334155',
-          } as any
-        }
-      >
-        <text
-          style={
-            {
-              fontSize: 16,
-              fontWeight: '700',
-              color: '#FFFFFF',
-              marginBottom: 4,
-            } as any
-          }
-        >
-          Live Preview
-        </text>
-        <text
-          style={
-            { fontSize: 12, color: '#94A3B8', marginBottom: 12 } as any
-          }
-        >
-          See how your flex settings affect the layout below
-        </text>
-
-        <view
-          style={
-            {
-              height: 250,
-              backgroundColor: '#0F172A',
-              borderRadius: '8px',
-              padding: 8,
-              flexDirection: flexDirection,
-              justifyContent: justifyContent,
-              alignItems: alignItems,
-              gap: gap,
-            } as any
-          }
-        >
-          <view
-            style={
-              {
-                backgroundColor: '#EF4444',
-                padding: 12,
-                borderRadius: '8px',
-                width: flexDirection === 'row' ? 80 : undefined,
-                height: flexDirection === 'column' ? 60 : undefined,
-              } as any
-            }
+            style={{
+              display: 'linear',
+              linearDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 12,
+            }}
           >
             <text
               style={
-                {
-                  color: '#FFFFFF',
-                  fontSize: 12,
-                  fontWeight: 'bold',
-                } as any
+                { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
               }
             >
-              Item 1
+              Gap: {gap}px
             </text>
+            <view
+              style={{ display: 'linear', linearDirection: 'row', gap: 8 }}
+            >
+              <view
+                bindtap={decreaseGap}
+                style={{
+                  paddingLeft: 14,
+                  paddingRight: 14,
+                  paddingTop: 7,
+                  paddingBottom: 7,
+                  backgroundColor: '#334155',
+                  borderRadius: '8px',
+                }}
+              >
+                <text
+                  style={{
+                    color: '#FFFFFF',
+                    fontSize: 13,
+                    fontWeight: '600',
+                  } as any}
+                >
+                  -
+                </text>
+              </view>
+              <view
+                bindtap={increaseGap}
+                style={{
+                  paddingLeft: 14,
+                  paddingRight: 14,
+                  paddingTop: 7,
+                  paddingBottom: 7,
+                  backgroundColor: '#334155',
+                  borderRadius: '8px',
+                }}
+              >
+                <text
+                  style={{
+                    color: '#FFFFFF',
+                    fontSize: 13,
+                    fontWeight: '600',
+                  } as any}
+                >
+                  +
+                </text>
+              </view>
+            </view>
           </view>
+
+          {/* Container Padding */}
           <view
-            style={
-              {
-                backgroundColor: '#3B82F6',
-                padding: 12,
-                borderRadius: '8px',
-                width: flexDirection === 'row' ? 100 : undefined,
-                height: flexDirection === 'column' ? 80 : undefined,
-              } as any
-            }
+            style={{
+              display: 'linear',
+              linearDirection: 'row',
+              alignItems: 'center',
+            }}
           >
             <text
               style={
-                {
-                  color: '#FFFFFF',
-                  fontSize: 12,
-                  fontWeight: 'bold',
-                } as any
+                { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
               }
             >
-              Item 2
+              Padding: {containerPadding}px
             </text>
-          </view>
-          <view
-            style={
-              {
-                backgroundColor: '#22C55E',
-                padding: 12,
-                borderRadius: '8px',
-                width: flexDirection === 'row' ? 60 : undefined,
-                height: flexDirection === 'column' ? 50 : undefined,
-              } as any
-            }
-          >
-            <text
-              style={
-                {
-                  color: '#FFFFFF',
-                  fontSize: 12,
-                  fontWeight: 'bold',
-                } as any
-              }
+            <view
+              style={{ display: 'linear', linearDirection: 'row', gap: 8 }}
             >
-              Item 3
-            </text>
+              <view
+                bindtap={decreasePadding}
+                style={{
+                  paddingLeft: 14,
+                  paddingRight: 14,
+                  paddingTop: 7,
+                  paddingBottom: 7,
+                  backgroundColor: '#334155',
+                  borderRadius: '8px',
+                }}
+              >
+                <text
+                  style={{
+                    color: '#FFFFFF',
+                    fontSize: 13,
+                    fontWeight: '600',
+                  } as any}
+                >
+                  -
+                </text>
+              </view>
+              <view
+                bindtap={increasePadding}
+                style={{
+                  paddingLeft: 14,
+                  paddingRight: 14,
+                  paddingTop: 7,
+                  paddingBottom: 7,
+                  backgroundColor: '#334155',
+                  borderRadius: '8px',
+                }}
+              >
+                <text
+                  style={{
+                    color: '#FFFFFF',
+                    fontSize: 13,
+                    fontWeight: '600',
+                  } as any}
+                >
+                  +
+                </text>
+              </view>
+            </view>
           </view>
         </view>
-      </view>
 
-      {/* ── Voltra JSON Output Card ───────────────────────────── */}
-      <view
-        style={
-          {
-            backgroundColor: '#1E293B',
-            borderRadius: '12px',
-            padding: 16,
-            marginBottom: 16,
-            borderWidth: 1,
-            borderColor: '#334155',
-          } as any
-        }
-      >
-        <text
-          style={
-            {
-              fontSize: 16,
-              fontWeight: '700',
-              color: '#FFFFFF',
-              marginBottom: 4,
-            } as any
-          }
-        >
-          Voltra JSON Output
-        </text>
-        <text
-          style={
-            { fontSize: 12, color: '#94A3B8', marginBottom: 12 } as any
-          }
-        >
-          renderVoltraVariantToJson output for the current settings
-        </text>
-
+        {/* ── Live Preview Card ─────────────────────────────────── */}
         <view
           style={{
             backgroundColor: '#0F172A',
-            borderRadius: '8px',
-            padding: 10,
-          }}
+            borderRadius: '20px',
+            padding: 18,
+            marginBottom: 12,
+            borderWidth: 1,
+            borderColor: 'rgba(148, 163, 184, 0.12)',
+          } as any}
         >
           <text
-            style={
-              {
-                fontSize: 10,
-                fontFamily: 'monospace',
-                color: '#4ADE80',
-              } as any
-            }
-          >
-            {getPreviewJson()}
-          </text>
-        </view>
-      </view>
-
-      {/* ── Text Align Test Card ──────────────────────────────── */}
-      <view
-        style={
-          {
-            backgroundColor: '#1E293B',
-            borderRadius: '12px',
-            padding: 16,
-            borderWidth: 1,
-            borderColor: '#334155',
-          } as any
-        }
-      >
-        <text
-          style={
-            {
+            style={{
               fontSize: 16,
               fontWeight: '700',
               color: '#FFFFFF',
               marginBottom: 4,
-            } as any
-          }
-        >
-          Text Align in Flex
-        </text>
-        <text
-          style={
-            { fontSize: 12, color: '#94A3B8', marginBottom: 12 } as any
-          }
-        >
-          Text alignment within stretched flex children
-        </text>
+            } as any}
+          >
+            Live Preview
+          </text>
+          <text
+            style={{ fontSize: 13, color: '#94A3B8', marginBottom: 10 } as any}
+          >
+            See how your flex settings affect the layout below
+          </text>
 
+          <view style={{
+            backgroundColor: '#1E293B',
+            borderRadius: '12px',
+            overflow: 'hidden',
+          } as any}>
+            <VoltraPreview id="flex-playground-main" height={300}>
+              <Voltra.View
+                style={{
+                  backgroundColor: '#334155',
+                  padding: containerPadding,
+                  width: '100%',
+                  height: '100%',
+                  flexDirection,
+                  alignItems,
+                  justifyContent,
+                  gap,
+                }}
+              >
+                <Voltra.View
+                  style={{
+                    backgroundColor: '#EF4444',
+                    padding: 12,
+                    borderRadius: 8,
+                    width: flexDirection === 'row' ? 80 : undefined,
+                    height: flexDirection === 'column' ? 60 : undefined,
+                  }}
+                >
+                  <Voltra.Text style={{ color: '#FFFFFF', fontSize: 12, fontWeight: 'bold' }}>
+                    Item 1
+                  </Voltra.Text>
+                </Voltra.View>
+
+                <Voltra.View
+                  style={{
+                    backgroundColor: '#3B82F6',
+                    padding: 12,
+                    borderRadius: 8,
+                    width: flexDirection === 'row' ? 100 : undefined,
+                    height: flexDirection === 'column' ? 80 : undefined,
+                  }}
+                >
+                  <Voltra.Text style={{ color: '#FFFFFF', fontSize: 12, fontWeight: 'bold' }}>
+                    Item 2
+                  </Voltra.Text>
+                </Voltra.View>
+
+                <Voltra.View
+                  style={{
+                    backgroundColor: '#10B981',
+                    padding: 12,
+                    borderRadius: 8,
+                    width: flexDirection === 'row' ? 60 : undefined,
+                    height: flexDirection === 'column' ? 50 : undefined,
+                  }}
+                >
+                  <Voltra.Text style={{ color: '#FFFFFF', fontSize: 12, fontWeight: 'bold' }}>
+                    Item 3
+                  </Voltra.Text>
+                </Voltra.View>
+              </Voltra.View>
+            </VoltraPreview>
+          </view>
+        </view>
+
+        {/* ── Text Align Test Card ──────────────────────────────── */}
         <view
-          style={
-            {
-              backgroundColor: '#0F172A',
-              borderRadius: '8px',
-              padding: 8,
-              height: 180,
-              flexDirection: 'column',
-              alignItems: 'stretch',
-              gap: 8,
-            } as any
-          }
+          style={{
+            backgroundColor: '#0F172A',
+            borderRadius: '20px',
+            padding: 18,
+            marginBottom: 12,
+            borderWidth: 1,
+            borderColor: 'rgba(148, 163, 184, 0.12)',
+          } as any}
         >
-          <view style={{ backgroundColor: '#1E293B', padding: 8, flex: 1 }}>
-            <text
-              style={
-                {
-                  color: '#FFFFFF',
-                  fontSize: 14,
-                  textAlign: 'left',
-                } as any
-              }
-            >
-              textAlign: left
-            </text>
-          </view>
-          <view style={{ backgroundColor: '#1E293B', padding: 8, flex: 1 }}>
-            <text
-              style={
-                {
-                  color: '#FFFFFF',
-                  fontSize: 14,
-                  textAlign: 'center',
-                } as any
-              }
-            >
-              textAlign: center
-            </text>
-          </view>
-          <view style={{ backgroundColor: '#1E293B', padding: 8, flex: 1 }}>
-            <text
-              style={
-                {
-                  color: '#FFFFFF',
-                  fontSize: 14,
-                  textAlign: 'right',
-                } as any
-              }
-            >
-              textAlign: right
-            </text>
+          <text
+            style={{
+              fontSize: 16,
+              fontWeight: '700',
+              color: '#FFFFFF',
+              marginBottom: 4,
+            } as any}
+          >
+            Text Align in Flex
+          </text>
+          <text
+            style={{ fontSize: 13, color: '#94A3B8', marginBottom: 10 } as any}
+          >
+            Text alignment within stretched flex children
+          </text>
+
+          <view style={{
+            backgroundColor: '#1E293B',
+            borderRadius: '12px',
+            overflow: 'hidden',
+          } as any}>
+            <VoltraPreview id="flex-playground-text-align" height={200}>
+              <Voltra.View
+                style={{
+                  backgroundColor: '#334155',
+                  padding: 8,
+                  width: '100%',
+                  height: '100%',
+                  flexDirection: 'column',
+                  alignItems: 'stretch',
+                  gap: 8,
+                }}
+              >
+                <Voltra.View style={{ backgroundColor: '#1E293B', padding: 8, flex: 1 }}>
+                  <Voltra.Text style={{ color: '#FFFFFF', fontSize: 14, textAlign: 'left' }}>
+                    textAlign: left
+                  </Voltra.Text>
+                </Voltra.View>
+                <Voltra.View style={{ backgroundColor: '#1E293B', padding: 8, flex: 1 }}>
+                  <Voltra.Text style={{ color: '#FFFFFF', fontSize: 14, textAlign: 'center' }}>
+                    textAlign: center
+                  </Voltra.Text>
+                </Voltra.View>
+                <Voltra.View style={{ backgroundColor: '#1E293B', padding: 8, flex: 1 }}>
+                  <Voltra.Text style={{ color: '#FFFFFF', fontSize: 14, textAlign: 'right' }}>
+                    textAlign: right
+                  </Voltra.Text>
+                </Voltra.View>
+              </Voltra.View>
+            </VoltraPreview>
           </view>
         </view>
       </view>
-    </view>
+    </scroll-view>
   );
 }
