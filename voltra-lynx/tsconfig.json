@@ -19,9 +19,7 @@
     "noEmit": true
   },
   "references": [
-    { "path": "packages/lynx-bridge" },
-    { "path": "packages/lynx-ios-client" },
-    { "path": "packages/lynx-android-client" }
+    { "path": "packages/lynx" }
   ],
   "include": [],
   "exclude": ["node_modules", "dist"]
