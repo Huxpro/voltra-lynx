@@ -1,0 +1,34 @@
+{
+  "name": "@use-voltra/lynx",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Voltra for LynxJS — bridge adapter + client APIs",
+  "exports": {
+    "./bridge": {
+      "types": "./dist/bridge/index.d.ts",
+      "import": "./dist/bridge/index.js"
+    },
+    "./ios-client": {
+      "types": "./dist/ios-client/index.d.ts",
+      "import": "./dist/ios-client/index.js"
+    },
+    "./android-client": {
+      "types": "./dist/android-client/index.d.ts",
+      "import": "./dist/android-client/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@use-voltra/ios": "^1.4.0",
+    "@use-voltra/android": "^1.4.0"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.0"
+  }
+}
