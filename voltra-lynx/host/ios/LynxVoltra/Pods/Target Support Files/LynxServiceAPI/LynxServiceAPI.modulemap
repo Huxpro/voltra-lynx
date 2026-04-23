@@ -1,6 +1,0 @@
-framework module LynxServiceAPI {
-  umbrella header "LynxServiceAPI-umbrella.h"
-
-  export *
-  module * { export * }
-}

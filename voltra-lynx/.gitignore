@@ -1,3 +1,14 @@
 node_modules/
 dist/
 *.tsbuildinfo
+
+# CocoaPods (regenerate with: cd host/ios/LynxVoltra && pod install)
+host/ios/LynxVoltra/Pods/
+
+# Xcode generated (regenerate with: cd host/ios/LynxVoltra && xcodegen generate && pod install)
+host/ios/LynxVoltra/LynxVoltra.xcodeproj/
+host/ios/LynxVoltra/LynxVoltra.xcworkspace/
+host/ios/LynxVoltra/DerivedData/
+
+# macOS
+.DS_Store
