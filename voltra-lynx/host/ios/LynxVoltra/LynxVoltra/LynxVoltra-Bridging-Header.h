@@ -3,3 +3,6 @@
 #import <Lynx/LynxTemplateProvider.h>
 #import <Lynx/LynxView.h>
 #import <Lynx/LynxModule.h>
+#import <Lynx/LynxUI.h>
+#import <Lynx/LynxComponentRegistry.h>
+#import <Lynx/LynxPropsProcessor.h>

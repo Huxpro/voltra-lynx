@@ -1064,8 +1064,7 @@ export function makeFlightPayload(): string {
 export function makeDeepLinksPayload(): string {
   return renderLiveActivityToString({
     lockScreen: (
-      <Voltra.HStack id="deep-links-live-activity" spacing={8} style={{ padding: 16 } as any} alignment="top">
-        <Voltra.VStack spacing={10} style={{ flex: 1 } as any}>
+      <Voltra.VStack id="deep-links-live-activity" spacing={10} style={{ padding: 16 } as any}>
           {/* Link with absolute URL */}
           <Voltra.Link destination="myapp://orders/123">
             <Voltra.HStack
@@ -1105,8 +1104,7 @@ export function makeDeepLinksPayload(): string {
               <Voltra.Symbol name="chevron.right" tintColor="#64748B" size={14} />
             </Voltra.HStack>
           </Voltra.Link>
-        </Voltra.VStack>
-      </Voltra.HStack>
+      </Voltra.VStack>
     ),
     island: {
       keylineTint: '#3B82F6',
