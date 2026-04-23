@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from '@lynx-js/react';
-import { Voltra, renderVoltraVariantToJson } from '@use-voltra/ios';
+import { Voltra } from '@use-voltra/ios';
+import { VoltraWidgetPreview } from '../../components/VoltraWidgetPreview';
 
 type ProgressType = 'linear' | 'circular';
 type ProgressMode = 'determinate' | 'timer' | 'indeterminate';
@@ -28,33 +29,11 @@ function ToggleButton({ label, active, onTap, disabled }: {
   );
 }
 
-// Color swatch button
-function ColorSwatch({ color, selected, onTap, borderHighlight }: {
-  color: string;
-  selected: boolean;
-  onTap: () => void;
-  borderHighlight?: string;
-}) {
-  return (
-    <view
-      bindtap={onTap}
-      style={{
-        width: 28, height: 28,
-        backgroundColor: color,
-        borderRadius: '6px',
-        borderWidth: selected ? 2 : 0,
-        borderColor: borderHighlight || '#007AFF',
-        marginLeft: 6,
-      }}
-    />
-  );
-}
-
 export function ProgressIndicatorsScreen() {
   const [type, setType] = useState<ProgressType>('linear');
   const [mode, setMode] = useState<ProgressMode>('determinate');
   const [progressValue, setProgressValue] = useState(65);
-  const [durationSec, setDurationSec] = useState(60);
+  const [durationSec, setDurationSec] = useState('60');
   const [timerState, setTimerState] = useState<{ startAtMs?: number; endAtMs?: number }>({
     startAtMs: Date.now(),
     endAtMs: Date.now() + 60000,
@@ -80,12 +59,12 @@ export function ProgressIndicatorsScreen() {
   }, [type, mode]);
 
   const resetTimer = useCallback(() => {
-    const duration = durationSec * 1000;
+    const duration = (parseInt(durationSec) || 0) * 1000;
     const now = Date.now();
     setTimerState({ startAtMs: now, endAtMs: now + duration });
   }, [durationSec]);
 
-  const buildPreviewJson = useCallback(() => {
+  const renderProgressWidget = () => {
     const commonProps: any = {
       label: (
         <Voltra.Text style={{ color: '#aaa', fontSize: 12 }}>
@@ -109,7 +88,7 @@ export function ProgressIndicatorsScreen() {
         ? { startAtMs: timerState.startAtMs, endAtMs: timerState.endAtMs, countDown }
         : {};
 
-    const widget = (
+    return (
       <Voltra.ZStack style={{ flex: 1, backgroundColor: '#1a1a2e', padding: 16 }}>
         <Voltra.VStack style={{ flex: 1 }} spacing={12} alignment={type === 'circular' ? 'center' : undefined}>
           {type === 'linear' ? (
@@ -131,302 +110,226 @@ export function ProgressIndicatorsScreen() {
         </Voltra.VStack>
       </Voltra.ZStack>
     );
-
-    try {
-      return JSON.stringify(renderVoltraVariantToJson(widget), null, 2);
-    } catch {
-      return '{ "error": "Failed to render" }';
-    }
-  }, [type, mode, progressValue, timerState, trackColor, progressColor, cornerRadius, height, lineWidth, useThumb, countDown]);
-
-  const previewJson = buildPreviewJson();
-
-  const cycleDuration = useCallback(() => {
-    if (durationSec === 30) setDurationSec(60);
-    else if (durationSec === 60) setDurationSec(120);
-    else if (durationSec === 120) setDurationSec(300);
-    else setDurationSec(30);
-  }, [durationSec]);
+  };
 
   return (
-    <view style={{ padding: 16 }}>
-      <text style={{ fontSize: 20, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 8 }}>
-        Progress Indicators
-      </text>
-      <text style={{ color: '#CBD5F5', marginBottom: 16, fontSize: 13 }}>
-        LinearProgressView and CircularProgressView with label/styling support.
-      </text>
-
-      {/* Live Preview (Voltra JSON) */}
-      <view style={{
-        backgroundColor: '#1c1c1e',
-        borderRadius: '16px',
-        padding: 16,
-        marginBottom: 16,
-      }}>
-        <text style={{ color: '#fff', fontSize: 14, fontWeight: '600', marginBottom: 8 }}>
-          Live Preview (JSON)
+    <scroll-view style={{ linearWeight: 1 } as any} scroll-orientation="vertical">
+      <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}>
+        <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' } as any}>
+          Progress Testing
         </text>
-        <text style={{ color: '#8E8E93', fontSize: 11, fontFamily: 'monospace' }}>
-          {previewJson.length > 600 ? previewJson.slice(0, 600) + '...' : previewJson}
+        <text style={{ fontSize: 14, color: '#CBD5F5', marginBottom: 24 } as any}>
+          Test VoltraLinearProgressView and VoltraCircularProgressView with new label and styling support.
         </text>
-      </view>
 
-      {mode === 'timer' && (
+        {/* 1. Live Preview */}
         <view
-          bindtap={resetTimer}
           style={{
-            backgroundColor: '#007AFF',
-            padding: 12,
-            borderRadius: '10px',
-            alignItems: 'center',
-            marginBottom: 16,
-          }}
+            backgroundColor: '#0F172A',
+            borderRadius: '20px',
+            padding: 18,
+            marginBottom: 12,
+            borderWidth: 1,
+            borderColor: 'rgba(148, 163, 184, 0.12)',
+          } as any}
         >
-          <text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>Reset / Start Timer</text>
-        </view>
-      )}
-
-      {/* Base Configuration */}
-      <view style={{
-        backgroundColor: '#1c1c1e',
-        borderRadius: '16px',
-        padding: 16,
-        marginBottom: 16,
-      }}>
-        <text style={{ color: '#fff', fontSize: 16, fontWeight: '600', marginBottom: 12 }}>
-          Base Configuration
-        </text>
-
-        {/* Type */}
-        <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <text style={{ color: '#fff', fontSize: 14 }}>Type</text>
-          <view style={{ display: 'linear', linearDirection: 'row' }}>
-            <view
-              bindtap={() => setType('linear')}
-              style={{
-                paddingLeft: 12, paddingRight: 12,
-                paddingTop: 6, paddingBottom: 6,
-                backgroundColor: type === 'linear' ? '#007AFF' : '#333',
-                borderRadius: '6px',
-              }}
-            >
-              <text style={{ color: '#fff', fontSize: 13 }}>Linear</text>
-            </view>
-            <view
-              bindtap={() => setType('circular')}
-              style={{
-                paddingLeft: 12, paddingRight: 12,
-                paddingTop: 6, paddingBottom: 6,
-                backgroundColor: type === 'circular' ? '#007AFF' : '#333',
-                borderRadius: '6px',
-                marginLeft: 8,
-              }}
-            >
-              <text style={{ color: '#fff', fontSize: 13 }}>Circular</text>
-            </view>
+          <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 10 } as any}>
+            Live Preview
+          </text>
+          <view style={{ alignItems: 'center' }}>
+            <VoltraWidgetPreview family="systemMedium">
+              {renderProgressWidget()}
+            </VoltraWidgetPreview>
           </view>
+          {mode === 'timer' && (
+            <view
+              bindtap={resetTimer}
+              style={{
+                backgroundColor: '#007AFF',
+                padding: 12,
+                borderRadius: '10px',
+                alignItems: 'center',
+                marginTop: 16,
+              } as any}
+            >
+              <text style={{ color: '#fff', fontSize: 14, fontWeight: '600' } as any}>Reset / Start Timer</text>
+            </view>
+          )}
         </view>
 
-        {/* Mode */}
-        <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <text style={{ color: '#fff', fontSize: 14 }}>Mode</text>
-          <view style={{ display: 'linear', linearDirection: 'row' }}>
-            <view
-              bindtap={() => setMode('determinate')}
-              style={{
-                paddingLeft: 10, paddingRight: 10,
-                paddingTop: 6, paddingBottom: 6,
-                backgroundColor: mode === 'determinate' ? '#007AFF' : '#333',
-                borderRadius: '6px',
-              }}
-            >
-              <text style={{ color: '#fff', fontSize: 12 }}>Determinate</text>
-            </view>
-            <view
-              bindtap={() => { if (type !== 'circular') setMode('timer'); }}
-              style={{
-                paddingLeft: 10, paddingRight: 10,
-                paddingTop: 6, paddingBottom: 6,
-                backgroundColor: mode === 'timer' ? '#007AFF' : '#333',
-                borderRadius: '6px',
-                opacity: type === 'circular' ? 0.4 : 1,
-                marginLeft: 8,
-              }}
-            >
-              <text style={{ color: '#fff', fontSize: 12 }}>Timer</text>
-            </view>
-            <view
-              bindtap={() => { if (type !== 'linear') setMode('indeterminate'); }}
-              style={{
-                paddingLeft: 10, paddingRight: 10,
-                paddingTop: 6, paddingBottom: 6,
-                backgroundColor: mode === 'indeterminate' ? '#007AFF' : '#333',
-                borderRadius: '6px',
-                opacity: type === 'linear' ? 0.4 : 1,
-                marginLeft: 8,
-              }}
-            >
-              <text style={{ color: '#fff', fontSize: 12 }}>Indeterminate</text>
-            </view>
-          </view>
-        </view>
+        {/* 2. Base Configuration */}
+        <view
+          style={{
+            backgroundColor: '#0F172A',
+            borderRadius: '20px',
+            padding: 18,
+            marginBottom: 12,
+            borderWidth: 1,
+            borderColor: 'rgba(148, 163, 184, 0.12)',
+          } as any}
+        >
+          <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 12 } as any}>
+            Base Configuration
+          </text>
 
-        {/* Progress value (determinate only) */}
-        {mode === 'determinate' && (
+          {/* Type */}
           <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <text style={{ color: '#fff', fontSize: 14 }}>Progress: {progressValue}%</text>
+            <text style={{ color: '#fff', fontSize: 14 }}>Type</text>
             <view style={{ display: 'linear', linearDirection: 'row' }}>
-              <view
-                bindtap={() => setProgressValue(Math.max(0, progressValue - 10))}
-                style={{
-                  paddingLeft: 12, paddingRight: 12,
-                  paddingTop: 6, paddingBottom: 6,
-                  backgroundColor: '#333',
-                  borderRadius: '6px',
-                }}
-              >
-                <text style={{ color: '#fff', fontSize: 13 }}>-10</text>
-              </view>
-              <view
-                bindtap={() => setProgressValue(Math.min(100, progressValue + 10))}
-                style={{
-                  paddingLeft: 12, paddingRight: 12,
-                  paddingTop: 6, paddingBottom: 6,
-                  backgroundColor: '#333',
-                  borderRadius: '6px',
-                  marginLeft: 8,
-                }}
-              >
-                <text style={{ color: '#fff', fontSize: 13 }}>+10</text>
-              </view>
+              <ToggleButton label="Linear" active={type === 'linear'} onTap={() => setType('linear')} />
+              <ToggleButton label="Circular" active={type === 'circular'} onTap={() => setType('circular')} />
             </view>
           </view>
-        )}
 
-        {/* Timer config */}
-        {mode === 'timer' && (
-          <view>
-            <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <text style={{ color: '#fff', fontSize: 14 }}>Duration: {durationSec}s</text>
-              <view
-                bindtap={cycleDuration}
-                style={{
-                  paddingLeft: 12, paddingRight: 12,
-                  paddingTop: 6, paddingBottom: 6,
-                  backgroundColor: '#333',
-                  borderRadius: '6px',
-                }}
-              >
-                <text style={{ color: '#fff', fontSize: 13 }}>Cycle</text>
-              </view>
-            </view>
-            <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <text style={{ color: '#fff', fontSize: 14 }}>Count Down</text>
-              <view
-                bindtap={() => setCountDown(!countDown)}
-                style={{
-                  paddingLeft: 12, paddingRight: 12,
-                  paddingTop: 6, paddingBottom: 6,
-                  backgroundColor: countDown ? '#007AFF' : '#333',
-                  borderRadius: '6px',
-                }}
-              >
-                <text style={{ color: '#fff', fontSize: 13 }}>{countDown ? 'ON' : 'OFF'}</text>
-              </view>
-            </view>
-            <text style={{ color: '#FFB800', fontSize: 11, marginBottom: 8 }}>
-              Note: Custom styling is ignored for Timers to support realtime updates.
-            </text>
-          </view>
-        )}
-      </view>
-
-      {/* Styling Configuration */}
-      <view style={{
-        backgroundColor: '#1c1c1e',
-        borderRadius: '16px',
-        padding: 16,
-        marginBottom: 16,
-      }}>
-        <text style={{ color: '#fff', fontSize: 16, fontWeight: '600', marginBottom: 12 }}>
-          Styling Configuration
-        </text>
-
-        {/* Track Color */}
-        <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <text style={{ color: '#fff', fontSize: 14 }}>Track Color</text>
-          <view style={{ display: 'linear', linearDirection: 'row' }}>
-            <ColorSwatch color="#333344" selected={trackColor === '#333344'} onTap={() => setTrackColor('#333344')} />
-            <ColorSwatch color="#444444" selected={trackColor === '#444444'} onTap={() => setTrackColor('#444444')} />
-            <ColorSwatch color="#1a1a2e" selected={trackColor === '#1a1a2e'} onTap={() => setTrackColor('#1a1a2e')} />
-          </view>
-        </view>
-
-        {/* Progress Color */}
-        <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <text style={{ color: '#fff', fontSize: 14 }}>Progress Color</text>
-          <view style={{ display: 'linear', linearDirection: 'row' }}>
-            <ColorSwatch color="#007AFF" selected={progressColor === '#007AFF'} onTap={() => setProgressColor('#007AFF')} borderHighlight="#fff" />
-            <ColorSwatch color="#34C759" selected={progressColor === '#34C759'} onTap={() => setProgressColor('#34C759')} borderHighlight="#fff" />
-            <ColorSwatch color="#FF9500" selected={progressColor === '#FF9500'} onTap={() => setProgressColor('#FF9500')} borderHighlight="#fff" />
-            <ColorSwatch color="#FF3B30" selected={progressColor === '#FF3B30'} onTap={() => setProgressColor('#FF3B30')} borderHighlight="#fff" />
-          </view>
-        </view>
-
-        {/* Linear-specific styling */}
-        {type === 'linear' && (
-          <view>
-            {/* Height */}
-            <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <text style={{ color: '#fff', fontSize: 14 }}>Height: {height}</text>
-              <view style={{ display: 'linear', linearDirection: 'row' }}>
-                <ToggleButton label="Small" active={height === 4} onTap={() => setHeight(4)} />
-                <ToggleButton label="Medium" active={height === 8} onTap={() => setHeight(8)} />
-                <ToggleButton label="Large" active={height === 16} onTap={() => setHeight(16)} />
-              </view>
-            </view>
-
-            {/* Corner Radius */}
-            <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <text style={{ color: '#fff', fontSize: 14 }}>Corner Radius: {cornerRadius}</text>
-              <view style={{ display: 'linear', linearDirection: 'row' }}>
-                <ToggleButton label="None" active={cornerRadius === 0} onTap={() => setCornerRadius(0)} />
-                <ToggleButton label="Small" active={cornerRadius === 4} onTap={() => setCornerRadius(4)} />
-                <ToggleButton label="Full" active={cornerRadius === 20} onTap={() => setCornerRadius(20)} />
-              </view>
-            </view>
-
-            {/* Custom Thumb */}
-            <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <text style={{ color: '#fff', fontSize: 14 }}>Custom Thumb</text>
-              <view
-                bindtap={() => setUseThumb(!useThumb)}
-                style={{
-                  paddingLeft: 12, paddingRight: 12,
-                  paddingTop: 6, paddingBottom: 6,
-                  backgroundColor: useThumb ? '#007AFF' : '#333',
-                  borderRadius: '6px',
-                }}
-              >
-                <text style={{ color: '#fff', fontSize: 13 }}>{useThumb ? 'ON' : 'OFF'}</text>
-              </view>
-            </view>
-          </view>
-        )}
-
-        {/* Circular-specific styling */}
-        {type === 'circular' && (
+          {/* Mode */}
           <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <text style={{ color: '#fff', fontSize: 14 }}>Line Width: {lineWidth}</text>
+            <text style={{ color: '#fff', fontSize: 14 }}>Mode</text>
             <view style={{ display: 'linear', linearDirection: 'row' }}>
-              <ToggleButton label="2" active={lineWidth === 2} onTap={() => setLineWidth(2)} />
-              <ToggleButton label="6" active={lineWidth === 6} onTap={() => setLineWidth(6)} />
-              <ToggleButton label="12" active={lineWidth === 12} onTap={() => setLineWidth(12)} />
+              <ToggleButton label="Determinate" active={mode === 'determinate'} onTap={() => setMode('determinate')} />
+              <ToggleButton label="Timer" active={mode === 'timer'} onTap={() => setMode('timer')} disabled={type === 'circular'} />
+              <ToggleButton label="Indeterminate" active={mode === 'indeterminate'} onTap={() => setMode('indeterminate')} disabled={type === 'linear'} />
             </view>
           </view>
-        )}
+
+          {/* Progress value (determinate only) */}
+          {mode === 'determinate' && (
+            <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <text style={{ color: '#fff', fontSize: 14 }}>Progress: {progressValue}%</text>
+              <view style={{ display: 'linear', linearDirection: 'row' }}>
+                <ToggleButton label="-10" active={false} onTap={() => setProgressValue(Math.max(0, progressValue - 10))} />
+                <ToggleButton label="+10" active={false} onTap={() => setProgressValue(Math.min(100, progressValue + 10))} />
+              </view>
+            </view>
+          )}
+
+          {/* Timer config */}
+          {mode === 'timer' && (
+            <view>
+              <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <text style={{ color: '#fff', fontSize: 14 }}>Duration (seconds)</text>
+                <input
+                  type="number"
+                  value={durationSec}
+                  bindinput={(e: any) => setDurationSec(e.detail.value)}
+                  style={{
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                    color: '#fff',
+                    padding: 8,
+                    borderRadius: '8px',
+                    width: 100,
+                    textAlign: 'right',
+                    fontSize: 14,
+                  } as any}
+                />
+              </view>
+              <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <text style={{ color: '#fff', fontSize: 14 }}>Count Down</text>
+                <ToggleButton label={countDown ? 'ON' : 'OFF'} active={countDown} onTap={() => setCountDown(!countDown)} />
+              </view>
+              <text style={{ color: '#FFB800', fontSize: 11, marginBottom: 8 }}>
+                Note: Custom styling is ignored for Timers to support realtime updates.
+              </text>
+            </view>
+          )}
+        </view>
+
+        {/* 3. Styling Configuration */}
+        <view
+          style={{
+            backgroundColor: '#0F172A',
+            borderRadius: '20px',
+            padding: 18,
+            marginBottom: 12,
+            borderWidth: 1,
+            borderColor: 'rgba(148, 163, 184, 0.12)',
+          } as any}
+        >
+          <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 12 } as any}>
+            Styling Configuration
+          </text>
+
+          {/* Track Color */}
+          <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <text style={{ color: '#fff', fontSize: 14 }}>Track Color</text>
+            <input
+              type="text"
+              value={trackColor}
+              bindinput={(e: any) => setTrackColor(e.detail.value)}
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.1)',
+                color: '#fff',
+                padding: 8,
+                borderRadius: '8px',
+                width: 100,
+                textAlign: 'right',
+                fontSize: 14,
+              } as any}
+            />
+          </view>
+
+          {/* Progress Color */}
+          <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <text style={{ color: '#fff', fontSize: 14 }}>Progress Color</text>
+            <input
+              type="text"
+              value={progressColor}
+              bindinput={(e: any) => setProgressColor(e.detail.value)}
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.1)',
+                color: '#fff',
+                padding: 8,
+                borderRadius: '8px',
+                width: 100,
+                textAlign: 'right',
+                fontSize: 14,
+              } as any}
+            />
+          </view>
+
+          {/* Linear-specific styling */}
+          {type === 'linear' && (
+            <view>
+              {/* Height */}
+              <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <text style={{ color: '#fff', fontSize: 14 }}>Height: {height}</text>
+                <view style={{ display: 'linear', linearDirection: 'row' }}>
+                  <ToggleButton label="Small" active={height === 4} onTap={() => setHeight(4)} />
+                  <ToggleButton label="Medium" active={height === 8} onTap={() => setHeight(8)} />
+                  <ToggleButton label="Large" active={height === 16} onTap={() => setHeight(16)} />
+                </view>
+              </view>
+
+              {/* Corner Radius */}
+              <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <text style={{ color: '#fff', fontSize: 14 }}>Corner Radius: {cornerRadius}</text>
+                <view style={{ display: 'linear', linearDirection: 'row' }}>
+                  <ToggleButton label="None" active={cornerRadius === 0} onTap={() => setCornerRadius(0)} />
+                  <ToggleButton label="Small" active={cornerRadius === 4} onTap={() => setCornerRadius(4)} />
+                  <ToggleButton label="Full" active={cornerRadius === 20} onTap={() => setCornerRadius(20)} />
+                </view>
+              </view>
+
+              {/* Custom Thumb */}
+              <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <text style={{ color: '#fff', fontSize: 14 }}>Custom Thumb</text>
+                <ToggleButton label={useThumb ? 'ON' : 'OFF'} active={useThumb} onTap={() => setUseThumb(!useThumb)} />
+              </view>
+            </view>
+          )}
+
+          {/* Circular-specific styling */}
+          {type === 'circular' && (
+            <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <text style={{ color: '#fff', fontSize: 14 }}>Line Width: {lineWidth}</text>
+              <view style={{ display: 'linear', linearDirection: 'row' }}>
+                <ToggleButton label="2" active={lineWidth === 2} onTap={() => setLineWidth(2)} />
+                <ToggleButton label="6" active={lineWidth === 6} onTap={() => setLineWidth(6)} />
+                <ToggleButton label="12" active={lineWidth === 12} onTap={() => setLineWidth(12)} />
+              </view>
+            </view>
+          )}
+        </view>
       </view>
-    </view>
+    </scroll-view>
   );
 }
