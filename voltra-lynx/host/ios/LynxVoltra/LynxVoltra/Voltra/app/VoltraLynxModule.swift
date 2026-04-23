@@ -18,12 +18,27 @@ public class VoltraLynxModule: NSObject, LynxModule {
 
   @objc public class var methodLookup: [String: String] {
     return [
+      // Live Activity
       "startLiveActivity": NSStringFromSelector(#selector(startLiveActivity(_:options:callback:))),
       "updateLiveActivity": NSStringFromSelector(#selector(updateLiveActivity(_:jsonString:options:callback:))),
       "endLiveActivity": NSStringFromSelector(#selector(endLiveActivity(_:options:callback:))),
       "endAllLiveActivities": NSStringFromSelector(#selector(endAllLiveActivities(_:))),
+      "getLatestVoltraActivityId": NSStringFromSelector(#selector(getLatestVoltraActivityId(_:))),
+      "listVoltraActivityIds": NSStringFromSelector(#selector(listVoltraActivityIds(_:))),
       "isLiveActivityActive": NSStringFromSelector(#selector(isLiveActivityActive(_:callback:))),
       "isHeadless": NSStringFromSelector(#selector(isHeadless(_:))),
+      "reloadLiveActivities": NSStringFromSelector(#selector(reloadLiveActivities(_:callback:))),
+      // Widgets
+      "updateWidget": NSStringFromSelector(#selector(updateWidget(_:jsonString:options:callback:))),
+      "scheduleWidget": NSStringFromSelector(#selector(scheduleWidget(_:timelineJson:callback:))),
+      "reloadWidgets": NSStringFromSelector(#selector(reloadWidgets(_:callback:))),
+      "clearWidget": NSStringFromSelector(#selector(clearWidget(_:callback:))),
+      "clearAllWidgets": NSStringFromSelector(#selector(clearAllWidgets(_:))),
+      "getActiveWidgets": NSStringFromSelector(#selector(getActiveWidgets(_:))),
+      // Credentials
+      "setWidgetServerCredentials": NSStringFromSelector(#selector(setWidgetServerCredentials(_:callback:))),
+      "clearWidgetServerCredentials": NSStringFromSelector(#selector(clearWidgetServerCredentials(_:))),
+      // Image Preloading
       "preloadImages": NSStringFromSelector(#selector(preloadImages(_:callback:))),
       "clearPreloadedImages": NSStringFromSelector(#selector(clearPreloadedImages(_:callback:))),
     ]
@@ -94,8 +109,101 @@ public class VoltraLynxModule: NSObject, LynxModule {
     callback(NSNumber(value: impl.isLiveActivityActive(name: activityName as String)))
   }
 
+  @objc func getLatestVoltraActivityId(_ callback: @escaping LynxCallbackBlock) {
+    callback(impl.getLatestVoltraActivityId() as Any)
+  }
+
+  @objc func listVoltraActivityIds(_ callback: @escaping LynxCallbackBlock) {
+    callback(impl.listVoltraActivityIds() as NSArray)
+  }
+
   @objc func isHeadless(_ callback: @escaping LynxCallbackBlock) {
     callback(NSNumber(value: impl.isHeadless()))
+  }
+
+  @objc func reloadLiveActivities(_ activityNames: NSArray?, callback: @escaping LynxCallbackBlock) {
+    let names = activityNames as? [String]
+    Task {
+      do {
+        try await impl.reloadLiveActivities(activityNames: names)
+        callback(NSNull())
+      } catch { callback(NSNull()) }
+    }
+  }
+
+  // MARK: - Widgets
+
+  @objc func updateWidget(_ widgetId: NSString, jsonString: NSString, options: NSDictionary?, callback: @escaping LynxCallbackBlock) {
+    let opts = UpdateWidgetOptions()
+    // opts.deepLinkUrl = options?["deepLinkUrl"] as? String  // TODO if needed
+    Task {
+      do {
+        try await impl.updateWidget(widgetId: widgetId as String, jsonString: jsonString as String, options: opts)
+        callback(NSNull())
+      } catch {
+        NSLog("[VoltraLynxModule] updateWidget failed: \(error)")
+        callback(NSNull())
+      }
+    }
+  }
+
+  @objc func scheduleWidget(_ widgetId: NSString, timelineJson: NSString, callback: @escaping LynxCallbackBlock) {
+    Task {
+      do {
+        try await impl.scheduleWidget(widgetId: widgetId as String, timelineJson: timelineJson as String)
+        callback(NSNull())
+      } catch {
+        NSLog("[VoltraLynxModule] scheduleWidget failed: \(error)")
+        callback(NSNull())
+      }
+    }
+  }
+
+  @objc func reloadWidgets(_ widgetIds: NSArray?, callback: @escaping LynxCallbackBlock) {
+    let ids = widgetIds as? [String]
+    Task {
+      await impl.reloadWidgets(widgetIds: ids)
+      callback(NSNull())
+    }
+  }
+
+  @objc func clearWidget(_ widgetId: NSString, callback: @escaping LynxCallbackBlock) {
+    Task {
+      await impl.clearWidget(widgetId: widgetId as String)
+      callback(NSNull())
+    }
+  }
+
+  @objc func clearAllWidgets(_ callback: @escaping LynxCallbackBlock) {
+    Task {
+      await impl.clearAllWidgets()
+      callback(NSNull())
+    }
+  }
+
+  @objc func getActiveWidgets(_ callback: @escaping LynxCallbackBlock) {
+    Task {
+      do {
+        let widgets = try await impl.getActiveWidgets()
+        callback(widgets as NSArray)
+      } catch { callback(NSArray()) }
+    }
+  }
+
+  // MARK: - Server Credentials
+
+  @objc func setWidgetServerCredentials(_ credentials: NSDictionary, callback: @escaping LynxCallbackBlock) {
+    guard let token = credentials["token"] as? String else {
+      callback(NSNull()); return
+    }
+    let headers = credentials["headers"] as? [String: String]
+    impl.setWidgetServerCredentials(token: token, headers: headers)
+    callback(NSNull())
+  }
+
+  @objc func clearWidgetServerCredentials(_ callback: @escaping LynxCallbackBlock) {
+    impl.clearWidgetServerCredentials()
+    callback(NSNull())
   }
 
   // MARK: - Image Preloading
