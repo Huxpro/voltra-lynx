@@ -4,7 +4,7 @@ import { useState, useCallback } from '@lynx-js/react';
 declare const NativeModules: {
   VoltraModule: {
     scheduleWidget: (kind: string, entries: string, callback: (result: any) => void) => void;
-    reloadWidgets: (kinds: string, callback: (result: any) => void) => void;
+    reloadWidgets: (kinds: any, callback: (result: any) => void) => void;
   };
 };
 
@@ -71,7 +71,7 @@ export function WidgetSchedulingScreen() {
         }
 
         // Reload widgets
-        NativeModules.VoltraModule.reloadWidgets(JSON.stringify(['weather']), (reloadResult: any) => {
+        NativeModules.VoltraModule.reloadWidgets(['weather'], (reloadResult: any) => {
           const reloadStr = String(reloadResult);
           if (reloadStr.startsWith('ERROR:')) {
             setStatusMessage('Reload error: ' + reloadStr.substring(6));
@@ -114,7 +114,7 @@ export function WidgetSchedulingScreen() {
           setStatusMessage('Clear error: ' + resultStr.substring(6));
           return;
         }
-        NativeModules.VoltraModule.reloadWidgets(JSON.stringify(['weather']), () => {
+        NativeModules.VoltraModule.reloadWidgets(['weather'], () => {
           setScheduledTimes(null);
           setStatusMessage('Timeline cleared.');
         });

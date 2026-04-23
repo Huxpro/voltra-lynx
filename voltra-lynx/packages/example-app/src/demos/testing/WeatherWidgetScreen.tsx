@@ -3,8 +3,8 @@ import { useState, useCallback } from '@lynx-js/react';
 // Lynx NativeModules global
 declare const NativeModules: {
   VoltraModule: {
-    updateWidget: (kind: string, variants: string, callback: (result: any) => void) => void;
-    reloadWidgets: (kinds: string, callback: (result: any) => void) => void;
+    updateWidget: (kind: string, variants: string, options: any, callback: (result: any) => void) => void;
+    reloadWidgets: (kinds: any, callback: (result: any) => void) => void;
     scheduleWidget: (kind: string, entries: string, callback: (result: any) => void) => void;
   };
 };
@@ -100,14 +100,14 @@ export function WeatherWidgetScreen() {
     });
 
     try {
-      NativeModules.VoltraModule.updateWidget('weather', variants, (result: any) => {
+      NativeModules.VoltraModule.updateWidget('weather', variants, {}, (result: any) => {
         const resultStr = String(result);
         if (resultStr.startsWith('ERROR:')) {
           setStatusMessage('Update error: ' + resultStr.substring(6));
           setIsUpdating(false);
           return;
         }
-        NativeModules.VoltraModule.reloadWidgets(JSON.stringify(['weather']), () => {
+        NativeModules.VoltraModule.reloadWidgets(['weather'], () => {
           setStatusMessage('Widget updated to ' + condition);
           setIsUpdating(false);
         });
@@ -146,14 +146,14 @@ export function WeatherWidgetScreen() {
     });
 
     try {
-      NativeModules.VoltraModule.updateWidget('weather', variants, (result: any) => {
+      NativeModules.VoltraModule.updateWidget('weather', variants, {}, (result: any) => {
         const resultStr = String(result);
         if (resultStr.startsWith('ERROR:')) {
           setStatusMessage('Update error: ' + resultStr.substring(6));
           setIsUpdating(false);
           return;
         }
-        NativeModules.VoltraModule.reloadWidgets(JSON.stringify(['weather']), () => {
+        NativeModules.VoltraModule.reloadWidgets(['weather'], () => {
           setStatusMessage('Custom weather applied: ' + customWeather.temperature + 'F');
           setIsUpdating(false);
         });
