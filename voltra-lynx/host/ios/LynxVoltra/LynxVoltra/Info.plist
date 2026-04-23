@@ -29,6 +29,8 @@
 	</dict>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
+	<key>Voltra_AppGroupIdentifier</key>
+	<string>group.com.voltra.lynx.demo</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Merriweather-Regular.ttf</string>

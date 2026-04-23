@@ -22,6 +22,8 @@
 	<array>
 		<string>Merriweather-Regular.ttf</string>
 	</array>
+	<key>Voltra_AppGroupIdentifier</key>
+	<string>group.com.voltra.lynx.demo</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionPointIdentifier</key>

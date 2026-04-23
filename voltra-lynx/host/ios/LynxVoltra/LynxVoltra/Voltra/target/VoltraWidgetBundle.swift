@@ -10,12 +10,12 @@ struct VoltraWidgetBundle: WidgetBundle {
 }
 
 struct VoltraDemoHomeWidget: Widget {
-  let kind = "VoltraDemoWidget"
+  let kind = "weather"
 
   var body: some WidgetConfiguration {
     StaticConfiguration(
       kind: kind,
-      provider: VoltraHomeWidgetProvider(widgetId: "VoltraDemoWidget")
+      provider: VoltraHomeWidgetProvider(widgetId: "weather")
     ) { entry in
       if #available(iOSApplicationExtension 17.0, *) {
         VoltraHomeWidgetView(entry: entry)
