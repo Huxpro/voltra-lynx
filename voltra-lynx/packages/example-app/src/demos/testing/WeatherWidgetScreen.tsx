@@ -1,98 +1,293 @@
-import { useState, useCallback } from '@lynx-js/react';
-import { VoltraModule } from '@use-voltra/lynx/ios-client';
+import { useState, useCallback, useEffect } from '@lynx-js/react';
+import { Voltra } from '@use-voltra/ios';
+import type { WidgetFamily } from '@use-voltra/ios';
+import { updateWidget, reloadWidgets, scheduleWidget } from '@use-voltra/lynx/ios-client';
+import { VoltraWidgetPreview } from '../../components/VoltraWidgetPreview';
+
+// ---------------------------------------------------------------------------
+// Weather types & constants (mirroring example/widgets/weather-types.ts)
+// ---------------------------------------------------------------------------
 
 type WeatherCondition = 'sunny' | 'cloudy' | 'rainy';
-
-type WidgetFamily =
-  | 'systemSmall'
-  | 'systemMedium'
-  | 'systemLarge'
-  | 'systemExtraLarge'
-  | 'accessoryCircular'
-  | 'accessoryRectangular'
-  | 'accessoryInline';
 
 interface WeatherData {
   condition: WeatherCondition;
   temperature: number;
-  highTemp: number;
-  lowTemp: number;
-  location: string;
-  description: string;
+  highTemp?: number;
+  lowTemp?: number;
+  location?: string;
+  description?: string;
+  lastUpdated?: Date;
 }
 
-const SAMPLE_WEATHER: Record<WeatherCondition, WeatherData> = {
+const WEATHER_GRADIENTS: Record<
+  WeatherCondition,
+  { colors: readonly [string, string, ...string[]]; start: 'top' | 'bottom'; end: 'top' | 'bottom' }
+> = {
+  sunny: {
+    colors: ['#FFD700', '#FFA500', '#FF8C00'],
+    start: 'top',
+    end: 'bottom',
+  },
+  cloudy: {
+    colors: ['#778899', '#B0C4DE', '#D3D3D3'],
+    start: 'top',
+    end: 'bottom',
+  },
+  rainy: {
+    colors: ['#4682B4', '#5F9EA0', '#778899'],
+    start: 'top',
+    end: 'bottom',
+  },
+};
+
+const WEATHER_EMOJIS: Record<WeatherCondition, string> = {
+  sunny: '\u2600\uFE0F',
+  cloudy: '\u2601\uFE0F',
+  rainy: '\uD83C\uDF27\uFE0F',
+};
+
+const WEATHER_DESCRIPTIONS: Record<WeatherCondition, string> = {
+  sunny: 'Sunny',
+  cloudy: 'Cloudy',
+  rainy: 'Rainy',
+};
+
+const SAMPLE_WEATHER_DATA: Record<WeatherCondition, WeatherData> = {
   sunny: {
     condition: 'sunny',
     temperature: 75,
     highTemp: 82,
-    lowTemp: 65,
+    lowTemp: 68,
     location: 'San Francisco',
     description: 'Clear skies',
+    lastUpdated: new Date(),
   },
   cloudy: {
     condition: 'cloudy',
-    temperature: 62,
-    highTemp: 68,
-    lowTemp: 55,
-    location: 'San Francisco',
-    description: 'Mostly cloudy',
+    temperature: 68,
+    highTemp: 74,
+    lowTemp: 62,
+    location: 'London',
+    description: 'Overcast',
+    lastUpdated: new Date(),
   },
   rainy: {
     condition: 'rainy',
-    temperature: 58,
-    highTemp: 62,
-    lowTemp: 52,
-    location: 'San Francisco',
-    description: 'Rain expected',
+    temperature: 62,
+    highTemp: 68,
+    lowTemp: 58,
+    location: 'Seattle',
+    description: 'Light rain',
+    lastUpdated: new Date(),
   },
 };
 
-const WEATHER_CONDITIONS: { id: WeatherCondition; label: string; emoji: string }[] = [
-  { id: 'sunny', label: 'Sunny', emoji: 'SUN' },
-  { id: 'cloudy', label: 'Cloudy', emoji: 'CLD' },
-  { id: 'rainy', label: 'Rainy', emoji: 'RN' },
-];
+// ---------------------------------------------------------------------------
+// Widget family & weather condition constants (matching RN version exactly)
+// ---------------------------------------------------------------------------
 
 const WIDGET_FAMILIES: { id: WidgetFamily; title: string; description: string }[] = [
-  { id: 'systemSmall', title: 'Small', description: '2x2 (170x170pt)' },
-  { id: 'systemMedium', title: 'Medium', description: '4x2 (364x170pt)' },
-  { id: 'systemLarge', title: 'Large', description: '4x4 (364x382pt)' },
-  { id: 'systemExtraLarge', title: 'XL', description: '4x8 (364x768pt)' },
-  { id: 'accessoryCircular', title: 'Circular', description: '76x76pt' },
-  { id: 'accessoryRectangular', title: 'Rect', description: '172x76pt' },
-  { id: 'accessoryInline', title: 'Inline', description: '172x40pt' },
+  { id: 'systemSmall', title: 'System Small', description: '2x2 grid widget (170x170pt)' },
+  { id: 'systemMedium', title: 'System Medium', description: '4x2 grid widget (364x170pt)' },
+  { id: 'systemLarge', title: 'System Large', description: '4x4 grid widget (364x382pt)' },
+  { id: 'systemExtraLarge', title: 'System Extra Large', description: '4x8 grid widget (364x768pt)' },
+  { id: 'accessoryCircular', title: 'Accessory Circular', description: 'Circular widget (76x76pt)' },
+  { id: 'accessoryRectangular', title: 'Accessory Rectangular', description: 'Rectangular widget (172x76pt)' },
+  { id: 'accessoryInline', title: 'Accessory Inline', description: 'Inline widget (172x40pt)' },
 ];
 
-const GRADIENT_COLORS: Record<WeatherCondition, { from: string; to: string }> = {
-  sunny: { from: '#F59E0B', to: '#EF4444' },
-  cloudy: { from: '#6B7280', to: '#374151' },
-  rainy: { from: '#3B82F6', to: '#1E3A5F' },
-};
+const WEATHER_CONDITIONS: { id: WeatherCondition; label: string; emoji: string }[] = [
+  { id: 'sunny', label: 'Sunny', emoji: '\u2600\uFE0F' },
+  { id: 'cloudy', label: 'Cloudy', emoji: '\u2601\uFE0F' },
+  { id: 'rainy', label: 'Rainy', emoji: '\uD83C\uDF27\uFE0F' },
+];
+
+// ---------------------------------------------------------------------------
+// WeatherWidget — Voltra JSX component (from IosWeatherWidget.tsx)
+// ---------------------------------------------------------------------------
+
+function WeatherWidget({ weather }: { weather: WeatherData }) {
+  const gradient = WEATHER_GRADIENTS[weather.condition];
+  const emoji = WEATHER_EMOJIS[weather.condition];
+  const description = WEATHER_DESCRIPTIONS[weather.condition];
+
+  return (
+    <Voltra.LinearGradient colors={gradient.colors} start={gradient.start} end={gradient.end} style={{ flex: 1 }}>
+      <Voltra.VStack style={{ flex: 1, padding: 16 }}>
+        {/* Temperature and Icon */}
+        <Voltra.HStack alignment="center" spacing={8}>
+          <Voltra.Text
+            style={{
+              fontSize: 42,
+              fontWeight: '300',
+              color: '#FFFFFF',
+              shadowColor: '#000000',
+              shadowOpacity: 0.3,
+              shadowRadius: 2,
+              shadowOffset: { width: 0, height: 2 },
+            }}
+          >
+            {weather.temperature}\u00B0
+          </Voltra.Text>
+
+          <Voltra.Spacer />
+
+          <Voltra.Text
+            style={{
+              fontSize: 32,
+              shadowColor: '#000000',
+              shadowOpacity: 0.3,
+              shadowRadius: 2,
+              shadowOffset: { width: 0, height: 2 },
+            }}
+          >
+            {emoji}
+          </Voltra.Text>
+        </Voltra.HStack>
+
+        {/* Description */}
+        <Voltra.Text
+          style={{
+            fontSize: 16,
+            fontWeight: '500',
+            color: '#FFFFFF',
+            opacity: 0.9,
+            shadowColor: '#000000',
+            shadowOpacity: 0.3,
+            shadowRadius: 1,
+            shadowOffset: { width: 0, height: 1 },
+            marginTop: 4,
+          }}
+        >
+          {description}
+        </Voltra.Text>
+
+        {/* Location */}
+        {weather.location ? (
+          <Voltra.Text
+            style={{
+              fontSize: 14,
+              color: '#FFFFFF',
+              opacity: 0.8,
+              shadowColor: '#000000',
+              shadowOpacity: 0.3,
+              shadowRadius: 1,
+              shadowOffset: { width: 0, height: 1 },
+              marginTop: 8,
+            }}
+          >
+            \uD83D\uDCCD {weather.location}
+          </Voltra.Text>
+        ) : null}
+
+        {/* High/Low Temps */}
+        {weather.highTemp !== undefined && weather.lowTemp !== undefined ? (
+          <Voltra.HStack spacing={12} style={{ marginTop: 12 }}>
+            <Voltra.HStack alignment="center" spacing={4}>
+              <Voltra.Text style={{ fontSize: 12, color: '#FFFFFF', opacity: 0.8 }}>\uD83D\uDD25</Voltra.Text>
+              <Voltra.Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: '500',
+                  color: '#FFFFFF',
+                  shadowColor: '#000000',
+                  shadowOpacity: 0.3,
+                  shadowRadius: 1,
+                  shadowOffset: { width: 0, height: 1 },
+                }}
+              >
+                {weather.highTemp}\u00B0
+              </Voltra.Text>
+            </Voltra.HStack>
+            <Voltra.HStack alignment="center" spacing={4}>
+              <Voltra.Text style={{ fontSize: 12, color: '#FFFFFF', opacity: 0.8 }}>\u2744\uFE0F</Voltra.Text>
+              <Voltra.Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: '500',
+                  color: '#FFFFFF',
+                  shadowColor: '#000000',
+                  shadowOpacity: 0.3,
+                  shadowRadius: 1,
+                  shadowOffset: { width: 0, height: 1 },
+                }}
+              >
+                {weather.lowTemp}\u00B0
+              </Voltra.Text>
+            </Voltra.HStack>
+          </Voltra.HStack>
+        ) : null}
+
+        {/* Last Updated */}
+        {weather.lastUpdated ? (
+          <Voltra.Text
+            style={{
+              fontSize: 10,
+              color: '#FFFFFF',
+              opacity: 0.6,
+              marginTop: 8,
+            }}
+          >
+            \uD83D\uDD52 {weather.lastUpdated.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
+          </Voltra.Text>
+        ) : null}
+      </Voltra.VStack>
+    </Voltra.LinearGradient>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Card styles (matching StylingScreen pattern)
+// ---------------------------------------------------------------------------
+
+const cardStyle = {
+  backgroundColor: '#0F172A',
+  borderRadius: '20px',
+  padding: 18,
+  marginBottom: 12,
+  borderWidth: 1,
+  borderColor: 'rgba(148, 163, 184, 0.12)',
+} as any;
+
+// ---------------------------------------------------------------------------
+// Main screen
+// ---------------------------------------------------------------------------
 
 export function WeatherWidgetScreen() {
   const [selectedWeather, setSelectedWeather] = useState<WeatherCondition>('sunny');
   const [selectedFamily, setSelectedFamily] = useState<WidgetFamily>('systemMedium');
-  const [currentWeather, setCurrentWeather] = useState<WeatherData>(SAMPLE_WEATHER.sunny);
+  const [currentWeather, setCurrentWeather] = useState<WeatherData>(SAMPLE_WEATHER_DATA.sunny);
   const [isUpdating, setIsUpdating] = useState(false);
   const [statusMessage, setStatusMessage] = useState('Ready');
+
+  // Auto-initialize on mount (matching RN: calls updateWidget on first render)
+  useEffect(() => {
+    const weatherData = SAMPLE_WEATHER_DATA['sunny'];
+    updateWidget('weather', {
+      systemSmall: <WeatherWidget weather={weatherData} />,
+      systemMedium: <WeatherWidget weather={weatherData} />,
+      systemLarge: <WeatherWidget weather={weatherData} />,
+    }).catch((error: any) => {
+      console.error('Failed to update weather widget:', error);
+    });
+    // Don't call reloadWidgets here to avoid resetting scheduled timelines
+  }, []);
 
   const handleWeatherChange = useCallback((condition: WeatherCondition) => {
     'background only';
     setSelectedWeather(condition);
-    const weatherData = SAMPLE_WEATHER[condition];
+    const weatherData = SAMPLE_WEATHER_DATA[condition];
     setCurrentWeather(weatherData);
     setIsUpdating(true);
     setStatusMessage('Updating widget to ' + condition + '...');
 
-    const variants = JSON.stringify({
-      systemSmall: { weather: weatherData },
-      systemMedium: { weather: weatherData },
-      systemLarge: { weather: weatherData },
-    });
-
-    VoltraModule.updateWidget('weather', variants).then(() => {
-      return VoltraModule.reloadWidgets(['weather']);
+    updateWidget('weather', {
+      systemSmall: <WeatherWidget weather={weatherData} />,
+      systemMedium: <WeatherWidget weather={weatherData} />,
+      systemLarge: <WeatherWidget weather={weatherData} />,
+    }).then(() => {
+      return reloadWidgets(['weather']);
     }).then(() => {
       setStatusMessage('Widget updated to ' + condition);
       setIsUpdating(false);
@@ -123,16 +318,14 @@ export function WeatherWidgetScreen() {
     setIsUpdating(true);
     setStatusMessage('Updating with custom weather...');
 
-    const variants = JSON.stringify({
-      systemSmall: { weather: customWeather },
-      systemMedium: { weather: customWeather },
-      systemLarge: { weather: customWeather },
-    });
-
-    VoltraModule.updateWidget('weather', variants).then(() => {
-      return VoltraModule.reloadWidgets(['weather']);
+    updateWidget('weather', {
+      systemSmall: <WeatherWidget weather={customWeather} />,
+      systemMedium: <WeatherWidget weather={customWeather} />,
+      systemLarge: <WeatherWidget weather={customWeather} />,
     }).then(() => {
-      setStatusMessage('Custom weather applied: ' + customWeather.temperature + 'F');
+      return reloadWidgets(['weather']);
+    }).then(() => {
+      setStatusMessage('Custom weather applied: ' + customWeather.temperature + '\u00B0F');
       setIsUpdating(false);
     }).catch((e: any) => {
       setStatusMessage('Error: ' + (e?.message || String(e)));
@@ -146,43 +339,104 @@ export function WeatherWidgetScreen() {
     setStatusMessage('Scheduling forecast timeline...');
 
     const now = new Date();
-    const entries = JSON.stringify([
-      {
-        date: new Date(now.getTime() + 5 * 1000).toISOString(),
-        backgroundColor: '#1a1a2e',
-        label: '1',
-        color: '#FFFFFF',
-      },
-      {
-        date: new Date(now.getTime() + 1 * 60 * 1000).toISOString(),
-        backgroundColor: '#16213e',
-        label: '2',
-        color: '#00FF00',
-      },
-      {
-        date: new Date(now.getTime() + 2 * 60 * 1000).toISOString(),
-        backgroundColor: '#0f3460',
-        label: '3',
-        color: '#FF00FF',
-      },
-      {
-        date: new Date(now.getTime() + 3 * 60 * 1000).toISOString(),
-        backgroundColor: '#e94560',
-        label: '4',
-        color: '#FFFF00',
-      },
-    ]);
 
-    VoltraModule.scheduleWidget('weather', entries).then(() => {
-      setStatusMessage('Timeline scheduled: 4 entries (+5s, +1m, +2m, +3m). Watch the widget change!');
+    const entries = [
+      {
+        date: new Date(now.getTime() + 5 * 1000), // Entry 1: 5 seconds from now
+        variants: {
+          systemSmall: (
+            <Voltra.ZStack style={{ flex: 1, backgroundColor: '#1a1a2e' }}>
+              <Voltra.Text style={{ fontSize: 48, fontWeight: '700', color: '#FFFFFF' }}>1</Voltra.Text>
+            </Voltra.ZStack>
+          ),
+          systemMedium: (
+            <Voltra.ZStack style={{ flex: 1, backgroundColor: '#1a1a2e' }}>
+              <Voltra.Text style={{ fontSize: 64, fontWeight: '700', color: '#FFFFFF' }}>1</Voltra.Text>
+            </Voltra.ZStack>
+          ),
+          systemLarge: (
+            <Voltra.ZStack style={{ flex: 1, backgroundColor: '#1a1a2e' }}>
+              <Voltra.Text style={{ fontSize: 80, fontWeight: '700', color: '#FFFFFF' }}>1</Voltra.Text>
+            </Voltra.ZStack>
+          ),
+        },
+      },
+      {
+        date: new Date(now.getTime() + 1 * 60 * 1000), // Entry 2: 1 minute
+        variants: {
+          systemSmall: (
+            <Voltra.ZStack style={{ flex: 1, backgroundColor: '#16213e' }}>
+              <Voltra.Text style={{ fontSize: 48, fontWeight: '700', color: '#00FF00' }}>2</Voltra.Text>
+            </Voltra.ZStack>
+          ),
+          systemMedium: (
+            <Voltra.ZStack style={{ flex: 1, backgroundColor: '#16213e' }}>
+              <Voltra.Text style={{ fontSize: 64, fontWeight: '700', color: '#00FF00' }}>2</Voltra.Text>
+            </Voltra.ZStack>
+          ),
+          systemLarge: (
+            <Voltra.ZStack style={{ flex: 1, backgroundColor: '#16213e' }}>
+              <Voltra.Text style={{ fontSize: 80, fontWeight: '700', color: '#00FF00' }}>2</Voltra.Text>
+            </Voltra.ZStack>
+          ),
+        },
+      },
+      {
+        date: new Date(now.getTime() + 2 * 60 * 1000), // Entry 3: 2 minutes
+        variants: {
+          systemSmall: (
+            <Voltra.ZStack style={{ flex: 1, backgroundColor: '#0f3460' }}>
+              <Voltra.Text style={{ fontSize: 48, fontWeight: '700', color: '#FF00FF' }}>3</Voltra.Text>
+            </Voltra.ZStack>
+          ),
+          systemMedium: (
+            <Voltra.ZStack style={{ flex: 1, backgroundColor: '#0f3460' }}>
+              <Voltra.Text style={{ fontSize: 64, fontWeight: '700', color: '#FF00FF' }}>3</Voltra.Text>
+            </Voltra.ZStack>
+          ),
+          systemLarge: (
+            <Voltra.ZStack style={{ flex: 1, backgroundColor: '#0f3460' }}>
+              <Voltra.Text style={{ fontSize: 80, fontWeight: '700', color: '#FF00FF' }}>3</Voltra.Text>
+            </Voltra.ZStack>
+          ),
+        },
+      },
+      {
+        date: new Date(now.getTime() + 3 * 60 * 1000), // Entry 4: 3 minutes
+        variants: {
+          systemSmall: (
+            <Voltra.ZStack style={{ flex: 1, backgroundColor: '#e94560' }}>
+              <Voltra.Text style={{ fontSize: 48, fontWeight: '700', color: '#FFFF00' }}>4</Voltra.Text>
+            </Voltra.ZStack>
+          ),
+          systemMedium: (
+            <Voltra.ZStack style={{ flex: 1, backgroundColor: '#e94560' }}>
+              <Voltra.Text style={{ fontSize: 64, fontWeight: '700', color: '#FFFF00' }}>4</Voltra.Text>
+            </Voltra.ZStack>
+          ),
+          systemLarge: (
+            <Voltra.ZStack style={{ flex: 1, backgroundColor: '#e94560' }}>
+              <Voltra.Text style={{ fontSize: 80, fontWeight: '700', color: '#FFFF00' }}>4</Voltra.Text>
+            </Voltra.ZStack>
+          ),
+        },
+      },
+    ];
+
+    scheduleWidget('weather', entries).then(() => {
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      });
+      const times = entries.map((e, i) => `${i + 1}: ${formatter.format(e.date)}`).join(', ');
+      setStatusMessage('Timeline scheduled! Entries: ' + times + '. Watch the widget change!');
       setIsUpdating(false);
     }).catch((e: any) => {
       setStatusMessage('Error: ' + (e?.message || String(e)));
       setIsUpdating(false);
     });
   }, []);
-
-  const gradientColor = GRADIENT_COLORS[selectedWeather];
 
   return (
     <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}>
@@ -191,8 +445,8 @@ export function WeatherWidgetScreen() {
         Weather Widget Testing
       </text>
       <text style={{ fontSize: 14, color: '#CBD5F5', lineHeight: '20px', marginBottom: 24 } as any}>
-        Test the weather widget with different conditions and widget sizes.
-        Choose from Sunny, Cloudy, or Rainy weather with gradient backgrounds.
+        Test the weather widget with different conditions and widget sizes. Choose from Sunny, Cloudy, or Rainy
+        weather with beautiful gradient backgrounds.
       </text>
 
       {/* Status bar */}
@@ -205,32 +459,26 @@ export function WeatherWidgetScreen() {
         <text style={{ fontSize: 12, color: '#94A3B8' }}>{statusMessage}</text>
       </view>
 
-      {/* Current Weather Display card */}
-      <view style={{
-        backgroundColor: '#1E293B',
-        borderRadius: '12px',
-        padding: 16,
-        marginBottom: 16,
-      } as any}>
-        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 8 }}>
+      {/* Current Weather Display */}
+      <view style={cardStyle}>
+        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 } as any}>
           Current Weather: {WEATHER_CONDITIONS.find((c) => c.id === selectedWeather)?.label}
         </text>
-        <text style={{ fontSize: 13, color: '#94A3B8' }}>
-          Temperature: {currentWeather.temperature}F | High: {currentWeather.highTemp}F | Low: {currentWeather.lowTemp}F | {currentWeather.location}
+        <text style={{ fontSize: 13, color: '#94A3B8' } as any}>
+          Temperature: {currentWeather.temperature}{'\u00B0'}F
+          {currentWeather.highTemp !== undefined && currentWeather.lowTemp !== undefined
+            ? ' \u2022 High: ' + currentWeather.highTemp + '\u00B0 \u2022 Low: ' + currentWeather.lowTemp + '\u00B0'
+            : ''}
+          {currentWeather.location ? ' \u2022 ' + currentWeather.location : ''}
         </text>
       </view>
 
-      {/* Widget Family Selection card */}
-      <view style={{
-        backgroundColor: '#1E293B',
-        borderRadius: '12px',
-        padding: 16,
-        marginBottom: 16,
-      } as any}>
-        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 }}>
+      {/* Widget Family Selection */}
+      <view style={cardStyle}>
+        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 } as any}>
           Widget Family: {WIDGET_FAMILIES.find((f) => f.id === selectedFamily)?.title}
         </text>
-        <text style={{ fontSize: 12, color: '#94A3B8', marginBottom: 12 }}>
+        <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 12 } as any}>
           {WIDGET_FAMILIES.find((f) => f.id === selectedFamily)?.description}
         </text>
         <view style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' } as any}>
@@ -261,17 +509,12 @@ export function WeatherWidgetScreen() {
         </view>
       </view>
 
-      {/* Weather Condition Buttons card */}
-      <view style={{
-        backgroundColor: '#1E293B',
-        borderRadius: '12px',
-        padding: 16,
-        marginBottom: 16,
-      } as any}>
-        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 }}>
+      {/* Weather Condition Buttons */}
+      <view style={cardStyle}>
+        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 } as any}>
           Weather Conditions
         </text>
-        <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 12 }}>
+        <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 12 } as any}>
           Select a weather condition to update the widget:
         </text>
         <view style={{ display: 'linear', linearDirection: 'row' } as any}>
@@ -301,14 +544,9 @@ export function WeatherWidgetScreen() {
         </view>
       </view>
 
-      {/* Quick Actions card */}
-      <view style={{
-        backgroundColor: '#1E293B',
-        borderRadius: '12px',
-        padding: 16,
-        marginBottom: 16,
-      } as any}>
-        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 12 }}>
+      {/* Quick Actions */}
+      <view style={cardStyle}>
+        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 12 } as any}>
           Quick Actions
         </text>
         <view style={{ display: 'linear', linearDirection: 'row' } as any}>
@@ -344,14 +582,9 @@ export function WeatherWidgetScreen() {
         </view>
       </view>
 
-      {/* Timeline Scheduling card */}
-      <view style={{
-        backgroundColor: '#1E293B',
-        borderRadius: '12px',
-        padding: 16,
-        marginBottom: 16,
-      } as any}>
-        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 }}>
+      {/* Timeline Scheduling */}
+      <view style={cardStyle}>
+        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 } as any}>
           Timeline Scheduling
         </text>
         <text style={{ fontSize: 13, color: '#94A3B8', lineHeight: '20px', marginBottom: 12 } as any}>
@@ -375,53 +608,29 @@ export function WeatherWidgetScreen() {
         <text style={{ fontSize: 12, color: '#64748B', lineHeight: '18px' } as any}>
           Schedules 4 entries: 1 (+5sec), 2 (+1min), 3 (+2min), 4 (+3min).
           Each has a different background color. Note: iOS may delay updates
-          based on battery/visibility.
+          based on battery/visibility. Test with Xcode attached for immediate updates.
         </text>
       </view>
 
-      {/* Widget Preview card */}
-      <view style={{
-        backgroundColor: '#1E293B',
-        borderRadius: '12px',
-        padding: 16,
-        marginBottom: 16,
-      } as any}>
-        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 }}>
+      {/* Widget Preview */}
+      <view style={cardStyle}>
+        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 } as any}>
           Widget Preview
         </text>
-        <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 16 }}>
+        <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 16 } as any}>
           This shows how the weather widget will appear on your home screen.
+          The widget updates in real-time when you change the weather condition above.
         </text>
-
-        {/* Simulated widget preview */}
-        <view style={{
-          backgroundColor: gradientColor.from,
-          borderRadius: '16px',
-          padding: 20,
-          alignItems: 'center',
-        } as any}>
-          <text style={{ fontSize: 48, fontWeight: '700', color: '#FFFFFF' }}>
-            {currentWeather.temperature}deg
-          </text>
-          <text style={{ fontSize: 16, color: 'rgba(255,255,255,0.9)', marginTop: 4 }}>
-            {currentWeather.description}
-          </text>
-          <text style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', marginTop: 4 }}>
-            H:{currentWeather.highTemp} L:{currentWeather.lowTemp}
-          </text>
-          <text style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 8 }}>
-            {currentWeather.location} | {selectedFamily}
-          </text>
+        <view style={{ alignItems: 'center', justifyContent: 'center', padding: 20 } as any}>
+          <VoltraWidgetPreview family={selectedFamily} id="weather-widget-preview">
+            <WeatherWidget weather={currentWeather} />
+          </VoltraWidgetPreview>
         </view>
       </view>
 
-      {/* How to Test card */}
-      <view style={{
-        backgroundColor: '#1E293B',
-        borderRadius: '12px',
-        padding: 16,
-      } as any}>
-        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 8 }}>
+      {/* How to Test */}
+      <view style={cardStyle}>
+        <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 8 } as any}>
           How to Test
         </text>
         <text style={{ fontSize: 13, color: '#94A3B8', lineHeight: '20px' } as any}>
