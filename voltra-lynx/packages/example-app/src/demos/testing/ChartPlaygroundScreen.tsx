@@ -1,5 +1,6 @@
 import { useState, useCallback } from '@lynx-js/react';
 import { Voltra, renderVoltraVariantToJson } from '@use-voltra/ios';
+import { VoltraPreview } from '../../components/VoltraPreview';
 
 // ─── data helpers ───────────────────────────────────────────────────────────
 
@@ -32,53 +33,101 @@ const randomRuleX = () => MONTHS[randomValue(0, MONTHS.length - 1)] ?? MONTHS[0]
 const randomPointRuleY = () => randomValue(0, 100);
 const randomPointRuleX = () => randomValue(0, 100);
 
-// ─── chart preview JSON helper ──────────────────────────────────────────────
-
-function renderChartPreview(element: React.ReactNode): string {
-  try {
-    return JSON.stringify(renderVoltraVariantToJson(element), null, 2);
-  } catch {
-    return '{ "error": "Failed to render" }';
-  }
-}
-
 // ─── chart card component ───────────────────────────────────────────────────
 
-function ChartCard({ title, description, json, onRandomize }: {
+function ChartCard({ title, description, children, onRandomize }: {
   title: string;
   description: string;
-  json: string;
+  children: React.ReactNode;
   onRandomize?: () => void;
 }) {
-  const truncated = json.length > 300 ? json.slice(0, 300) + '...' : json;
+  const [showJson, setShowJson] = useState(false);
+
+  let jsonText = '';
+  if (showJson) {
+    try {
+      jsonText = JSON.stringify(renderVoltraVariantToJson(children as any), null, 2);
+    } catch {
+      jsonText = '(render error)';
+    }
+  }
 
   return (
-    <view style={{
-      backgroundColor: '#1c1c1e',
-      borderRadius: '16px',
-      padding: 16,
-      marginBottom: 16,
-    }}>
-      <text style={{ color: '#fff', fontSize: 15, fontWeight: '600', marginBottom: 4 }}>{title}</text>
-      <text style={{ color: '#8E8E93', fontSize: 12, marginBottom: 8 }}>{description}</text>
-      {onRandomize && (
-        <view style={{ alignItems: 'flex-end', marginBottom: 8 }}>
+    <view
+      style={{
+        backgroundColor: '#0F172A',
+        borderRadius: '20px',
+        padding: 18,
+        marginBottom: 12,
+        borderWidth: 1,
+        borderColor: 'rgba(148, 163, 184, 0.12)',
+      } as any}
+    >
+      <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 } as any}>
+        {title}
+      </text>
+      <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 10 } as any}>
+        {description}
+      </text>
+
+      {onRandomize ? (
+        <view style={{ alignItems: 'flex-end', marginBottom: 8 } as any}>
           <view
             bindtap={onRandomize}
             style={{
-              paddingLeft: 12, paddingRight: 12,
-              paddingTop: 6, paddingBottom: 6,
-              backgroundColor: '#333',
-              borderRadius: '6px',
-            }}
+              paddingLeft: 12,
+              paddingRight: 12,
+              paddingTop: 6,
+              paddingBottom: 6,
+              backgroundColor: '#334155',
+              borderRadius: '8px',
+            } as any}
           >
-            <text style={{ color: '#fff', fontSize: 12 }}>Randomize</text>
+            <text style={{ color: '#FFFFFF', fontSize: 12, fontWeight: '600' } as any}>Randomize</text>
           </view>
         </view>
-      )}
-      <text style={{ color: '#6E6E73', fontSize: 10, fontFamily: 'monospace' }}>
-        {truncated}
-      </text>
+      ) : null}
+
+      {/* Live SwiftUI Preview */}
+      <view style={{
+        backgroundColor: '#1E293B',
+        borderRadius: '12px',
+        overflow: 'hidden',
+      } as any}>
+        <VoltraPreview height={220}>
+          {children}
+        </VoltraPreview>
+      </view>
+
+      {/* Toggle JSON */}
+      <view
+        bindtap={() => setShowJson(!showJson)}
+        style={{
+          paddingTop: 6,
+          paddingBottom: 6,
+          alignItems: 'center',
+        } as any}
+      >
+        <text style={{ fontSize: 11, color: '#64748B' } as any}>
+          {showJson ? 'Hide JSON' : 'Show JSON'}
+        </text>
+      </view>
+
+      {showJson ? (
+        <view style={{
+          backgroundColor: '#1E293B',
+          borderRadius: '12px',
+          padding: 10,
+        } as any}>
+          <text style={{
+            fontSize: 10,
+            fontFamily: 'monospace',
+            color: '#4ADE80',
+          } as any}>
+            {jsonText}
+          </text>
+        </view>
+      ) : null}
     </view>
   );
 }
@@ -114,202 +163,186 @@ export function ChartPlaygroundScreen() {
     setComboLineData(randomLineData());
   }, []);
 
-  // Build chart JSON previews
-  const barChartJson = renderChartPreview(
-    <Voltra.Chart
-      style={{ width: '100%', height: '100%', color: '#FFFFFF', backgroundColor: '#0F172A' } as any}
-      xAxisVisibility="visible"
-      yAxisVisibility="visible"
-    >
-      <Voltra.BarMark data={barData} color="#4285f4" cornerRadius={4} />
-    </Voltra.Chart>
-  );
-
-  const multiBarChartJson = renderChartPreview(
-    <Voltra.Chart
-      style={{ width: '100%', height: '100%', color: '#FFFFFF' } as any}
-      yAxisVisibility="visible"
-      xAxisVisibility="visible"
-      foregroundStyleScale={{ A: '#4285f4', B: '#ea4335' }}
-    >
-      <Voltra.BarMark data={multiData} stacking="grouped" cornerRadius={4} />
-    </Voltra.Chart>
-  );
-
-  const lineChartJson = renderChartPreview(
-    <Voltra.Chart style={{ width: '100%', height: '100%' } as any}>
-      <Voltra.LineMark data={lineData} color="#34a853" interpolation="monotone" lineWidth={2} />
-    </Voltra.Chart>
-  );
-
-  const areaChartJson = renderChartPreview(
-    <Voltra.Chart style={{ width: '100%', height: '100%' } as any}>
-      <Voltra.AreaMark data={areaData} color="#4285f4" interpolation="monotone" />
-    </Voltra.Chart>
-  );
-
-  const pointChartJson = renderChartPreview(
-    <Voltra.Chart
-      style={{ width: '100%', height: '100%', color: '#FFFFFF', backgroundColor: '#0F172A' } as any}
-      xAxisVisibility="visible"
-      yAxisVisibility="visible"
-    >
-      <Voltra.PointMark data={pointData} color="#fbbc04" symbolSize={60} />
-      <Voltra.RuleMark xValue={pointRuleX} yValue={pointRuleY} color="#ea4335" lineWidth={2} />
-    </Voltra.Chart>
-  );
-
-  const ruleChartJson = renderChartPreview(
-    <Voltra.Chart
-      style={{ width: '100%', height: '100%', color: '#FFFFFF', backgroundColor: '#0F172A' } as any}
-      xAxisVisibility="visible"
-      yAxisVisibility="visible"
-    >
-      <Voltra.BarMark data={barData} color="#4285f4" cornerRadius={4} />
-      <Voltra.RuleMark xValue={ruleX} yValue={ruleY} color="#ea4335" lineWidth={2} />
-    </Voltra.Chart>
-  );
-
-  const sectorPieJson = renderChartPreview(
-    <Voltra.Chart style={{ width: '100%', height: '100%' } as any}>
-      <Voltra.SectorMark data={sectorData} angularInset={2} />
-    </Voltra.Chart>
-  );
-
-  const sectorDonutJson = renderChartPreview(
-    <Voltra.Chart
-      style={{ width: '100%', height: '100%', color: '#FFFFFF', backgroundColor: '#0F172A' } as any}
-      xAxisVisibility="visible"
-      yAxisVisibility="visible"
-      legendVisibility="hidden"
-    >
-      <Voltra.SectorMark data={sectorData} innerRadius={0.5} angularInset={2} />
-    </Voltra.Chart>
-  );
-
-  const comboChartJson = renderChartPreview(
-    <Voltra.Chart
-      style={{ width: '100%', height: '100%', color: '#FFFFFF', backgroundColor: '#0F172A' } as any}
-      xAxisVisibility="visible"
-      yAxisVisibility="visible"
-    >
-      <Voltra.BarMark data={comboBarData} color="#4285f4" cornerRadius={4} />
-      <Voltra.LineMark data={comboLineData} color="#ea4335" lineWidth={2} interpolation="monotone" />
-    </Voltra.Chart>
-  );
-
-  const hiddenAxesJson = renderChartPreview(
-    <Voltra.Chart
-      style={{ width: '100%', height: '100%', color: '#FFFFFF', backgroundColor: '#0F172A' } as any}
-      xAxisVisibility="hidden"
-      yAxisVisibility="hidden"
-      legendVisibility="hidden"
-    >
-      <Voltra.AreaMark data={areaData} color="#4285f4" interpolation="monotone" />
-    </Voltra.Chart>
-  );
-
   return (
-    <view style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 20, paddingBottom: 24 }}>
-      <text style={{ fontSize: 20, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 8 }}>
-        Chart Playground
-      </text>
-      <text style={{ color: '#CBD5F5', marginBottom: 16, fontSize: 13 }}>
-        All SwiftUI chart mark types powered by Voltra. Tap Randomize to animate between data sets.
-      </text>
+    <scroll-view style={{ linearWeight: 1 } as any} scroll-orientation="vertical">
+      <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 24, paddingBottom: 24 }}>
+        <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' } as any}>
+          Chart Playground
+        </text>
+        <text style={{ fontSize: 14, color: '#CBD5F5', marginBottom: 8 } as any}>
+          All SwiftUI chart mark types powered by Voltra. Tap Randomize to animate between data sets.
+        </text>
 
-      <view
-        bindtap={randomizeAll}
-        style={{
-          backgroundColor: '#007AFF',
-          padding: 12,
-          borderRadius: '10px',
-          alignItems: 'center',
-          marginBottom: 16,
-        }}
-      >
-        <text style={{ color: '#fff', fontSize: 15, fontWeight: '600' }}>Randomize All</text>
+        {/* Randomize All button */}
+        <view
+          bindtap={randomizeAll}
+          style={{
+            backgroundColor: '#007AFF',
+            padding: 12,
+            borderRadius: '10px',
+            alignItems: 'center',
+            marginBottom: 16,
+          } as any}
+        >
+          <text style={{ color: '#FFFFFF', fontSize: 15, fontWeight: '600' } as any}>Randomize All</text>
+        </view>
+
+        <view style={{ marginTop: 8 }}>
+          {/* BarMark */}
+          <ChartCard
+            title="BarMark"
+            description="Single series bar chart with rounded corners."
+            onRandomize={() => setBarData(randomBarData())}
+          >
+            <Voltra.Chart
+              style={{ width: '100%', height: '100%', color: '#FFFFFF', backgroundColor: '#0F172A' }}
+              xAxisVisibility="visible"
+              yAxisVisibility="visible"
+            >
+              <Voltra.BarMark data={barData} color="#4285f4" cornerRadius={4} />
+            </Voltra.Chart>
+          </ChartCard>
+
+          {/* BarMark multi-series */}
+          <ChartCard
+            title="BarMark - Multi-series"
+            description="Two series (A and B) rendered as grouped bars using the supported stacking grouped mode."
+            onRandomize={() => setMultiData(randomMultiSeriesData())}
+          >
+            <Voltra.Chart
+              style={{ width: '100%', height: '100%', color: '#FFFFFF' }}
+              yAxisVisibility="visible"
+              xAxisVisibility="visible"
+              foregroundStyleScale={{ A: '#4285f4', B: '#ea4335' }}
+            >
+              <Voltra.BarMark data={multiData} stacking="grouped" cornerRadius={4} />
+            </Voltra.Chart>
+          </ChartCard>
+
+          {/* LineMark */}
+          <ChartCard
+            title="LineMark"
+            description="Smooth monotone line chart."
+            onRandomize={() => setLineData(randomLineData())}
+          >
+            <Voltra.Chart style={{ width: '100%', height: '100%' }}>
+              <Voltra.LineMark data={lineData} color="#34a853" interpolation="monotone" lineWidth={2} />
+            </Voltra.Chart>
+          </ChartCard>
+
+          {/* AreaMark */}
+          <ChartCard
+            title="AreaMark"
+            description="Filled area chart - the classic stocks-app look."
+            onRandomize={() => setAreaData(randomAreaData())}
+          >
+            <Voltra.Chart style={{ width: '100%', height: '100%' }}>
+              <Voltra.AreaMark data={areaData} color="#4285f4" interpolation="monotone" />
+            </Voltra.Chart>
+          </ChartCard>
+
+          {/* PointMark */}
+          <ChartCard
+            title="PointMark"
+            description="Scatter plot with numeric x and y axes plus both vertical and horizontal reference lines."
+            onRandomize={() => {
+              setPointData(randomPointData());
+              setPointRuleY(randomPointRuleY());
+              setPointRuleX(randomPointRuleX());
+            }}
+          >
+            <Voltra.Chart
+              style={{ width: '100%', height: '100%', color: '#FFFFFF', backgroundColor: '#0F172A' }}
+              xAxisVisibility="visible"
+              yAxisVisibility="visible"
+            >
+              <Voltra.PointMark data={pointData} color="#fbbc04" symbolSize={60} />
+              <Voltra.RuleMark xValue={pointRuleX} yValue={pointRuleY} color="#ea4335" lineWidth={2} />
+            </Voltra.Chart>
+          </ChartCard>
+
+          {/* RuleMark */}
+          <ChartCard
+            title="RuleMark"
+            description="Bar chart with both horizontal and vertical reference lines. When both xValue and yValue are set, both lines render."
+            onRandomize={() => {
+              setBarData(randomBarData());
+              setRuleY(randomRuleY());
+              setRuleX(randomRuleX());
+            }}
+          >
+            <Voltra.Chart
+              style={{ width: '100%', height: '100%', color: '#FFFFFF', backgroundColor: '#0F172A' }}
+              xAxisVisibility="visible"
+              yAxisVisibility="visible"
+            >
+              <Voltra.BarMark data={barData} color="#4285f4" cornerRadius={4} />
+              <Voltra.RuleMark xValue={ruleX} yValue={ruleY} color="#ea4335" lineWidth={2} />
+            </Voltra.Chart>
+          </ChartCard>
+
+          {/* SectorMark - Pie */}
+          <ChartCard
+            title="SectorMark - Pie"
+            description="Pie chart built with SectorMark (iOS 17+)."
+            onRandomize={() => setSectorData(randomSectorData())}
+          >
+            <Voltra.Chart style={{ width: '100%', height: '100%' }}>
+              <Voltra.SectorMark data={sectorData} angularInset={2} />
+            </Voltra.Chart>
+          </ChartCard>
+
+          {/* SectorMark - Donut */}
+          <ChartCard
+            title="SectorMark - Donut"
+            description="Same data as above but with an inner radius to create a donut chart."
+            onRandomize={() => setSectorData(randomSectorData())}
+          >
+            <Voltra.Chart
+              style={{ width: '100%', height: '100%', color: '#FFFFFF', backgroundColor: '#0F172A' }}
+              xAxisVisibility="visible"
+              yAxisVisibility="visible"
+              legendVisibility="hidden"
+            >
+              <Voltra.SectorMark data={sectorData} innerRadius={0.5} angularInset={2} />
+            </Voltra.Chart>
+          </ChartCard>
+
+          {/* Combo - Bar + Line */}
+          <ChartCard
+            title="Combo - Bar + Line"
+            description="Multiple mark types composited in one chart."
+            onRandomize={() => {
+              setComboBarData(randomBarData());
+              setComboLineData(randomLineData());
+            }}
+          >
+            <Voltra.Chart
+              style={{ width: '100%', height: '100%', color: '#FFFFFF', backgroundColor: '#0F172A' }}
+              xAxisVisibility="visible"
+              yAxisVisibility="visible"
+            >
+              <Voltra.BarMark data={comboBarData} color="#4285f4" cornerRadius={4} />
+              <Voltra.LineMark data={comboLineData} color="#ea4335" lineWidth={2} interpolation="monotone" />
+            </Voltra.Chart>
+          </ChartCard>
+
+          {/* Hidden Axes */}
+          <ChartCard
+            title="Hidden Axes"
+            description="Chart with both axes hidden - clean minimal look."
+          >
+            <Voltra.Chart
+              style={{ width: '100%', height: '100%', color: '#FFFFFF', backgroundColor: '#0F172A' }}
+              xAxisVisibility="hidden"
+              yAxisVisibility="hidden"
+              legendVisibility="hidden"
+            >
+              <Voltra.AreaMark data={areaData} color="#4285f4" interpolation="monotone" />
+            </Voltra.Chart>
+          </ChartCard>
+        </view>
       </view>
-
-      <ChartCard
-        title="BarMark"
-        description="Single series bar chart with rounded corners."
-        json={barChartJson}
-        onRandomize={() => setBarData(randomBarData())}
-      />
-
-      <ChartCard
-        title="BarMark - Multi-series"
-        description="Two series (A and B) rendered as grouped bars using the supported stacking grouped mode."
-        json={multiBarChartJson}
-        onRandomize={() => setMultiData(randomMultiSeriesData())}
-      />
-
-      <ChartCard
-        title="LineMark"
-        description="Smooth monotone line chart."
-        json={lineChartJson}
-        onRandomize={() => setLineData(randomLineData())}
-      />
-
-      <ChartCard
-        title="AreaMark"
-        description="Filled area chart - the classic stocks-app look."
-        json={areaChartJson}
-        onRandomize={() => setAreaData(randomAreaData())}
-      />
-
-      <ChartCard
-        title="PointMark"
-        description="Scatter plot with numeric x and y axes plus both vertical and horizontal reference lines."
-        json={pointChartJson}
-        onRandomize={() => {
-          setPointData(randomPointData());
-          setPointRuleY(randomPointRuleY());
-          setPointRuleX(randomPointRuleX());
-        }}
-      />
-
-      <ChartCard
-        title="RuleMark"
-        description="Bar chart with both horizontal and vertical reference lines. When both xValue and yValue are set, both lines render."
-        json={ruleChartJson}
-        onRandomize={() => {
-          setBarData(randomBarData());
-          setRuleY(randomRuleY());
-          setRuleX(randomRuleX());
-        }}
-      />
-
-      <ChartCard
-        title="SectorMark - Pie"
-        description="Pie chart built with SectorMark (iOS 17+)."
-        json={sectorPieJson}
-        onRandomize={() => setSectorData(randomSectorData())}
-      />
-
-      <ChartCard
-        title="SectorMark - Donut"
-        description="Same data as above but with an inner radius to create a donut chart."
-        json={sectorDonutJson}
-        onRandomize={() => setSectorData(randomSectorData())}
-      />
-
-      <ChartCard
-        title="Combo - Bar + Line"
-        description="Multiple mark types composited in one chart."
-        json={comboChartJson}
-        onRandomize={() => {
-          setComboBarData(randomBarData());
-          setComboLineData(randomLineData());
-        }}
-      />
-
-      <ChartCard
-        title="Hidden Axes"
-        description="Chart with both axes hidden - clean minimal look."
-        json={hiddenAxesJson}
-      />
-    </view>
+    </scroll-view>
   );
 }
