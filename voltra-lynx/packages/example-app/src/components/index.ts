@@ -3,3 +3,4 @@ export type { ButtonProps } from './Button';
 export { Card } from './Card';
 export { StatusPill } from './StatusPill';
 export { VoltraPreview } from './VoltraPreview';
+export { VoltraWidgetPreview } from './VoltraWidgetPreview';
