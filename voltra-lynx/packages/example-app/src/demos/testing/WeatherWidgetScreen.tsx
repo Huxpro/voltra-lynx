@@ -1,13 +1,5 @@
 import { useState, useCallback } from '@lynx-js/react';
-
-// Lynx NativeModules global
-declare const NativeModules: {
-  VoltraModule: {
-    updateWidget: (kind: string, variants: string, options: any, callback: (result: any) => void) => void;
-    reloadWidgets: (kinds: any, callback: (result: any) => void) => void;
-    scheduleWidget: (kind: string, entries: string, callback: (result: any) => void) => void;
-  };
-};
+import { VoltraModule } from '@use-voltra/lynx/ios-client';
 
 type WeatherCondition = 'sunny' | 'cloudy' | 'rainy';
 
@@ -99,23 +91,15 @@ export function WeatherWidgetScreen() {
       systemLarge: { weather: weatherData },
     });
 
-    try {
-      NativeModules.VoltraModule.updateWidget('weather', variants, {}, (result: any) => {
-        const resultStr = String(result);
-        if (resultStr.startsWith('ERROR:')) {
-          setStatusMessage('Update error: ' + resultStr.substring(6));
-          setIsUpdating(false);
-          return;
-        }
-        NativeModules.VoltraModule.reloadWidgets(['weather'], () => {
-          setStatusMessage('Widget updated to ' + condition);
-          setIsUpdating(false);
-        });
-      });
-    } catch (e: any) {
+    VoltraModule.updateWidget('weather', variants).then(() => {
+      return VoltraModule.reloadWidgets(['weather']);
+    }).then(() => {
+      setStatusMessage('Widget updated to ' + condition);
+      setIsUpdating(false);
+    }).catch((e: any) => {
       setStatusMessage('Error: ' + (e?.message || String(e)));
       setIsUpdating(false);
-    }
+    });
   }, []);
 
   const handleRandomWeather = useCallback(() => {
@@ -145,23 +129,15 @@ export function WeatherWidgetScreen() {
       systemLarge: { weather: customWeather },
     });
 
-    try {
-      NativeModules.VoltraModule.updateWidget('weather', variants, {}, (result: any) => {
-        const resultStr = String(result);
-        if (resultStr.startsWith('ERROR:')) {
-          setStatusMessage('Update error: ' + resultStr.substring(6));
-          setIsUpdating(false);
-          return;
-        }
-        NativeModules.VoltraModule.reloadWidgets(['weather'], () => {
-          setStatusMessage('Custom weather applied: ' + customWeather.temperature + 'F');
-          setIsUpdating(false);
-        });
-      });
-    } catch (e: any) {
+    VoltraModule.updateWidget('weather', variants).then(() => {
+      return VoltraModule.reloadWidgets(['weather']);
+    }).then(() => {
+      setStatusMessage('Custom weather applied: ' + customWeather.temperature + 'F');
+      setIsUpdating(false);
+    }).catch((e: any) => {
       setStatusMessage('Error: ' + (e?.message || String(e)));
       setIsUpdating(false);
-    }
+    });
   }, []);
 
   const handleScheduleForecast = useCallback(() => {
@@ -197,20 +173,13 @@ export function WeatherWidgetScreen() {
       },
     ]);
 
-    try {
-      NativeModules.VoltraModule.scheduleWidget('weather', entries, (result: any) => {
-        const resultStr = String(result);
-        if (resultStr.startsWith('ERROR:')) {
-          setStatusMessage('Schedule error: ' + resultStr.substring(6));
-        } else {
-          setStatusMessage('Timeline scheduled: 4 entries (+5s, +1m, +2m, +3m). Watch the widget change!');
-        }
-        setIsUpdating(false);
-      });
-    } catch (e: any) {
+    VoltraModule.scheduleWidget('weather', entries).then(() => {
+      setStatusMessage('Timeline scheduled: 4 entries (+5s, +1m, +2m, +3m). Watch the widget change!');
+      setIsUpdating(false);
+    }).catch((e: any) => {
       setStatusMessage('Error: ' + (e?.message || String(e)));
       setIsUpdating(false);
-    }
+    });
   }, []);
 
   const gradientColor = GRADIENT_COLORS[selectedWeather];

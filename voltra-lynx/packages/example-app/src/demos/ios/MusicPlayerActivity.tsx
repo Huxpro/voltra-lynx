@@ -1,13 +1,6 @@
 import { useState, useCallback } from '@lynx-js/react';
+import { VoltraModule } from '@use-voltra/lynx/ios-client';
 import { makeMusicPlayerPayload, SONGS, type Song } from '../../voltra-payload';
-
-declare const NativeModules: {
-  VoltraModule: {
-    startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
-    updateLiveActivity: (id: string, json: string, options: any, callback: (r: any) => void) => void;
-    endLiveActivity: (id: string, options: any, callback: (r: any) => void) => void;
-  };
-};
 
 export function MusicPlayerActivity() {
   const [activityId, setActivityId] = useState<string | null>(null);
@@ -22,18 +15,15 @@ export function MusicPlayerActivity() {
     'background only';
     const payload = makeMusicPlayerPayload(song, playing);
     if (existingId) {
-      NativeModules.VoltraModule.updateLiveActivity(existingId, payload, {}, () => {
+      VoltraModule.updateLiveActivity(existingId, payload).then(() => {
         setStatus(`Playing: ${song.title}`);
-      });
+      }).catch(() => {});
     } else {
-      NativeModules.VoltraModule.startLiveActivity(payload, { activityName: 'music-player' }, (id: any) => {
-        const result = String(id);
-        if (result.startsWith('ERROR:')) {
-          setStatus('Error: ' + result.substring(6));
-        } else {
-          setActivityId(result);
-          setStatus(`Playing: ${song.title}`);
-        }
+      VoltraModule.startLiveActivity(payload, { activityName: 'music-player' }).then((id) => {
+        setActivityId(id);
+        setStatus(`Playing: ${song.title}`);
+      }).catch((e: any) => {
+        setStatus('Error: ' + (e?.message || String(e)));
       });
     }
   }, []);
@@ -68,11 +58,11 @@ export function MusicPlayerActivity() {
   const stop = useCallback(() => {
     'background only';
     if (!activityId) return;
-    NativeModules.VoltraModule.endLiveActivity(activityId, { dismissalPolicy: { type: 'immediate' } }, () => {
+    VoltraModule.endLiveActivity(activityId, { dismissalPolicy: { type: 'immediate' } }).then(() => {
       setActivityId(null);
       setIsPlaying(false);
       setStatus('Stopped');
-    });
+    }).catch(() => {});
   }, [activityId]);
 
   return (

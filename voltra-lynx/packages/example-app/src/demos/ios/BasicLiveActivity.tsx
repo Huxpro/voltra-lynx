@@ -1,14 +1,6 @@
 import { useState, useCallback } from '@lynx-js/react';
+import { VoltraModule } from '@use-voltra/lynx/ios-client';
 import { makeBasicLiveActivityPayload } from '../../voltra-payload';
-
-// Lynx NativeModules global (available on background thread)
-declare const NativeModules: {
-  VoltraModule: {
-    startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
-    updateLiveActivity: (id: string, json: string, options: any, callback: (r: any) => void) => void;
-    endLiveActivity: (id: string, options: any, callback: (r: any) => void) => void;
-  };
-};
 
 export function BasicLiveActivityDemo() {
   const [activityId, setActivityId] = useState<string | null>(null);
@@ -17,62 +9,31 @@ export function BasicLiveActivityDemo() {
 
   const start = useCallback(() => {
     'background only';
-    // Debug: check if NativeModules exists
-    if (typeof NativeModules === 'undefined') {
-      setStatus('Error: NativeModules is undefined');
-      return;
-    }
-    if (!NativeModules.VoltraModule) {
-      setStatus('Error: NativeModules.VoltraModule not found. Available: ' + Object.keys(NativeModules).join(', '));
-      return;
-    }
-    if (typeof NativeModules.VoltraModule.startLiveActivity !== 'function') {
-      setStatus('Error: startLiveActivity is not a function. Type: ' + typeof NativeModules.VoltraModule.startLiveActivity);
-      return;
-    }
-
     const payload = makeBasicLiveActivityPayload();
-    try {
-      NativeModules.VoltraModule.startLiveActivity(
-        payload,
-        { activityName: 'basic-demo' },
-        (id: any) => {
-          const result = String(id);
-          if (result.startsWith('ERROR:')) {
-            setStatus('Native error: ' + result.substring(6));
-          } else if (id && id !== null && result !== 'null') {
-            setActivityId(result);
-            setStatus('Active (id: ' + result.substring(0, 8) + '...)');
-          } else {
-            setStatus('Callback returned null');
-          }
-        }
-      );
-    } catch (e: any) {
-      setStatus('Catch: ' + (e?.message || String(e)));
-    }
+    VoltraModule.startLiveActivity(payload, { activityName: 'basic-demo' }).then((id) => {
+      setActivityId(id);
+      setStatus('Active (id: ' + id.substring(0, 8) + '...)');
+    }).catch((e: any) => {
+      setStatus('Error: ' + (e?.message || String(e)));
+    });
   }, []);
 
   const update = useCallback(() => {
     'background only';
     if (!activityId) return;
     const payload = makeBasicLiveActivityPayload();
-    NativeModules.VoltraModule.updateLiveActivity(
-      activityId, payload, {},
-      () => { setStatus('Updated'); }
-    );
+    VoltraModule.updateLiveActivity(activityId, payload).then(() => {
+      setStatus('Updated');
+    }).catch(() => {});
   }, [activityId]);
 
   const end = useCallback(() => {
     'background only';
     if (!activityId) return;
-    NativeModules.VoltraModule.endLiveActivity(
-      activityId, { dismissalPolicy: { type: 'immediate' } },
-      () => {
-        setActivityId(null);
-        setStatus('Ended');
-      }
-    );
+    VoltraModule.endLiveActivity(activityId, { dismissalPolicy: { type: 'immediate' } }).then(() => {
+      setActivityId(null);
+      setStatus('Ended');
+    }).catch(() => {});
   }, [activityId]);
 
   return (
@@ -81,7 +42,7 @@ export function BasicLiveActivityDemo() {
         Basic Live Activity
       </text>
       <text style={{ color: '#666', marginBottom: 24 }}>
-        Calls NativeModules.VoltraModule directly. Start → check lock screen.
+        Calls VoltraModule directly. Start → check lock screen.
       </text>
 
       {/* Activity preview */}

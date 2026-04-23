@@ -1,12 +1,5 @@
 import { useState, useCallback } from '@lynx-js/react';
-
-// Lynx NativeModules global
-declare const NativeModules: {
-  VoltraModule: {
-    scheduleWidget: (kind: string, entries: string, callback: (result: any) => void) => void;
-    reloadWidgets: (kinds: any, callback: (result: any) => void) => void;
-  };
-};
+import { VoltraModule } from '@use-voltra/lynx/ios-client';
 
 interface ScheduledTime {
   past: string;
@@ -61,67 +54,46 @@ export function WidgetSchedulingScreen() {
       },
     ]);
 
-    try {
-      NativeModules.VoltraModule.scheduleWidget('weather', entries, (result: any) => {
-        const resultStr = String(result);
-        if (resultStr.startsWith('ERROR:')) {
-          setStatusMessage('Schedule error: ' + resultStr.substring(6));
-          setIsScheduling(false);
-          return;
-        }
-
-        // Reload widgets
-        NativeModules.VoltraModule.reloadWidgets(['weather'], (reloadResult: any) => {
-          const reloadStr = String(reloadResult);
-          if (reloadStr.startsWith('ERROR:')) {
-            setStatusMessage('Reload error: ' + reloadStr.substring(6));
-          } else {
-            const formatter = new Intl.DateTimeFormat('en-US', {
-              hour: 'numeric',
-              minute: '2-digit',
-              second: '2-digit',
-            });
-
-            setScheduledTimes({
-              past: formatter.format(yesterday),
-              second: formatter.format(secondEntry),
-              third: formatter.format(thirdEntry),
-            });
-
-            setStatusMessage(
-              'Timeline scheduled! State 1: ' + formatter.format(yesterday) +
-              ', State 2: ' + formatter.format(secondEntry) +
-              ' (+' + minutesUntilSecond + 'm)' +
-              ', State 3: ' + formatter.format(thirdEntry) +
-              ' (+' + minutesUntilThird + 'm)'
-            );
-          }
-          setIsScheduling(false);
-        });
+    VoltraModule.scheduleWidget('weather', entries).then(() => {
+      // Reload widgets
+      return VoltraModule.reloadWidgets(['weather']);
+    }).then(() => {
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit',
       });
-    } catch (e: any) {
+
+      setScheduledTimes({
+        past: formatter.format(yesterday),
+        second: formatter.format(secondEntry),
+        third: formatter.format(thirdEntry),
+      });
+
+      setStatusMessage(
+        'Timeline scheduled! State 1: ' + formatter.format(yesterday) +
+        ', State 2: ' + formatter.format(secondEntry) +
+        ' (+' + minutesUntilSecond + 'm)' +
+        ', State 3: ' + formatter.format(thirdEntry) +
+        ' (+' + minutesUntilThird + 'm)'
+      );
+      setIsScheduling(false);
+    }).catch((e: any) => {
       setStatusMessage('Error: ' + (e?.message || String(e)));
       setIsScheduling(false);
-    }
+    });
   }, [minutesUntilSecond, minutesUntilThird]);
 
   const handleClearTimeline = useCallback(() => {
     'background only';
-    try {
-      NativeModules.VoltraModule.scheduleWidget('weather', JSON.stringify([]), (result: any) => {
-        const resultStr = String(result);
-        if (resultStr.startsWith('ERROR:')) {
-          setStatusMessage('Clear error: ' + resultStr.substring(6));
-          return;
-        }
-        NativeModules.VoltraModule.reloadWidgets(['weather'], () => {
-          setScheduledTimes(null);
-          setStatusMessage('Timeline cleared.');
-        });
-      });
-    } catch (e: any) {
+    VoltraModule.scheduleWidget('weather', JSON.stringify([])).then(() => {
+      return VoltraModule.reloadWidgets(['weather']);
+    }).then(() => {
+      setScheduledTimes(null);
+      setStatusMessage('Timeline cleared.');
+    }).catch((e: any) => {
       setStatusMessage('Error: ' + (e?.message || String(e)));
-    }
+    });
   }, []);
 
   const incrementSecond = useCallback(() => {

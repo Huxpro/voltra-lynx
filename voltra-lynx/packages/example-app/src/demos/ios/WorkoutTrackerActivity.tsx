@@ -1,14 +1,6 @@
 import { useState, useCallback } from '@lynx-js/react';
+import { VoltraModule } from '@use-voltra/lynx/ios-client';
 import { makeWorkoutPayload } from '../../voltra-payload';
-
-// Lynx NativeModules global (available on background thread)
-declare const NativeModules: {
-  VoltraModule: {
-    startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
-    updateLiveActivity: (id: string, json: string, options: any, callback: (r: any) => void) => void;
-    endLiveActivity: (id: string, options: any, callback: (r: any) => void) => void;
-  };
-};
 
 // Heart rate zones for display
 const ZONES = [
@@ -83,10 +75,9 @@ export function WorkoutTrackerActivity() {
     'background only';
     if (!activityId) return;
     const payload = makeWorkoutPayload(heartRate, distanceText, pace, startTime);
-    NativeModules.VoltraModule.updateLiveActivity(
-      activityId, payload, {},
-      () => { setStatus('Updated - HR: ' + heartRate + ' BPM'); }
-    );
+    VoltraModule.updateLiveActivity(activityId, payload).then(() => {
+      setStatus('Updated - HR: ' + heartRate + ' BPM');
+    }).catch(() => {});
   }, [activityId, heartRate, distanceText, pace, startTime]);
 
   // Combined tick + update
@@ -103,10 +94,7 @@ export function WorkoutTrackerActivity() {
 
     // Update live activity payload
     const payload = makeWorkoutPayload(heartRate, distanceText, pace, startTime);
-    NativeModules.VoltraModule.updateLiveActivity(
-      activityId, payload, {},
-      () => {}
-    );
+    VoltraModule.updateLiveActivity(activityId, payload).catch(() => {});
 
     // Schedule next tick
     setTimeout(() => tickAndUpdate(), 1000);
@@ -114,39 +102,17 @@ export function WorkoutTrackerActivity() {
 
   const startWorkout = useCallback(() => {
     'background only';
-    if (typeof NativeModules === 'undefined') {
-      setStatus('Error: NativeModules is undefined');
-      return;
-    }
-    if (!NativeModules.VoltraModule) {
-      setStatus('Error: VoltraModule not found');
-      return;
-    }
-
     const payload = makeWorkoutPayload(120, '0.0 km', '--:--', Date.now());
-    try {
-      NativeModules.VoltraModule.startLiveActivity(
-        payload,
-        { activityName: 'workout' },
-        (id: any) => {
-          const result = String(id);
-          if (result.startsWith('ERROR:')) {
-            setStatus('Error: ' + result.substring(6));
-          } else if (id && id !== null && result !== 'null') {
-            setActivityId(result);
-            setIsRunning(true);
-            setTimerRunning(true);
-            setStatus('Workout active');
-            // Start the update loop
-            setTimeout(() => tickAndUpdate(), 1000);
-          } else {
-            setStatus('Callback returned null');
-          }
-        }
-      );
-    } catch (e: any) {
+    VoltraModule.startLiveActivity(payload, { activityName: 'workout' }).then((id) => {
+      setActivityId(id);
+      setIsRunning(true);
+      setTimerRunning(true);
+      setStatus('Workout active');
+      // Start the update loop
+      setTimeout(() => tickAndUpdate(), 1000);
+    }).catch((e: any) => {
       setStatus('Error: ' + (e?.message || String(e)));
-    }
+    });
   }, [tickAndUpdate]);
 
   const stopWorkout = useCallback(() => {
@@ -154,13 +120,10 @@ export function WorkoutTrackerActivity() {
     if (!activityId) return;
     setTimerRunning(false);
     setIsRunning(false);
-    NativeModules.VoltraModule.endLiveActivity(
-      activityId, { dismissalPolicy: { type: 'immediate' } },
-      () => {
-        setActivityId(null);
-        setStatus('Workout ended');
-      }
-    );
+    VoltraModule.endLiveActivity(activityId, { dismissalPolicy: { type: 'immediate' } }).then(() => {
+      setActivityId(null);
+      setStatus('Workout ended');
+    }).catch(() => {});
   }, [activityId]);
 
   const zoneLabel = getZoneLabel(heartRate);

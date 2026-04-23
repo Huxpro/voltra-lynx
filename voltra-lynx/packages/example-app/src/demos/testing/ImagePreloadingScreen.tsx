@@ -1,12 +1,5 @@
 import { useState, useCallback } from '@lynx-js/react';
-
-// Lynx NativeModules global
-declare const NativeModules: {
-  VoltraModule: {
-    preloadImages: (images: string, callback: (result: any) => void) => void;
-    clearPreloadedImages: (keys: string, callback: (result: any) => void) => void;
-  };
-};
+import { VoltraModule } from '@use-voltra/lynx/ios-client';
 
 function generateRandomKey(): string {
   return `asset-${Math.random().toString(36).substring(2, 15)}`;
@@ -53,27 +46,17 @@ export function ImagePreloadingScreen() {
     // Mark all as loading
     setEntries((prev) => prev.map((e) => ({ ...e, status: 'loading' as const })));
 
-    const imagesPayload = JSON.stringify(
-      entries.map((e) => ({ url: e.url, key: e.key }))
-    );
+    const images = entries.map((e) => ({ url: e.url, key: e.key }));
 
-    try {
-      NativeModules.VoltraModule.preloadImages(imagesPayload, (result: any) => {
-        const resultStr = String(result);
-        if (resultStr.startsWith('ERROR:')) {
-          setStatusMessage('Error: ' + resultStr.substring(6));
-          setEntries((prev) => prev.map((e) => ({ ...e, status: 'error' as const })));
-        } else {
-          setStatusMessage('Preloaded ' + entries.length + ' images successfully');
-          setEntries((prev) => prev.map((e) => ({ ...e, status: 'loaded' as const })));
-        }
-        setIsProcessing(false);
-      });
-    } catch (e: any) {
-      setStatusMessage('Catch: ' + (e?.message || String(e)));
+    VoltraModule.preloadImages(images).then((result) => {
+      setStatusMessage('Preloaded ' + entries.length + ' images successfully');
+      setEntries((prev) => prev.map((e) => ({ ...e, status: 'loaded' as const })));
+      setIsProcessing(false);
+    }).catch((e: any) => {
+      setStatusMessage('Error: ' + (e?.message || String(e)));
       setEntries((prev) => prev.map((e) => ({ ...e, status: 'error' as const })));
       setIsProcessing(false);
-    }
+    });
   }, [entries]);
 
   const clearAll = useCallback(() => {
@@ -83,20 +66,13 @@ export function ImagePreloadingScreen() {
       return;
     }
 
-    const keys = JSON.stringify(entries.map((e) => e.key));
-    try {
-      NativeModules.VoltraModule.clearPreloadedImages(keys, (result: any) => {
-        const resultStr = String(result);
-        if (resultStr.startsWith('ERROR:')) {
-          setStatusMessage('Clear error: ' + resultStr.substring(6));
-        } else {
-          setStatusMessage('Cleared all preloaded images');
-          setEntries([]);
-        }
-      });
-    } catch (e: any) {
-      setStatusMessage('Catch: ' + (e?.message || String(e)));
-    }
+    const keys = entries.map((e) => e.key);
+    VoltraModule.clearPreloadedImages(keys).then(() => {
+      setStatusMessage('Cleared all preloaded images');
+      setEntries([]);
+    }).catch((e: any) => {
+      setStatusMessage('Error: ' + (e?.message || String(e)));
+    });
   }, [entries]);
 
   const statusColors: Record<string, string> = {

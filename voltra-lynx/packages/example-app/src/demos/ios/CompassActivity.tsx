@@ -1,14 +1,6 @@
 import { useState, useEffect, useCallback } from '@lynx-js/react';
+import { VoltraModule } from '@use-voltra/lynx/ios-client';
 import { makeCompassPayload } from '../../voltra-payload';
-
-// Lynx NativeModules global (available on background thread)
-declare const NativeModules: {
-  VoltraModule: {
-    startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
-    updateLiveActivity: (id: string, json: string, options: any, callback: (r: any) => void) => void;
-    endLiveActivity: (id: string, options: any, callback: (r: any) => void) => void;
-  };
-};
 
 const cardinalDirections = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
 
@@ -39,64 +31,36 @@ export function CompassActivity() {
   useEffect(() => {
     if (!isActive || !isSimulating) return;
 
-    // Run on background thread for NativeModules access
+    // Run on background thread for native module access
     const doUpdate = () => {
       'background only';
       if (!activityId) return;
       const payload = makeCompassPayload(heading);
-      NativeModules.VoltraModule.updateLiveActivity(
-        activityId, payload, {},
-        () => {}
-      );
+      VoltraModule.updateLiveActivity(activityId, payload).catch(() => {});
     };
     doUpdate();
   }, [heading, activityId, isActive, isSimulating]);
 
   const start = useCallback(() => {
     'background only';
-    if (typeof NativeModules === 'undefined') {
-      setStatus('Error: NativeModules is undefined');
-      return;
-    }
-    if (!NativeModules.VoltraModule) {
-      setStatus('Error: VoltraModule not found');
-      return;
-    }
-
     const payload = makeCompassPayload(heading);
-    try {
-      NativeModules.VoltraModule.startLiveActivity(
-        payload,
-        { activityName: 'compass' },
-        (id: any) => {
-          const result = String(id);
-          if (result.startsWith('ERROR:')) {
-            setStatus('Native error: ' + result.substring(6));
-          } else if (id && id !== null && result !== 'null') {
-            setActivityId(result);
-            setStatus('Active (id: ' + result.substring(0, 8) + '...)');
-            setIsSimulating(true);
-          } else {
-            setStatus('Callback returned null');
-          }
-        }
-      );
-    } catch (e: any) {
-      setStatus('Catch: ' + (e?.message || String(e)));
-    }
+    VoltraModule.startLiveActivity(payload, { activityName: 'compass' }).then((id) => {
+      setActivityId(id);
+      setStatus('Active (id: ' + id.substring(0, 8) + '...)');
+      setIsSimulating(true);
+    }).catch((e: any) => {
+      setStatus('Error: ' + (e?.message || String(e)));
+    });
   }, [heading]);
 
   const stop = useCallback(() => {
     'background only';
     if (!activityId) return;
-    NativeModules.VoltraModule.endLiveActivity(
-      activityId, { dismissalPolicy: { type: 'immediate' } },
-      () => {
-        setActivityId(null);
-        setIsSimulating(false);
-        setStatus('Ended');
-      }
-    );
+    VoltraModule.endLiveActivity(activityId, { dismissalPolicy: { type: 'immediate' } }).then(() => {
+      setActivityId(null);
+      setIsSimulating(false);
+      setStatus('Ended');
+    }).catch(() => {});
   }, [activityId]);
 
   const cardinal = getCardinal(heading);

@@ -1,13 +1,6 @@
 import { useState, useCallback } from '@lynx-js/react';
+import { VoltraModule } from '@use-voltra/lynx/ios-client';
 import { Voltra, renderLiveActivityToString } from '@use-voltra/ios';
-
-// ─── NativeModules declaration ──────────────────────────────────────────────
-
-declare const NativeModules: {
-  VoltraModule: {
-    startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
-  };
-};
 
 // ─── Payload builders (Voltra JSX rendered to string) ───────────────────────
 
@@ -284,27 +277,12 @@ export function ImageFallbackScreen() {
 
   const handleShowExample = useCallback((scenario: Scenario) => {
     'background only';
-    try {
-      const payload = scenario.getPayload();
-      if (typeof NativeModules !== 'undefined' && NativeModules.VoltraModule) {
-        NativeModules.VoltraModule.startLiveActivity(
-          payload,
-          { activityName: `image-fallback-${scenario.id}` },
-          (result: any) => {
-            const r = String(result);
-            if (r.startsWith('ERROR:')) {
-              setStatusMessage('Error: ' + r.substring(6));
-            } else {
-              setStatusMessage('Started: ' + scenario.title);
-            }
-          },
-        );
-      } else {
-        setStatusMessage('NativeModules not available. Showing preview only.');
-      }
-    } catch (e: any) {
+    const payload = scenario.getPayload();
+    VoltraModule.startLiveActivity(payload, { activityName: `image-fallback-${scenario.id}` }).then(() => {
+      setStatusMessage('Started: ' + scenario.title);
+    }).catch((e: any) => {
       setStatusMessage('Error: ' + (e?.message || String(e)));
-    }
+    });
   }, []);
 
   return (

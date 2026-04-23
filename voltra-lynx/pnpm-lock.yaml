@@ -26,6 +26,9 @@ importers:
       '@use-voltra/ios':
         specifier: ^1.4.0
         version: 1.4.0(react@18.3.1)
+      '@use-voltra/lynx':
+        specifier: workspace:*
+        version: link:../lynx
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -43,46 +46,18 @@ importers:
         specifier: ~5.8.0
         version: 5.8.3
 
-  packages/lynx-android-client:
+  packages/lynx:
     dependencies:
       '@use-voltra/android':
         specifier: ^1.4.0
         version: 1.4.0(react@18.3.1)
-      '@voltra-lynx/bridge':
-        specifier: workspace:*
-        version: link:../lynx-bridge
-      react:
-        specifier: '*'
-        version: 18.3.1
-    devDependencies:
-      '@types/react':
-        specifier: ^18.3.0
-        version: 18.3.28
-      typescript:
-        specifier: ~5.8.0
-        version: 5.8.3
-
-  packages/lynx-bridge:
-    devDependencies:
-      typescript:
-        specifier: ~5.8.0
-        version: 5.8.3
-
-  packages/lynx-ios-client:
-    dependencies:
       '@use-voltra/ios':
         specifier: ^1.4.0
         version: 1.4.0(react@18.3.1)
-      '@voltra-lynx/bridge':
-        specifier: workspace:*
-        version: link:../lynx-bridge
       react:
-        specifier: '*'
+        specifier: '>=18'
         version: 18.3.1
     devDependencies:
-      '@types/react':
-        specifier: ^18.3.0
-        version: 18.3.28
       typescript:
         specifier: ~5.8.0
         version: 5.8.3

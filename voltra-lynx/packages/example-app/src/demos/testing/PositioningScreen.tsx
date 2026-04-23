@@ -1,4 +1,5 @@
 import { useState } from '@lynx-js/react';
+import { VoltraModule } from '@use-voltra/lynx/ios-client';
 import { Voltra, renderLiveActivityToString } from '@use-voltra/ios';
 
 // ─── Voltra positioning examples rendered to string payloads ──────────────
@@ -337,14 +338,6 @@ const POSITIONING_DATA = [
   },
 ];
 
-// ─── NativeModules declaration ──────────────────────────────────────────────
-
-declare const NativeModules: {
-  VoltraModule: {
-    startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
-  };
-};
-
 // ─── Screen ─────────────────────────────────────────────────────────────────
 
 export function PositioningScreen() {
@@ -352,27 +345,12 @@ export function PositioningScreen() {
 
   const handleLaunch = (item: (typeof POSITIONING_DATA)[number]) => {
     'background only';
-    try {
-      const payload = item.getPayload();
-      if (typeof NativeModules !== 'undefined' && NativeModules.VoltraModule) {
-        NativeModules.VoltraModule.startLiveActivity(
-          payload,
-          { activityName: `positioning-${item.id}` },
-          (result: any) => {
-            const r = String(result);
-            if (r.startsWith('ERROR:')) {
-              setStatusMessage('Error: ' + r.substring(6));
-            } else {
-              setStatusMessage('Started: ' + item.title);
-            }
-          },
-        );
-      } else {
-        setStatusMessage('NativeModules not available.');
-      }
-    } catch (e: any) {
+    const payload = item.getPayload();
+    VoltraModule.startLiveActivity(payload, { activityName: `positioning-${item.id}` }).then(() => {
+      setStatusMessage('Started: ' + item.title);
+    }).catch((e: any) => {
       setStatusMessage('Error: ' + (e?.message || String(e)));
-    }
+    });
   };
 
   return (

@@ -1,4 +1,5 @@
 import { useState, useCallback } from '@lynx-js/react';
+import { VoltraModule } from '@use-voltra/lynx/ios-client';
 // Purple gradient background matching original Voltra splash
 const BG_GRADIENT = 'linear-gradient(160deg, #1a0533 0%, #0d0f1a 40%, #0a1628 60%, #0d1117 100%)';
 import {
@@ -26,15 +27,6 @@ import { ImagePreloadingScreen } from './demos/testing/ImagePreloadingScreen';
 import { ImageFallbackScreen } from './demos/testing/ImageFallbackScreen';
 import { WidgetSchedulingScreen } from './demos/testing/WidgetSchedulingScreen';
 import { WeatherWidgetScreen } from './demos/testing/WeatherWidgetScreen';
-
-declare const NativeModules: {
-  VoltraModule: {
-    startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
-    updateLiveActivity: (id: string, json: string, options: any, callback: (r: any) => void) => void;
-    endLiveActivity: (id: string, options: any, callback: (r: any) => void) => void;
-    endAllLiveActivities: (callback: (r: any) => void) => void;
-  };
-};
 
 // ─── Activity definitions ───────────────────────────────────────
 
@@ -123,17 +115,14 @@ function ActivityCard({ def }: { def: ActivityDef }) {
   const handleStartEnd = useCallback(() => {
     'background only';
     if (isActive && activityId) {
-      NativeModules.VoltraModule.endLiveActivity(activityId, { dismissalPolicy: { type: 'immediate' } }, () => {
+      VoltraModule.endLiveActivity(activityId, { dismissalPolicy: { type: 'immediate' } }).then(() => {
         setActivityId(null);
-      });
+      }).catch(() => {});
     } else {
       const payload = def.makePayload();
-      NativeModules.VoltraModule.startLiveActivity(payload, { activityName: def.activityName }, (id: any) => {
-        const result = String(id);
-        if (id && !result.startsWith('ERROR:') && result !== 'null') {
-          setActivityId(result);
-        }
-      });
+      VoltraModule.startLiveActivity(payload, { activityName: def.activityName }).then((id) => {
+        setActivityId(id);
+      }).catch(() => {});
     }
   }, [isActive, activityId, def]);
 
@@ -141,7 +130,7 @@ function ActivityCard({ def }: { def: ActivityDef }) {
     'background only';
     if (!activityId) return;
     const payload = def.makePayload();
-    NativeModules.VoltraModule.updateLiveActivity(activityId, payload, {}, () => {});
+    VoltraModule.updateLiveActivity(activityId, payload).catch(() => {});
   }, [activityId, def]);
 
   return (
@@ -301,7 +290,7 @@ export function App() {
           <view
             bindtap={() => {
               'background only';
-              NativeModules.VoltraModule.endAllLiveActivities(() => {});
+              VoltraModule.endAllLiveActivities().catch(() => {});
             }}
             style={{
               marginTop: 12,

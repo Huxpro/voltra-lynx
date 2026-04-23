@@ -1,13 +1,6 @@
 import { useState, useCallback } from '@lynx-js/react';
+import { VoltraModule } from '@use-voltra/lynx/ios-client';
 import { makeSupplementalPayload } from '../../voltra-payload';
-
-declare const NativeModules: {
-  VoltraModule: {
-    startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
-    updateLiveActivity: (id: string, json: string, options: any, callback: (r: any) => void) => void;
-    endLiveActivity: (id: string, options: any, callback: (r: any) => void) => void;
-  };
-};
 
 export function SupplementalFamiliesDemo() {
   const [activityId, setActivityId] = useState<string | null>(null);
@@ -16,57 +9,31 @@ export function SupplementalFamiliesDemo() {
 
   const start = useCallback(() => {
     'background only';
-    if (typeof NativeModules === 'undefined') {
-      setStatus('Error: NativeModules is undefined');
-      return;
-    }
-    if (!NativeModules.VoltraModule) {
-      setStatus('Error: VoltraModule not found');
-      return;
-    }
-
     const payload = makeSupplementalPayload();
-    try {
-      NativeModules.VoltraModule.startLiveActivity(
-        payload,
-        { activityName: 'supplemental-families-demo', deepLinkUrl: '/voltraui/supplemental-families-demo' },
-        (id: any) => {
-          const result = String(id);
-          if (result.startsWith('ERROR:')) {
-            setStatus('Native error: ' + result.substring(6));
-          } else if (id && id !== null && result !== 'null') {
-            setActivityId(result);
-            setStatus('Active (id: ' + result.substring(0, 8) + '...)');
-          } else {
-            setStatus('Callback returned null');
-          }
-        }
-      );
-    } catch (e: any) {
-      setStatus('Catch: ' + (e?.message || String(e)));
-    }
+    VoltraModule.startLiveActivity(payload, { activityName: 'supplemental-families-demo', deepLinkUrl: '/voltraui/supplemental-families-demo' }).then((id) => {
+      setActivityId(id);
+      setStatus('Active (id: ' + id.substring(0, 8) + '...)');
+    }).catch((e: any) => {
+      setStatus('Error: ' + (e?.message || String(e)));
+    });
   }, []);
 
   const update = useCallback(() => {
     'background only';
     if (!activityId) return;
     const payload = makeSupplementalPayload();
-    NativeModules.VoltraModule.updateLiveActivity(
-      activityId, payload, {},
-      () => { setStatus('Updated at ' + new Date().toLocaleTimeString()); }
-    );
+    VoltraModule.updateLiveActivity(activityId, payload).then(() => {
+      setStatus('Updated at ' + new Date().toLocaleTimeString());
+    }).catch(() => {});
   }, [activityId]);
 
   const end = useCallback(() => {
     'background only';
     if (!activityId) return;
-    NativeModules.VoltraModule.endLiveActivity(
-      activityId, { dismissalPolicy: { type: 'immediate' } },
-      () => {
-        setActivityId(null);
-        setStatus('Ended');
-      }
-    );
+    VoltraModule.endLiveActivity(activityId, { dismissalPolicy: { type: 'immediate' } }).then(() => {
+      setActivityId(null);
+      setStatus('Ended');
+    }).catch(() => {});
   }, [activityId]);
 
   return (

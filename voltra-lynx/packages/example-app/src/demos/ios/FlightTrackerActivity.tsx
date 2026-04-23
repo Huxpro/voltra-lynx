@@ -1,13 +1,6 @@
 import { useState, useCallback } from '@lynx-js/react';
+import { VoltraModule } from '@use-voltra/lynx/ios-client';
 import { makeFlightPayload } from '../../voltra-payload';
-
-declare const NativeModules: {
-  VoltraModule: {
-    startLiveActivity: (json: string, options: any, callback: (id: any) => void) => void;
-    updateLiveActivity: (id: string, json: string, options: any, callback: (r: any) => void) => void;
-    endLiveActivity: (id: string, options: any, callback: (r: any) => void) => void;
-  };
-};
 
 export function FlightTrackerActivity() {
   const [activityId, setActivityId] = useState<string | null>(null);
@@ -17,32 +10,21 @@ export function FlightTrackerActivity() {
   const start = useCallback(() => {
     'background only';
     const payload = makeFlightPayload();
-    NativeModules.VoltraModule.startLiveActivity(
-      payload,
-      { activityName: 'flight' },
-      (id: any) => {
-        const result = String(id);
-        if (result.startsWith('ERROR:')) {
-          setStatus('Error: ' + result.substring(6));
-        } else {
-          setActivityId(result);
-          setStatus('Active');
-        }
-      }
-    );
+    VoltraModule.startLiveActivity(payload, { activityName: 'flight' }).then((id) => {
+      setActivityId(id);
+      setStatus('Active');
+    }).catch((e: any) => {
+      setStatus('Error: ' + (e?.message || String(e)));
+    });
   }, []);
 
   const stop = useCallback(() => {
     'background only';
     if (!activityId) return;
-    NativeModules.VoltraModule.endLiveActivity(
-      activityId,
-      { dismissalPolicy: { type: 'immediate' } },
-      () => {
-        setActivityId(null);
-        setStatus('Ended');
-      }
-    );
+    VoltraModule.endLiveActivity(activityId, { dismissalPolicy: { type: 'immediate' } }).then(() => {
+      setActivityId(null);
+      setStatus('Ended');
+    }).catch(() => {});
   }, [activityId]);
 
   return (
