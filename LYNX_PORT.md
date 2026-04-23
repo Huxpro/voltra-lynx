@@ -221,3 +221,93 @@ Before marking any feature complete:
 3. **DO NOT** use `requireNativeModule` or any Expo API in Lynx code
 4. **DO NOT** implement Custom Elements (VoltraView) until core APIs work
 5. **DO NOT** skip payload verification — the 4KB limit is a hard iOS constraint
+
+---
+
+## Key Breakthrough: React Alias
+
+`pluginReactLynx` aliases `react` → `@lynx-js/react` at build time. This means:
+
+- `@use-voltra/ios` components (`VStack`, `Text`, `Symbol`, etc.) that `import from 'react'` get Lynx's `createElement`
+- `<Voltra.VStack>` JSX works **directly** in Lynx `.tsx` files — no conflict, no workaround needed
+- `renderLiveActivityToString()` traverses the Lynx element tree and serializes to JSON correctly
+- This is the same mechanism that makes `@tanstack/react-query` work in Lynx
+
+Any React library that only uses `createElement`/hooks (not DOM) should work in Lynx via this alias.
+
+---
+
+## Lynx CSS Gotchas (MUST follow — violating any = broken UI)
+
+### Layout
+
+| Pattern | Wrong (Web/RN) | Correct (Lynx) |
+|---------|---------------|-----------------|
+| Scroll direction | `scroll-y` | `scroll-orientation="vertical"` |
+| Fill remaining space | `flex: 1` | `linearWeight: 1` |
+| Horizontal row | `display: 'flex', flexDirection: 'row'` | `display: 'linear', linearDirection: 'row'` |
+| Root view sizing | `flex: 1` | `width: '100%', height: '100%'` |
+
+- Default layout is `linear` (vertical, like Android LinearLayout), NOT flexbox
+- `flex: 1` on `<scroll-view>` results in **zero computed height** (confirmed by LynxBase OnCall threads)
+- `flexGrow: 1` also unreliable on scroll-view — always use `linearWeight: 1`
+
+### Styling
+
+| Pattern | Wrong | Correct |
+|---------|-------|---------|
+| Border radius | `borderRadius: 12` | `borderRadius: '12px'` |
+| Line height | `lineHeight: 18` | Remove, or `'18px'` |
+| Padding shorthand | `paddingHorizontal: 16` | `paddingLeft: 16, paddingRight: 16` |
+
+- `borderRadius` with bare numbers is **silently ignored** — must use string with `px`
+- `lineHeight` bare number = **multiplier** (18× font size = huge gaps), not pixels
+
+### Text & Events
+
+- `<text>` is always block-level — no inline layout
+- Cannot put raw text inside `<view>` — must wrap in `<text>`
+- Use `bindtap` not `onPress` or `onClick`
+- Background-thread NativeModule calls need `'background only'` directive
+
+### Static Assets
+
+- Import images: `import img from '../assets/foo.png'` → URL string
+- Use in CSS: `backgroundImage: url(${img})`
+- Use in JSX: `<image src={img} />`
+- Lynx host app needs resource fetcher configured to load asset URLs from dev server
+
+---
+
+## iOS Host App Setup (LynxVoltra)
+
+Built with **public Lynx SDK** from CocoaPods (not internal template-assembler):
+
+```ruby
+pod 'Lynx', '3.7.0', :subspecs => ['Framework']
+pod 'PrimJS', '3.7.0', :subspecs => ['quickjs', 'napi']
+```
+
+Key setup steps:
+1. `xcodegen generate` → creates Xcode project from `project.yml`
+2. `pod install` → installs Lynx SDK
+3. `AppDelegate.swift`: `LynxEnv.sharedInstance()` + `config.register(VoltraLynxModule.self)`
+4. `ViewController.swift`: creates `LynxView`, loads bundle from `http://localhost:3000/main.lynx.bundle`
+5. Widget Extension embedded for Live Activity rendering
+6. `NSSupportsLiveActivities: true` in Info.plist
+7. Custom fonts (Merriweather) registered in both app and extension Info.plist `UIAppFonts`
+8. Image assets in shared `Assets.xcassets` for both targets
+
+### LynxModule Protocol (Swift)
+
+```swift
+@objc public class var name: String { "VoltraModule" }
+@objc public class var methodLookup: [String: String] { ... }
+public required override init() { ... }
+@objc public required init(param: Any) { ... }
+// Methods use LynxCallbackBlock: (id result) -> Void
+```
+
+- `class var` (not `static var`) for protocol conformance
+- `required init()` AND `init(param:)` both needed
+- Callbacks use `LynxCallbackBlock` typedef (NOT Promise)
