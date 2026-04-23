@@ -33,13 +33,10 @@ import UIKit
   // MARK: - Props called from ObjC (VoltraPreviewElement)
 
   @objc public func setPayload(_ jsonString: String) {
-    NSLog("[VoltraPreview] setPayload called, length: \(jsonString.count)")
     do {
       let json = try JSONValue.parse(from: jsonString)
       root = VoltraNode.parse(from: json)
-      NSLog("[VoltraPreview] Parsed OK, root: \(root)")
     } catch {
-      NSLog("[VoltraPreview] Failed to parse payload: \(error)")
       root = .empty
     }
     updateView()
@@ -56,16 +53,14 @@ import UIKit
 
     let newView = Voltra(root: root, activityId: currentViewId)
     let hc = UIHostingController(rootView: AnyView(newView))
-    hc.view.backgroundColor = .systemRed.withAlphaComponent(0.3) // DEBUG: visible bg
+    hc.view.backgroundColor = .clear
     hc.view.frame = bounds
     addSubview(hc.view)
     hostingController = hc
-    NSLog("[VoltraPreview] updateView, bounds: \(bounds), subviews: \(subviews.count)")
   }
 
   public override func layoutSubviews() {
     super.layoutSubviews()
     hostingController?.view.frame = bounds
-    NSLog("[VoltraPreview] layoutSubviews, bounds: \(bounds)")
   }
 }
