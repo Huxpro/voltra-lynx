@@ -248,7 +248,7 @@ export function GradientPlaygroundScreen() {
 
           <view style={{ backgroundColor: '#1E293B', borderRadius: '12px', overflow: 'hidden' } as any}>
             <VoltraPreview id="gradient-live-preview" height={220}>
-              <Voltra.VStack
+              <Voltra.View
                 style={{
                   height: '100%',
                   backgroundColor: gradient,
@@ -260,7 +260,7 @@ export function GradientPlaygroundScreen() {
               >
                 <Voltra.Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: 'bold' } as any}>Gradient View</Voltra.Text>
                 <Voltra.Text style={{ color: 'rgba(255,255,255,0.75)', fontSize: 11 } as any}>{gradient}</Voltra.Text>
-              </Voltra.VStack>
+              </Voltra.View>
             </VoltraPreview>
           </view>
         </view>
