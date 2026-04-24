@@ -12,6 +12,10 @@ export function TimerScreen() {
   const [textStyle, setTextStyle] = useState<TextStyle>('timer');
   const [showHours, setShowHours] = useState(false);
   const [durationSec, setDurationSec] = useState('300'); // 5 minutes default
+  const [templateJson] = useState(JSON.stringify({
+    running: 'Time remaining: {time}',
+    completed: 'Timer finished!',
+  }, null, 2));
 
   const [timerState, setTimerState] = useState<{
     startAtMs?: number;
@@ -108,6 +112,7 @@ export function TimerScreen() {
                     direction={mode === 'stopwatch' ? 'up' : direction}
                     textStyle={textStyle}
                     showHours={showHours}
+                    textTemplates={templateJson}
                   />
                 </Voltra.VStack>
               </Voltra.ZStack>
