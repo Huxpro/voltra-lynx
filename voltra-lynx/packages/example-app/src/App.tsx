@@ -92,18 +92,18 @@ const ACTIVITIES: ActivityDef[] = [
 // ─── Testing ground entries ─────────────────────────────────────
 
 const TESTING_ENTRIES: { id: string; title: string; component: () => JSX.Element }[] = [
-  { id: 'components', title: 'Components Catalog', component: ComponentsCatalogScreen },
-  { id: 'styling', title: 'Styling', component: StylingScreen },
-  { id: 'flex', title: 'Flex Playground', component: FlexPlaygroundScreen },
+  { id: 'weather', title: 'Weather Widget', component: WeatherWidgetScreen },
   { id: 'timer', title: 'Timer', component: TimerScreen },
+  { id: 'styling', title: 'Styling', component: StylingScreen },
+  { id: 'positioning', title: 'Positioning', component: PositioningScreen },
   { id: 'progress', title: 'Progress Indicators', component: ProgressIndicatorsScreen },
+  { id: 'components', title: 'Components', component: ComponentsCatalogScreen },
+  { id: 'flex', title: 'Flex Layout Playground', component: FlexPlaygroundScreen },
   { id: 'charts', title: 'Chart Playground', component: ChartPlaygroundScreen },
   { id: 'gradients', title: 'Gradient Playground', component: GradientPlaygroundScreen },
-  { id: 'positioning', title: 'Positioning', component: PositioningScreen },
   { id: 'preloading', title: 'Image Preloading', component: ImagePreloadingScreen },
   { id: 'image-fallback', title: 'Image Fallback', component: ImageFallbackScreen },
   { id: 'scheduling', title: 'Widget Scheduling', component: WidgetSchedulingScreen },
-  { id: 'weather', title: 'Weather Widget', component: WeatherWidgetScreen },
 ];
 
 // ─── Activity Card ──────────────────────────────────────────────
