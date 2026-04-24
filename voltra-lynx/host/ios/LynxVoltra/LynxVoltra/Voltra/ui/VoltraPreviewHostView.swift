@@ -24,10 +24,20 @@ import UIKit
 
   private func setupHostingController() {
     let view = Voltra(root: .empty, activityId: currentViewId)
-    let hc = UIHostingController(rootView: AnyView(view))
-    hc.view.backgroundColor = .clear
+    let hc = makeHostingController(rootView: AnyView(view))
     addSubview(hc.view)
     hostingController = hc
+  }
+
+  private func makeHostingController(rootView: AnyView) -> UIHostingController<AnyView> {
+    let hc = UIHostingController(rootView: rootView)
+    hc.view.backgroundColor = .clear
+    hc.view.isOpaque = false
+    // Remove the default system background that UIHostingController adds internally
+    for subview in hc.view.subviews {
+      subview.backgroundColor = .clear
+    }
+    return hc
   }
 
   // MARK: - Props called from ObjC (VoltraPreviewElement)
@@ -52,8 +62,7 @@ import UIKit
     hostingController?.view.removeFromSuperview()
 
     let newView = Voltra(root: root, activityId: currentViewId)
-    let hc = UIHostingController(rootView: AnyView(newView))
-    hc.view.backgroundColor = .clear
+    let hc = makeHostingController(rootView: AnyView(newView))
     hc.view.frame = bounds
     addSubview(hc.view)
     hostingController = hc

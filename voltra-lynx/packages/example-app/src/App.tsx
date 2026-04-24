@@ -91,19 +91,19 @@ const ACTIVITIES: ActivityDef[] = [
 
 // ─── Testing ground entries ─────────────────────────────────────
 
-const TESTING_ENTRIES: { id: string; title: string; component: () => JSX.Element }[] = [
-  { id: 'weather', title: 'Weather Widget', component: WeatherWidgetScreen },
-  { id: 'timer', title: 'Timer', component: TimerScreen },
-  { id: 'styling', title: 'Styling', component: StylingScreen },
-  { id: 'positioning', title: 'Positioning', component: PositioningScreen },
-  { id: 'progress', title: 'Progress Indicators', component: ProgressIndicatorsScreen },
-  { id: 'components', title: 'Components', component: ComponentsCatalogScreen },
-  { id: 'flex', title: 'Flex Layout Playground', component: FlexPlaygroundScreen },
-  { id: 'charts', title: 'Chart Playground', component: ChartPlaygroundScreen },
-  { id: 'gradients', title: 'Gradient Playground', component: GradientPlaygroundScreen },
-  { id: 'preloading', title: 'Image Preloading', component: ImagePreloadingScreen },
-  { id: 'image-fallback', title: 'Image Fallback', component: ImageFallbackScreen },
-  { id: 'scheduling', title: 'Widget Scheduling', component: WidgetSchedulingScreen },
+const TESTING_ENTRIES: { id: string; title: string; description: string; component: () => JSX.Element }[] = [
+  { id: 'weather', title: 'Weather Widget', description: 'Test the weather widget with different conditions, gradients, and real-time updates. Change weather conditions and see the widget update instantly.', component: WeatherWidgetScreen },
+  { id: 'timer', title: 'Timer', description: 'Test the VoltraTimer component with different styles (Timer/Relative), count directions, and templates. Verifies native Live Activity behavior.', component: TimerScreen },
+  { id: 'styling', title: 'Styling', description: 'Explore Voltra styling properties including padding, margins, colors, borders, shadows, and typography.', component: StylingScreen },
+  { id: 'positioning', title: 'Positioning', description: 'Learn about static, relative, and absolute positioning modes. See how left, top, and zIndex properties work with visual examples.', component: PositioningScreen },
+  { id: 'progress', title: 'Progress Indicators', description: 'Explore linear and circular progress indicators. Test determinate, indeterminate, and timer-based modes with custom labels and styling.', component: ProgressIndicatorsScreen },
+  { id: 'components', title: 'Components', description: 'Explore all available Voltra components including Button, Text, VStack, HStack, ZStack, Image, and more.', component: ComponentsCatalogScreen },
+  { id: 'flex', title: 'Flex Layout Playground', description: 'Interactive playground for experimenting with flex layout properties. Test alignItems, justifyContent, flexDirection, spacing, and padding with live visual feedback.', component: FlexPlaygroundScreen },
+  { id: 'charts', title: 'Chart Playground', description: 'Explore all SwiftUI chart mark types: BarMark, LineMark, AreaMark, PointMark, RuleMark, and SectorMark. Randomize data to see animated transitions.', component: ChartPlaygroundScreen },
+  { id: 'gradients', title: 'Gradient Playground', description: 'Test CSS gradient strings as backgroundColor. Experiment with linear, radial, and conic gradients, direction/angle controls, color presets, stop positions, and borderRadius clipping.', component: GradientPlaygroundScreen },
+  { id: 'preloading', title: 'Image Preloading', description: 'Test image preloading functionality for Live Activities. Download images to App Group storage and verify they appear in Live Activities.', component: ImagePreloadingScreen },
+  { id: 'image-fallback', title: 'Image Fallback', description: 'Explore the new image fallback behavior using backgroundColor from styles. Test missing images with various styling approaches.', component: ImageFallbackScreen },
+  { id: 'scheduling', title: 'Widget Scheduling', description: 'Test widget timeline scheduling with multiple states. Configure timing for each state and watch widgets automatically transition between them.', component: WidgetSchedulingScreen },
 ];
 
 // ─── Activity Card ──────────────────────────────────────────────
@@ -219,28 +219,73 @@ function TestingGroundsScreen({ onBack }: { onBack: () => void }) {
 
   return (
     <view style={{ width: '100%', height: '100%', backgroundColor: '#0B0F19' }}>
-      <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center', padding: 12, paddingTop: 60, backgroundColor: '#0F172A', borderBottomWidth: 1, borderBottomColor: 'rgba(148, 163, 184, 0.12)' }}>
-        <view bindtap={onBack} style={{ paddingRight: 12 }}>
-          <text style={{ fontSize: 16, fontWeight: '600', color: '#8232FF' }}>Back</text>
-        </view>
-        <text style={{ fontSize: 17, fontWeight: 'bold', color: '#E2E8F0' }}>Testing Grounds</text>
-      </view>
-      <scroll-view style={{ width: '100%', linearWeight: 1 }} scroll-orientation="vertical">
-        <view style={{ padding: 16 }}>
+      <scroll-view style={{ width: '100%', linearWeight: 1 } as any} scroll-orientation="vertical">
+        <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 70, paddingBottom: 24 }}>
+          <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' } as any}>
+            Testing Grounds
+          </text>
+          <text style={{ fontSize: 14, color: '#CBD5F5', marginBottom: 8 } as any}>
+            Explore different aspects of Voltra development. Each section provides hands-on examples and demonstrations of specific features.
+          </text>
+
           {TESTING_ENTRIES.map((entry) => (
             <view
               key={entry.id}
-              bindtap={() => setActiveScreen(entry.id)}
               style={{
-                backgroundColor: '#0F172A', borderRadius: '12px', padding: 16, marginBottom: 8,
-                borderWidth: 1, borderColor: 'rgba(148, 163, 184, 0.12)',
-                display: 'linear', linearDirection: 'row', alignItems: 'center',
-              }}
+                backgroundColor: '#0F172A',
+                borderRadius: '20px',
+                padding: 18,
+                marginBottom: 12,
+                borderWidth: 1,
+                borderColor: 'rgba(148, 163, 184, 0.12)',
+              } as any}
             >
-              <text style={{ color: '#E2E8F0', fontSize: 16, linearWeight: 1 } as any}>{entry.title}</text>
-              <text style={{ color: '#94A3B8', fontSize: 16 }}>›</text>
+              <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 } as any}>
+                {entry.title}
+              </text>
+              <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 16 } as any}>
+                {entry.description}
+              </text>
+              <view
+                bindtap={() => setActiveScreen(entry.id)}
+                style={{
+                  backgroundColor: '#8232FF',
+                  borderRadius: '12px',
+                  paddingTop: 12,
+                  paddingBottom: 12,
+                  paddingLeft: 24,
+                  paddingRight: 24,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                } as any}
+              >
+                <text style={{ color: '#FFFFFF', fontSize: 14, fontWeight: '600' } as any}>
+                  Explore {entry.title}
+                </text>
+              </view>
             </view>
           ))}
+
+          <view style={{ marginTop: 24, alignItems: 'center' } as any}>
+            <view
+              bindtap={onBack}
+              style={{
+                borderWidth: 1,
+                borderColor: 'rgba(130, 50, 255, 0.6)',
+                backgroundColor: 'transparent',
+                borderRadius: '12px',
+                paddingTop: 12,
+                paddingBottom: 12,
+                paddingLeft: 24,
+                paddingRight: 24,
+                alignItems: 'center',
+              } as any}
+            >
+              <text style={{ color: '#E2E8F0', fontSize: 14, fontWeight: '600' } as any}>
+                Back to Live Activities
+              </text>
+            </view>
+          </view>
         </view>
       </scroll-view>
     </view>
