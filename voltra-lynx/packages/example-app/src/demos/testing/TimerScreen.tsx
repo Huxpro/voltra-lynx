@@ -300,23 +300,23 @@ export function TimerScreen() {
               >
                 Duration (seconds)
               </text>
-              <input
-                type="number"
-                value={durationSec}
-                bindinput={(e: any) => setDurationSec(e.detail.value)}
-                style={{
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  color: '#fff',
-                  paddingLeft: 8,
-                  paddingRight: 8,
-                  paddingTop: 6,
-                  paddingBottom: 6,
-                  borderRadius: '8px',
-                  width: 100,
-                  textAlign: 'right',
-                  fontSize: 14,
-                } as any}
-              />
+              <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' } as any}>
+                <view
+                  bindtap={() => setDurationSec(String(Math.max(60, (parseInt(durationSec) || 300) - 60)))}
+                  style={{ backgroundColor: '#334155', paddingLeft: 10, paddingRight: 10, paddingTop: 6, paddingBottom: 6, borderRadius: '6px', marginRight: 8 } as any}
+                >
+                  <text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>-60s</text>
+                </view>
+                <text style={{ color: '#FFFFFF', fontSize: 14, fontWeight: '600', width: 50, textAlign: 'center' } as any}>
+                  {durationSec || '300'}
+                </text>
+                <view
+                  bindtap={() => setDurationSec(String(Math.min(3600, (parseInt(durationSec) || 300) + 60)))}
+                  style={{ backgroundColor: '#334155', paddingLeft: 10, paddingRight: 10, paddingTop: 6, paddingBottom: 6, borderRadius: '6px', marginLeft: 8 } as any}
+                >
+                  <text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>+60s</text>
+                </view>
+              </view>
             </view>
           )}
 

@@ -222,7 +222,7 @@ export function WidgetSchedulingScreen() {
             Set when each future state should appear:
           </text>
 
-          {/* State 2 input */}
+          {/* State 2 stepper */}
           <view style={{
             display: 'linear',
             linearDirection: 'row',
@@ -233,28 +233,26 @@ export function WidgetSchedulingScreen() {
             <text style={{ fontSize: 14, color: '#FFFFFF', linearWeight: 1 } as any}>
               State 2 (minutes from now):
             </text>
-            <input
-              type="number"
-              value={minutesUntilSecond}
-              bindinput={(e: any) => setMinutesUntilSecond(e.detail.value)}
-              placeholder="2"
-              style={{
-                backgroundColor: 'rgba(255,255,255,0.1)',
-                color: '#FFFFFF',
-                paddingLeft: 8,
-                paddingRight: 8,
-                paddingTop: 6,
-                paddingBottom: 6,
-                borderRadius: '8px',
-                width: 80,
-                height: 36,
-                textAlign: 'right',
-                fontSize: 16,
-              } as any}
-            />
+            <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' } as any}>
+              <view
+                bindtap={() => setMinutesUntilSecond(String(Math.max(1, (parseInt(minutesUntilSecond) || 2) - 1)))}
+                style={{ backgroundColor: '#334155', paddingLeft: 10, paddingRight: 10, paddingTop: 6, paddingBottom: 6, borderRadius: '6px', marginRight: 8 } as any}
+              >
+                <text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>-</text>
+              </view>
+              <text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '600', width: 30, textAlign: 'center' } as any}>
+                {minutesUntilSecond || '2'}
+              </text>
+              <view
+                bindtap={() => setMinutesUntilSecond(String(Math.min(60, (parseInt(minutesUntilSecond) || 2) + 1)))}
+                style={{ backgroundColor: '#334155', paddingLeft: 10, paddingRight: 10, paddingTop: 6, paddingBottom: 6, borderRadius: '6px', marginLeft: 8 } as any}
+              >
+                <text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>+</text>
+              </view>
+            </view>
           </view>
 
-          {/* State 3 input */}
+          {/* State 3 stepper */}
           <view style={{
             display: 'linear',
             linearDirection: 'row',
@@ -264,25 +262,23 @@ export function WidgetSchedulingScreen() {
             <text style={{ fontSize: 14, color: '#FFFFFF', linearWeight: 1 } as any}>
               State 3 (minutes from now):
             </text>
-            <input
-              type="number"
-              value={minutesUntilThird}
-              bindinput={(e: any) => setMinutesUntilThird(e.detail.value)}
-              placeholder="5"
-              style={{
-                backgroundColor: 'rgba(255,255,255,0.1)',
-                color: '#FFFFFF',
-                paddingLeft: 8,
-                paddingRight: 8,
-                paddingTop: 6,
-                paddingBottom: 6,
-                borderRadius: '8px',
-                width: 80,
-                height: 36,
-                textAlign: 'right',
-                fontSize: 16,
-              } as any}
-            />
+            <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' } as any}>
+              <view
+                bindtap={() => setMinutesUntilThird(String(Math.max(1, (parseInt(minutesUntilThird) || 5) - 1)))}
+                style={{ backgroundColor: '#334155', paddingLeft: 10, paddingRight: 10, paddingTop: 6, paddingBottom: 6, borderRadius: '6px', marginRight: 8 } as any}
+              >
+                <text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>-</text>
+              </view>
+              <text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '600', width: 30, textAlign: 'center' } as any}>
+                {minutesUntilThird || '5'}
+              </text>
+              <view
+                bindtap={() => setMinutesUntilThird(String(Math.min(60, (parseInt(minutesUntilThird) || 5) + 1)))}
+                style={{ backgroundColor: '#334155', paddingLeft: 10, paddingRight: 10, paddingTop: 6, paddingBottom: 6, borderRadius: '6px', marginLeft: 8 } as any}
+              >
+                <text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>+</text>
+              </view>
+            </view>
           </view>
         </view>
 

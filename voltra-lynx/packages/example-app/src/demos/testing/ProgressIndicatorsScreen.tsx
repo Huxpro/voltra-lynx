@@ -207,24 +207,23 @@ export function ProgressIndicatorsScreen() {
             <view>
               <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                 <text style={{ color: '#fff', fontSize: 14 }}>Duration (seconds)</text>
-                <input
-                  type="number"
-                  value={durationSec}
-                  bindinput={(e: any) => setDurationSec(e.detail.value)}
-                  style={{
-                    backgroundColor: 'rgba(255,255,255,0.1)',
-                    color: '#fff',
-                    paddingLeft: 8,
-                    paddingRight: 8,
-                    paddingTop: 6,
-                    paddingBottom: 6,
-                    borderRadius: '8px',
-                    width: 100,
-                    height: 36,
-                    textAlign: 'right',
-                    fontSize: 14,
-                  } as any}
-                />
+                <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' } as any}>
+                  <view
+                    bindtap={() => setDurationSec(String(Math.max(10, (parseInt(durationSec) || 30) - 10)))}
+                    style={{ backgroundColor: '#334155', paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4, borderRadius: '6px', marginRight: 6 } as any}
+                  >
+                    <text style={{ color: '#fff', fontSize: 12, fontWeight: '600' }}>-10</text>
+                  </view>
+                  <text style={{ color: '#fff', fontSize: 14, fontWeight: '600', width: 40, textAlign: 'center' } as any}>
+                    {durationSec || '30'}
+                  </text>
+                  <view
+                    bindtap={() => setDurationSec(String(Math.min(300, (parseInt(durationSec) || 30) + 10)))}
+                    style={{ backgroundColor: '#334155', paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4, borderRadius: '6px', marginLeft: 6 } as any}
+                  >
+                    <text style={{ color: '#fff', fontSize: 12, fontWeight: '600' }}>+10</text>
+                  </view>
+                </view>
               </view>
               <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                 <text style={{ color: '#fff', fontSize: 14 }}>Count Down</text>
@@ -255,39 +254,35 @@ export function ProgressIndicatorsScreen() {
           {/* Track Color */}
           <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <text style={{ color: '#fff', fontSize: 14 }}>Track Color</text>
-            <input
-              type="text"
-              value={trackColor}
-              bindinput={(e: any) => setTrackColor(e.detail.value)}
-              style={{
-                backgroundColor: 'rgba(255,255,255,0.1)',
-                color: '#fff',
-                padding: 8,
-                borderRadius: '8px',
-                width: 100,
-                textAlign: 'right',
-                fontSize: 14,
-              } as any}
-            />
+            <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' } as any}>
+              {['#334155', '#1E293B', '#4B5563'].map((c) => (
+                <view
+                  key={c}
+                  bindtap={() => setTrackColor(c)}
+                  style={{
+                    width: 28, height: 28, borderRadius: '14px', backgroundColor: c, marginLeft: 6,
+                    borderWidth: trackColor === c ? 2 : 0, borderColor: '#fff',
+                  } as any}
+                />
+              ))}
+            </view>
           </view>
 
           {/* Progress Color */}
           <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <text style={{ color: '#fff', fontSize: 14 }}>Progress Color</text>
-            <input
-              type="text"
-              value={progressColor}
-              bindinput={(e: any) => setProgressColor(e.detail.value)}
-              style={{
-                backgroundColor: 'rgba(255,255,255,0.1)',
-                color: '#fff',
-                padding: 8,
-                borderRadius: '8px',
-                width: 100,
-                textAlign: 'right',
-                fontSize: 14,
-              } as any}
-            />
+            <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' } as any}>
+              {['#8232FF', '#00D1FF', '#10B981', '#F59E0B'].map((c) => (
+                <view
+                  key={c}
+                  bindtap={() => setProgressColor(c)}
+                  style={{
+                    width: 28, height: 28, borderRadius: '14px', backgroundColor: c, marginLeft: 6,
+                    borderWidth: progressColor === c ? 2 : 0, borderColor: '#fff',
+                  } as any}
+                />
+              ))}
+            </view>
           </view>
 
           {/* Linear-specific styling */}
