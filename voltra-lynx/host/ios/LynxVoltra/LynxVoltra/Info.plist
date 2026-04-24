@@ -31,6 +31,10 @@
 	<true/>
 	<key>Voltra_AppGroupIdentifier</key>
 	<string>group.com.voltra.lynx.demo</string>
+	<key>Voltra_WidgetIds</key>
+	<array>
+		<string>weather</string>
+	</array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Merriweather-Regular.ttf</string>

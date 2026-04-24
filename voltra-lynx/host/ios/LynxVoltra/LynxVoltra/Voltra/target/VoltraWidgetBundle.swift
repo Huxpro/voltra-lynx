@@ -5,27 +5,25 @@ import WidgetKit
 struct VoltraWidgetBundle: WidgetBundle {
   var body: some Widget {
     VoltraWidget()
-    VoltraDemoHomeWidget()
+    VoltraWidget_weather()
   }
 }
 
-struct VoltraDemoHomeWidget: Widget {
-  let kind = "weather"
+// MARK: - Home Screen Widget Definitions
+
+struct VoltraWidget_weather: Widget {
+  private let widgetId = "weather"
 
   var body: some WidgetConfiguration {
     StaticConfiguration(
-      kind: kind,
-      provider: VoltraHomeWidgetProvider(widgetId: "weather")
+      kind: "\(VoltraStorageKeys.widgetKindPrefix)\(widgetId)",
+      provider: VoltraHomeWidgetProvider(widgetId: widgetId)
     ) { entry in
-      if #available(iOSApplicationExtension 17.0, *) {
-        VoltraHomeWidgetView(entry: entry)
-          .containerBackground(.fill.tertiary, for: .widget)
-      } else {
-        VoltraHomeWidgetView(entry: entry)
-      }
+      VoltraHomeWidgetView(entry: entry)
     }
-    .configurationDisplayName("Voltra Widget")
-    .description("Display Voltra content on your home screen.")
+    .configurationDisplayName("Weather Widget")
+    .description("Shows current weather conditions")
     .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+    .contentMarginsDisabled()
   }
 }

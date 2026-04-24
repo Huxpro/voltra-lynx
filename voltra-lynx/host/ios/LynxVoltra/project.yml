@@ -42,6 +42,7 @@ targets:
         INFOPLIST_FILE: LynxVoltra/Voltra/target/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.voltra.lynx.demo.widget
         TARGETED_DEVICE_FAMILY: "1,2"
+        IPHONEOS_DEPLOYMENT_TARGET: "17.0"
         SWIFT_ACTIVE_COMPILATION_CONDITIONS: "WIDGET_EXTENSION"
         SKIP_INSTALL: "YES"
         SWIFT_EMIT_LOC_STRINGS: "NO"

@@ -128,7 +128,7 @@ function WeatherWidget({ weather }: { weather: WeatherData }) {
               shadowOffset: { width: 0, height: 2 },
             }}
           >
-            {weather.temperature}\u00B0
+            {weather.temperature}{'°'}
           </Voltra.Text>
 
           <Voltra.Spacer />
@@ -177,7 +177,7 @@ function WeatherWidget({ weather }: { weather: WeatherData }) {
               marginTop: 8,
             }}
           >
-            \uD83D\uDCCD {weather.location}
+            {'\uD83D\uDCCD'} {weather.location}
           </Voltra.Text>
         ) : null}
 
@@ -185,7 +185,7 @@ function WeatherWidget({ weather }: { weather: WeatherData }) {
         {weather.highTemp !== undefined && weather.lowTemp !== undefined ? (
           <Voltra.HStack spacing={12} style={{ marginTop: 12 }}>
             <Voltra.HStack alignment="center" spacing={4}>
-              <Voltra.Text style={{ fontSize: 12, color: '#FFFFFF', opacity: 0.8 }}>\uD83D\uDD25</Voltra.Text>
+              <Voltra.Text style={{ fontSize: 12, color: '#FFFFFF', opacity: 0.8 }}>{'\uD83D\uDD25'}</Voltra.Text>
               <Voltra.Text
                 style={{
                   fontSize: 14,
@@ -197,11 +197,11 @@ function WeatherWidget({ weather }: { weather: WeatherData }) {
                   shadowOffset: { width: 0, height: 1 },
                 }}
               >
-                {weather.highTemp}\u00B0
+                {weather.highTemp}{'°'}
               </Voltra.Text>
             </Voltra.HStack>
             <Voltra.HStack alignment="center" spacing={4}>
-              <Voltra.Text style={{ fontSize: 12, color: '#FFFFFF', opacity: 0.8 }}>\u2744\uFE0F</Voltra.Text>
+              <Voltra.Text style={{ fontSize: 12, color: '#FFFFFF', opacity: 0.8 }}>{'\u2744\uFE0F'}</Voltra.Text>
               <Voltra.Text
                 style={{
                   fontSize: 14,
@@ -213,7 +213,7 @@ function WeatherWidget({ weather }: { weather: WeatherData }) {
                   shadowOffset: { width: 0, height: 1 },
                 }}
               >
-                {weather.lowTemp}\u00B0
+                {weather.lowTemp}{'°'}
               </Voltra.Text>
             </Voltra.HStack>
           </Voltra.HStack>
@@ -229,7 +229,7 @@ function WeatherWidget({ weather }: { weather: WeatherData }) {
               marginTop: 8,
             }}
           >
-            \uD83D\uDD52 {weather.lastUpdated.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
+            {'\uD83D\uDD52'} {weather.lastUpdated.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
           </Voltra.Text>
         ) : null}
       </Voltra.VStack>
@@ -263,14 +263,18 @@ export function WeatherWidgetScreen() {
 
   // Auto-initialize on mount (matching RN: calls updateWidget on first render)
   useEffect(() => {
-    const weatherData = SAMPLE_WEATHER_DATA['sunny'];
-    updateWidget('weather', {
-      systemSmall: <WeatherWidget weather={weatherData} />,
-      systemMedium: <WeatherWidget weather={weatherData} />,
-      systemLarge: <WeatherWidget weather={weatherData} />,
-    }).catch((error: any) => {
-      console.error('Failed to update weather widget:', error);
-    });
+    const initWidget = () => {
+      'background only';
+      const weatherData = SAMPLE_WEATHER_DATA['sunny'];
+      updateWidget('weather', {
+        systemSmall: WeatherWidget({ weather: weatherData }),
+        systemMedium: WeatherWidget({ weather: weatherData }),
+        systemLarge: WeatherWidget({ weather: weatherData }),
+      }).catch((error: any) => {
+        console.error('Failed to update weather widget:', error);
+      });
+    };
+    initWidget();
     // Don't call reloadWidgets here to avoid resetting scheduled timelines
   }, []);
 
@@ -283,9 +287,9 @@ export function WeatherWidgetScreen() {
     setStatusMessage('Updating widget to ' + condition + '...');
 
     updateWidget('weather', {
-      systemSmall: <WeatherWidget weather={weatherData} />,
-      systemMedium: <WeatherWidget weather={weatherData} />,
-      systemLarge: <WeatherWidget weather={weatherData} />,
+      systemSmall: WeatherWidget({ weather: weatherData }),
+      systemMedium: WeatherWidget({ weather: weatherData }),
+      systemLarge: WeatherWidget({ weather: weatherData }),
     }).then(() => {
       return reloadWidgets(['weather']);
     }).then(() => {
@@ -319,9 +323,9 @@ export function WeatherWidgetScreen() {
     setStatusMessage('Updating with custom weather...');
 
     updateWidget('weather', {
-      systemSmall: <WeatherWidget weather={customWeather} />,
-      systemMedium: <WeatherWidget weather={customWeather} />,
-      systemLarge: <WeatherWidget weather={customWeather} />,
+      systemSmall: WeatherWidget({ weather: customWeather }),
+      systemMedium: WeatherWidget({ weather: customWeather }),
+      systemLarge: WeatherWidget({ weather: customWeather }),
     }).then(() => {
       return reloadWidgets(['weather']);
     }).then(() => {
@@ -623,7 +627,7 @@ export function WeatherWidgetScreen() {
         </text>
         <view style={{ alignItems: 'center', justifyContent: 'center', padding: 20 } as any}>
           <VoltraWidgetPreview family={selectedFamily} id="weather-widget-preview">
-            <WeatherWidget weather={currentWeather} />
+            {WeatherWidget({ weather: currentWeather })}
           </VoltraWidgetPreview>
         </view>
       </view>
