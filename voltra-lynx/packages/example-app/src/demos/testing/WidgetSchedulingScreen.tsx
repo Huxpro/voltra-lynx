@@ -241,9 +241,13 @@ export function WidgetSchedulingScreen() {
               style={{
                 backgroundColor: 'rgba(255,255,255,0.1)',
                 color: '#FFFFFF',
-                padding: 8,
+                paddingLeft: 8,
+                paddingRight: 8,
+                paddingTop: 6,
+                paddingBottom: 6,
                 borderRadius: '8px',
                 width: 80,
+                height: 36,
                 textAlign: 'right',
                 fontSize: 16,
               } as any}
@@ -268,9 +272,13 @@ export function WidgetSchedulingScreen() {
               style={{
                 backgroundColor: 'rgba(255,255,255,0.1)',
                 color: '#FFFFFF',
-                padding: 8,
+                paddingLeft: 8,
+                paddingRight: 8,
+                paddingTop: 6,
+                paddingBottom: 6,
                 borderRadius: '8px',
                 width: 80,
+                height: 36,
                 textAlign: 'right',
                 fontSize: 16,
               } as any}

@@ -214,9 +214,13 @@ export function ProgressIndicatorsScreen() {
                   style={{
                     backgroundColor: 'rgba(255,255,255,0.1)',
                     color: '#fff',
-                    padding: 8,
+                    paddingLeft: 8,
+                    paddingRight: 8,
+                    paddingTop: 6,
+                    paddingBottom: 6,
                     borderRadius: '8px',
                     width: 100,
+                    height: 36,
                     textAlign: 'right',
                     fontSize: 14,
                   } as any}
