@@ -30,7 +30,7 @@ type VoltraWidgetPreviewProps = {
 export function VoltraWidgetPreview({ family, children, id, className }: VoltraWidgetPreviewProps) {
   const dimensions = WIDGET_DIMENSIONS[family];
   return (
-    <VoltraPreview id={id} height={dimensions.height} className={className}>
+    <VoltraPreview id={id} width={dimensions.width} height={dimensions.height} className={className}>
       {children}
     </VoltraPreview>
   );
