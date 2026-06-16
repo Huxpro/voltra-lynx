@@ -128,6 +128,26 @@ jobs:
         working-directory: example/android
         run: ./gradlew :voltra:testDebugUnitTest
 
+  lynx-android-build:
+    name: '[Android] Lynx Host Build'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Lynx Android host app
+        working-directory: voltra-lynx/host/android
+        run: ./gradlew assembleDebug
+
   native-swift-test:
     name: '[Swift] Test'
     runs-on: macos-latest
@@ -193,5 +213,8 @@ jobs:
       - name: Check ktlint version
         run: ktlint --version
 
-      - name: Check Kotlin formatting
+      - name: Check Kotlin formatting (Expo module)
         run: npm run format:kotlin:check
+
+      - name: Check Kotlin formatting (Lynx Android host)
+        run: ktlint "voltra-lynx/host/android/**/*.kt"
