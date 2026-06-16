@@ -35,6 +35,9 @@ targets:
       - path: LynxVoltra/Voltra/target
       - path: LynxVoltra/Voltra/shared
       - path: LynxVoltra/Voltra/ui
+        excludes:
+          - "VoltraPreviewElement.h"
+          - "VoltraPreviewElement.m"
       - path: LynxVoltra/Assets.xcassets
       - path: LynxVoltra/Fonts
     settings:
