@@ -50,3 +50,10 @@ npm-debug.log
 ## Build
 /build
 /packages/voltra/ios/.build/
+
+## Hackathon presentation (kept local — not part of the source)
+/presentation/
+
+## Claude Code local-only state (Ralph Loop iteration state, worktree scratch)
+/.claude/ralph-loop.local.md
+/.claude/worktrees/
