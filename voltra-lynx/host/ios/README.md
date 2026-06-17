@@ -158,6 +158,151 @@ Tap any demo → the SwiftUI Live Activity appears in the Dynamic Island.
 
 ---
 
+## Install on a physical iPhone (Release / embedded bundle)
+
+The Simulator SOP above keeps the JS bundle on a dev server. For a real
+device demo — installed once, runs offline, no Mac needed afterwards — use
+a Release build. `ViewController.swift` flips automatically:
+
+```swift
+private static let templateURL: String = {
+  #if DEBUG
+    return "http://localhost:3000/main.lynx.bundle"  // Simulator/dev
+  #else
+    return "main.lynx"                                // Release/embedded
+  #endif
+}()
+```
+
+…and the `project.yml` declares a pre-build script that — only when
+`CONFIGURATION = Release` — runs `pnpm build` in `packages/example-app/`
+and copies `dist/main.lynx.bundle` into the .app's resources.
+
+### One-shot AI build prompt (device)
+
+> Build and install the Voltra Lynx iOS demo on a connected, paired iPhone
+> in Release configuration so the .app is self-contained.
+>
+> Working tree: `voltra-lynx/host/ios/LynxVoltra/`. Bundle ID
+> `com.voltra.lynx.demo`, widget extension `…demo.widget`. Signing is
+> configured automatically via `DEVELOPMENT_TEAM` in `project.yml` — change
+> that team ID to yours before running.
+>
+> Steps: (1) confirm the iPhone shows up in `xcrun devicectl list devices`
+> as `available`; if not, walk the user through the §Phone setup checklist
+> (Developer Mode + Trust + cable). (2) regen project from clean per
+> §Rebuild from clean steps 3–4 (xcodegen, pod install). (3) run the
+> §Device build xcodebuild command. (4) install via `xcrun devicectl device
+> install app …` if it works, OR fall back to opening the workspace in
+> Xcode and asking the user to Cmd+R with the device selected. (5) verify
+> the app launches and shows the Voltra home screen (no dev server running).
+>
+> First device launch requires Trust on the phone: Settings → General →
+> VPN & Device Management → trust the developer cert. Walk the user
+> through this if needed.
+
+### Phone setup checklist
+
+| Required | How |
+|---|---|
+| Developer Mode | Settings → Privacy & Security → Developer Mode → ON, then reboot |
+| Trust this Mac | Plug in cable; tap "Trust" when the phone prompts; enter passcode |
+| iPhone unlocked + connected | Lock screen disables device-coordination |
+| Apple Developer team ID | Get yours from Xcode → Settings → Accounts (10 chars). The repo defaults to `ZBB74974C5` (huxpro@gmail.com's personal team); change `DEVELOPMENT_TEAM` in `project.yml` to yours before building. |
+
+Verify the phone is connected and trusted:
+
+```bash
+xcrun devicectl list devices
+# Look for State = "available"; if it's "unavailable", re-plug + re-trust.
+```
+
+### Device build
+
+```bash
+cd voltra-lynx/host/ios/LynxVoltra
+
+# Clean only the build dir (don't nuke Pods between SDKs — keep them)
+rm -rf build
+
+xcodebuild \
+  -workspace LynxVoltra.xcworkspace \
+  -scheme LynxVoltra \
+  -configuration Release \
+  -sdk iphoneos \
+  -derivedDataPath ./build \
+  -destination "generic/platform=iOS" \
+  -allowProvisioningUpdates \
+  build
+```
+
+⚠️ **If you've just built for the simulator, the `iphoneos` build will fail
+with `'Lynx/LynxConfig.h' file not found` unless you `rm -rf build/` first.**
+The Swift bridging-header scanner caches simulator-arch header maps that
+collide with the device arch. Keep `Pods/` and `*.xcodeproj/` — only the
+build artifacts need to be cleaned between SDK switches.
+
+The .app lands at:
+
+```
+./build/Build/Products/Release-iphoneos/LynxVoltra.app
+```
+
+### Install on the device
+
+Two paths, try the CLI first:
+
+```bash
+DEVICE_UDID=$(xcrun devicectl list devices --filter-state available \
+              | grep -oE '[A-F0-9-]{36}' | head -1)
+APP=./build/Build/Products/Release-iphoneos/LynxVoltra.app
+
+xcrun devicectl device install app --device "$DEVICE_UDID" "$APP"
+xcrun devicectl device process launch --device "$DEVICE_UDID" \
+       com.voltra.lynx.demo
+```
+
+If `devicectl` reports
+`CoreDeviceService was unable to locate a device matching the requested
+device identifier`, that's CoreDevice being flaky (commonly happens when
+the device runs an iOS version newer than Xcode's bundled DeviceSupport
+files — eg. Xcode 26.0 with iPhone on iOS 26.4.2). Fall back to Xcode:
+
+```bash
+open voltra-lynx/host/ios/LynxVoltra/LynxVoltra.xcworkspace
+```
+
+In the Xcode toolbar select your iPhone as the run destination, set
+Edit Scheme → Run → Build Configuration to **Release**, then Cmd+R.
+Xcode will download missing DeviceSupport files on-demand, code-sign,
+install, and launch — all in one click.
+
+### First launch on the device
+
+iOS will refuse to run an app signed by an unrecognized developer cert
+until you trust it once:
+
+**Settings → General → VPN & Device Management → "Apple Development:
+huxpro@gmail.com" → Trust "Apple Development: …" → Enter passcode**
+
+After that, the Voltra app shows on the home screen as **LynxVoltra**.
+Open it: the embedded `main.lynx.bundle` loads from
+`Bundle.main.path(forResource:"main.lynx", ofType:"bundle")` via
+`DemoLynxProvider`. No dev server needed.
+
+### Live Activity / Widget on a personal team
+
+With a **free** Apple developer account (no $99/year), Live Activities
+and Home Screen Widgets work but the provisioning profile expires after
+**7 days**. You'll have to rebuild + reinstall once a week. With a paid
+Apple Developer Program account, signing is permanent.
+
+App Group `group.com.voltra.lynx.demo` (used to share widget data between
+the app and its extension) is auto-provisioned by Xcode when both targets
+sign with the same team.
+
+---
+
 ## What's in this directory
 
 ```

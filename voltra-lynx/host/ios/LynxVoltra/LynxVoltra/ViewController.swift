@@ -1,8 +1,18 @@
 import UIKit
 
 class ViewController: UIViewController {
-  // Change this to your Rspeedy dev server URL
-  private let bundleURL = "http://localhost:3000/main.lynx.bundle"
+  // Debug → load from rspeedy dev server (hot reload).
+  // Release → load main.lynx.bundle embedded in the .app at build time
+  //           by the "Bundle Lynx JS" pre-build script (see project.yml).
+  // DemoLynxProvider handles both forms — http URLs go through URLSession,
+  // bare names go through Bundle.main.path(forResource:ofType:).
+  private static let templateURL: String = {
+    #if DEBUG
+      return "http://localhost:3000/main.lynx.bundle"
+    #else
+      return "main.lynx"
+    #endif
+  }()
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -23,7 +33,6 @@ class ViewController: UIViewController {
 
     view.addSubview(lynxView)
 
-    // Load Voltra bundle from dev server
-    lynxView.loadTemplate(fromURL: bundleURL, initData: nil)
+    lynxView.loadTemplate(fromURL: Self.templateURL, initData: nil)
   }
 }

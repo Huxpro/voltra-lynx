@@ -12,3 +12,8 @@ host/ios/LynxVoltra/DerivedData/
 
 # macOS
 .DS_Store
+
+# Built Lynx JS bundle copied into iOS app at Release build time
+# (regenerate with: cd packages/example-app && pnpm build, then it's
+# auto-copied by the project.yml preBuildScript on Release builds).
+host/ios/LynxVoltra/LynxVoltra/main.lynx.bundle

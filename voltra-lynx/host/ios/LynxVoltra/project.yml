@@ -8,6 +8,11 @@ options:
 settings:
   base:
     USER_SCRIPT_SANDBOXING: "NO"
+    # Default signing — override per-target if needed.
+    # ZBB74974C5 is huxpro@gmail.com's personal team. Change this to your
+    # own team ID (Xcode → Settings → Accounts) before building for device.
+    DEVELOPMENT_TEAM: ZBB74974C5
+    CODE_SIGN_STYLE: Automatic
 
 targets:
   LynxVoltra:
@@ -27,6 +32,34 @@ targets:
     dependencies:
       - target: VoltraWidgetExtension
         embed: true
+    # Release-only: build the Lynx JS bundle and copy it into the .app so
+    # the app works offline. Debug skips this — ViewController.swift reads
+    # from the rspeedy dev server via #if DEBUG.
+    preBuildScripts:
+      - name: "[Lynx] Bundle JS for Release"
+        basedOnDependencyAnalysis: false
+        script: |
+          set -euo pipefail
+          if [ "$CONFIGURATION" != "Release" ]; then
+            echo "[Lynx] Debug build — skipping JS bundle (dev server loads from localhost:3000)"
+            exit 0
+          fi
+          EXAMPLE_APP="$SRCROOT/../../../packages/example-app"
+          echo "[Lynx] Building JS bundle in: $EXAMPLE_APP"
+          cd "$EXAMPLE_APP"
+          # Use whichever pnpm the user's shell finds; fall back to corepack.
+          export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/share/pnpm:$PATH"
+          if command -v pnpm >/dev/null 2>&1; then
+            pnpm install --frozen-lockfile --prefer-offline
+            pnpm build
+          else
+            corepack enable
+            corepack pnpm install --frozen-lockfile --prefer-offline
+            corepack pnpm build
+          fi
+          DEST="$SRCROOT/LynxVoltra"
+          echo "[Lynx] Copying dist/main.lynx.bundle → $DEST/main.lynx.bundle"
+          cp -f "$EXAMPLE_APP/dist/main.lynx.bundle" "$DEST/main.lynx.bundle"
 
   VoltraWidgetExtension:
     type: app-extension
