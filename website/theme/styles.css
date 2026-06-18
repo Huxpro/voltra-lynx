@@ -1,0 +1,30 @@
+/*
+ * Local stylesheet overrides for the @callstack/rspress-theme.
+ *
+ * The Callstack theme injects three Callstack ad slots by default:
+ *   • DocFooterCTA  — banner at the bottom of every doc page
+ *   • HomeBanner    — banner under the feature cards on the home page
+ *   • OutlineCTA    — block in the right-hand outline on doc pages
+ *
+ * We're not Callstack, so we hide all three. The class names below are
+ * the hashed CSS-module class names emitted by @callstack/rspress-theme
+ * v0.5.1 from `doc_footer_cta_index_module.container`,
+ * `home_banner_index_module.wrapper`, and `outline_cta_index_module.container`.
+ * If you upgrade the theme and the slots reappear, regenerate the hashes
+ * by grepping the new theme bundle.
+ */
+
+/* DocFooterCTA — bottom-of-page Callstack banner */
+.container-uhcWmO { display: none !important; }
+
+/* HomeBanner — under home-page feature cards */
+.wrapper-mI4CtC { display: none !important; }
+
+/* OutlineCTA — right-hand sidebar block + the divider rspress adds above it */
+.container-LzbylO { display: none !important; }
+.rp-outline__divider:has(+ .container-LzbylO) { display: none !important; }
+
+/* HomeFooter — Callstack brand logo on the home page footer.
+ * Keep the footer row + message text (that's our 'Voltra for Lynx · MIT · …'
+ * line), only hide the Callstack logo + spacer it leaves behind. */
+.logo-eionWK { display: none !important; }
