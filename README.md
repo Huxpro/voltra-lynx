@@ -1,74 +1,88 @@
-![voltra-banner](https://use-voltra.dev/voltra-baner.jpg)
+<div align="center">
 
-### Build Live Activities and Widgets with JSX in React Native
+# Voltra for Lynx
 
-[![mit licence][license-badge]][license] [![npm downloads][npm-downloads-badge]][npm-downloads] [![PRs Welcome][prs-welcome-badge]][prs-welcome]
+**Build iOS Live Activities, Dynamic Island, and Android Widgets with JSX —
+on [LynxJS](https://lynxjs.org/).**
 
-Voltra turns React Native JSX into SwiftUI and Jetpack Compose Glance so you can ship custom Live Activities, Dynamic Island layouts, and Android Widgets without touching native code. Author everything in React, keep hot reload, and let the config plugin handle the native extension targets.
+[![docs](https://img.shields.io/badge/docs-huxpro.github.io%2Fvoltra--lynx-6366f1?style=for-the-badge)](https://huxpro.github.io/voltra-lynx/)
+[![upstream](https://img.shields.io/badge/upstream-callstackincubator%2Fvoltra-blue?style=for-the-badge)](https://github.com/callstackincubator/voltra)
+[![license](https://img.shields.io/npm/l/voltra?style=for-the-badge)](./LICENSE.txt)
 
-## Features
+</div>
 
-- **Ship Native Surfaces**: Create iOS Live Activities, Dynamic Island variants, and Android Home Screen widgets directly from React components - no Swift, Kotlin, or Xcode/Android Studio UI work required.
+---
 
-- **Fast Development Workflow**: Hooks respect Fast Refresh and both JS and native layers enforce platform-specific payload budgets.
+## What this fork is
 
-- **Production-Ready Push Notifications**: Support for ActivityKit push tokens (iOS) and FCM (Android) to stream lifecycle updates and build server-driven refreshes.
+A port of [Voltra](https://github.com/callstackincubator/voltra) — the React
+JSX library for native iOS Live Activities, Dynamic Island, and Android Widgets
+— to **[LynxJS](https://lynxjs.org/)**.
 
-- **Familiar Styling**: Use React Native style props and platform-native modifiers (SwiftUI/Glance) in one place.
+The fundamental observation that made the port cheap: Live Activities and
+Widgets render in out-of-process OS extensions that only accept SwiftUI /
+Compose Glance. The JS framework's job is to produce a JSON payload — native
+code turns that payload into pixels. **The rendering engine doesn't care
+which JS runtime fed it the JSON.** So almost everything came across
+unchanged.
 
-- **Type-Safe & Developer-Friendly**: The Voltra schema, hooks, and examples ship with TypeScript definitions, tests, and docs so AI coding agents stay productive.
+| | Original (React Native + Expo) | This fork (LynxJS) |
+|---|---|---|
+| Layer 0 — pure JS packages | shipped on npm | **100% reused via npm** |
+| Layer 1 — client business logic (hooks, API) | written for Expo modules | **~95% vendored verbatim** |
+| Layer 2 — bridge adapter | `requireNativeModule` / Promise | **662 LoC new** — wraps Lynx's callback-based NativeModules into Promises |
+| Layer 3 — native module registration | Expo `Module` DSL | **788 LoC new** — `LynxModule` protocol (Swift) + `@LynxMethod` (Kotlin) |
+| Layer 4 — SwiftUI / Glance rendering | upstream Voltra | **byte-identical** |
 
-- **Works With Your Setup**: Compatible with Expo Dev Client and bare React Native projects. The config plugin automatically wires native extension targets for you.
+Net new code in the port: **1,440 LoC** to bring **32,500 LoC** of native
+UI library to a different host runtime. **95.6%** reuse.
 
-## Documentation
+## Repo layout
 
-The documentation is available at [use-voltra.dev](https://use-voltra.dev). You can also use the following links to jump to specific topics:
-
-- [Getting Started](https://use-voltra.dev/getting-started/introduction)
-- [Installation](https://use-voltra.dev/getting-started/installation)
-- [iOS Setup](https://use-voltra.dev/ios/setup)
-- [Android Setup](https://use-voltra.dev/android/setup)
-- [iOS Development](https://use-voltra.dev/ios/development/developing-live-activities)
-- [Android Development](https://use-voltra.dev/android/development/developing-widgets)
-- [iOS API Reference](https://use-voltra.dev/ios/api/configuration)
-- [Android API Reference](https://use-voltra.dev/android/api/plugin-configuration)
-
-## Getting started
-
-> [!NOTE]
-> The library isn't supported in Expo Go. To set it up correctly, you need to use [Expo Dev Client](https://docs.expo.dev/versions/latest/sdk/dev-client/).
-
-Install the package:
-
-```sh
-npm install voltra
+```
+.
+├── voltra-lynx/             ← THE PORT: bridge adapter, ios + android hosts,
+│   │                          example app, host READMEs
+│   ├── packages/
+│   │   ├── lynx/            ← @use-voltra/lynx — bridge + client APIs
+│   │   └── example-app/     ← Rspeedy + ReactLynx demo app
+│   └── host/
+│       ├── ios/             ← LynxVoltra Xcode project
+│       └── android/         ← VoltraLynx Gradle project
+│
+├── website/                 ← rspress site → GitHub Pages
+├── LYNX_PORT.md             ← architecture, layer model, translation rules
+├── packages/                ← upstream Voltra (RN/Expo) sources — kept for
+│                              reference and as the Layer 0 upstream
+├── example/                 ← upstream Voltra example (React Native + Expo)
+└── tasks/                   ← PRDs that drove the port (61+ user stories)
 ```
 
-Add the config plugin to your `app.json`:
+## Get started
 
-```json
-{
-  "expo": {
-    "plugins": ["voltra"]
-  }
-}
-```
+| If you want to… | Read |
+|---|---|
+| Use Voltra in **LynxJS** | [`voltra-lynx/README.md`](./voltra-lynx/README.md) — quick start, LoC reuse table |
+| Build the iOS demo on a simulator or device | [`voltra-lynx/host/ios/README.md`](./voltra-lynx/host/ios/README.md) — full rebuild SOP + AI prompt |
+| Build the Android demo | [`voltra-lynx/host/android/README.md`](./voltra-lynx/host/android/README.md) |
+| Understand the architecture | [`LYNX_PORT.md`](./LYNX_PORT.md) — layer model, translation tables, Lynx CSS gotchas |
+| Use the **original React Native** Voltra | upstream → [callstackincubator/voltra](https://github.com/callstackincubator/voltra) |
 
-Then run `npx expo prebuild --clean` to generate the native extension targets.
-
-See the [documentation](https://use-voltra.dev/getting-started/installation) for detailed setup instructions.
-
-## Quick example
+## Quick example (Lynx)
 
 ```tsx
-import { useLiveActivity } from 'voltra/client'
-import { Voltra } from 'voltra'
+import { useLiveActivity } from '@use-voltra/lynx/ios-client'
+import { Voltra } from '@use-voltra/ios'
 
 export function OrderTracker({ orderId }: { orderId: string }) {
   const ui = (
-    <Voltra.VStack style={{ padding: 16, borderRadius: 14, backgroundColor: '#111827' }}>
-      <Voltra.Text style={{ color: 'white', fontSize: 18, fontWeight: '700' }}>Order #{orderId}</Voltra.Text>
-      <Voltra.Text style={{ color: '#9CA3AF', marginTop: 6 }}>Driver en route · ETA 12 min</Voltra.Text>
+    <Voltra.VStack style={{ padding: 16, borderRadius: '14px', backgroundColor: '#111827' }}>
+      <Voltra.Text style={{ color: 'white', fontSize: 18, fontWeight: '700' }}>
+        Order #{orderId}
+      </Voltra.Text>
+      <Voltra.Text style={{ color: '#9CA3AF', marginTop: 6 }}>
+        Driver en route · ETA 12 min
+      </Voltra.Text>
     </Voltra.VStack>
   )
 
@@ -85,27 +99,30 @@ export function OrderTracker({ orderId }: { orderId: string }) {
 }
 ```
 
-## Platform compatibility
+The only Lynx-specific things in this snippet are the `from
+'@use-voltra/lynx/ios-client'` import and `borderRadius: '14px'` instead of
+`14`. The Voltra JSX components, the hook API, and the JSON payload format
+are identical to the original.
 
-Voltra is a cross-platform library that supports:
+## Status
 
-- **iOS**: Live Activities and Dynamic Island (SwiftUI).
-- **Android**: Home Screen Widgets (Jetpack Compose Glance).
+- ✅ iOS host app — Live Activities, Dynamic Island, Home Screen widgets,
+  in-app `<voltra-preview>` Custom Elements
+- ✅ Android host app — Glance widgets, ongoing notifications, live updates
+- ✅ End-to-end verified on iOS Simulator AND physical iPhone (Release build,
+  embedded JS bundle, no dev server needed)
+- ✅ 95.6% code reuse measured against upstream
+- 🚧 Turnkey dev-experience layer planned at [Huxpro/lynx-dev-clients-voltra](https://github.com/Huxpro/lynx-dev-clients-voltra) — bring the RN/Expo
+  `RCTBundleURLProvider` + `react-native-xcode.sh` + dev-menu experience to
+  any Lynx integration
 
-## Authors
+## Credits
 
-`voltra` is an open source collaboration between [Saúl Sharma](https://github.com/saulsharma) and [Szymon Chmal](https://github.com/szymonchmal) at [Callstack][callstack-readme-with-love].
+- Original Voltra: [Saúl Sharma](https://github.com/saulsharma) and
+  [Szymon Chmal](https://github.com/szymonchmal) at
+  [Callstack](https://callstack.com/) (MIT)
+- Lynx port: [@Huxpro](https://github.com/Huxpro)
 
-If you think it's cool, please star it 🌟. This project will always remain free to use.
+## License
 
-[Callstack][callstack-readme-with-love] is a group of React and React Native geeks, contact us at [hello@callstack.com](mailto:hello@callstack.com) if you need any help with these or just want to say hi!
-
-Like the project? ⚛️ [Join the Callstack team](https://callstack.com/careers/?utm_campaign=Senior_RN&utm_source=github&utm_medium=readme) who does amazing stuff for clients and drives React Native Open Source! 🔥
-
-[callstack-readme-with-love]: https://callstack.com/?utm_source=github.com&utm_medium=referral&utm_campaign=voltra&utm_term=readme-with-love
-[license-badge]: https://img.shields.io/npm/l/voltra?style=for-the-badge
-[license]: https://github.com/callstackincubator/voltra/blob/main/LICENSE.txt
-[npm-downloads-badge]: https://img.shields.io/npm/dm/voltra?style=for-the-badge
-[npm-downloads]: https://www.npmjs.com/package/voltra
-[prs-welcome-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge
-[prs-welcome]: ./CONTRIBUTING.md
+MIT — same as upstream.
