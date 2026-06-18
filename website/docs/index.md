@@ -6,27 +6,24 @@ hero:
     src:
       light: /logo-light.svg
       dark: /logo-dark.svg
-    alt: Voltra for Lynx
-  name: 'Voltra · ported to Lynx'
-  tagline: 'A Lynx port of <a href="https://www.use-voltra.dev/" target="_blank">Voltra</a> — the React JSX library for iOS Live Activities, Dynamic Island, and Android Home Screen widgets. 95.6% of upstream ships byte-identical; only the bridge layer is new. This site documents the port. For the component API and platform development guides, see the official Voltra docs.'
+    alt: Voltra
+  name: 'Live Activities & Widgets in Lynx'
+  tagline: 'Voltra lets Lynx developers build native Live Activities, Dynamic Island, and Home Screen widgets on iOS and Android using ReactLynx JSX — no Swift or Kotlin required. Hot reload, push updates, and a working reference host for both platforms.'
   actions:
     - theme: brand
-      text: How the port works
-      link: /lynx/architecture
+      text: Get Started
+      link: /getting-started/introduction
     - theme: alt
-      text: Official Voltra docs ↗
+      text: Voltra docs ↗
       link: https://www.use-voltra.dev/
-  badge:
-    text: Extension of upstream · Hackathon
-    type: info
 features:
-  - title: 95.6% Code Reuse
-    details: 'Only 1,440 lines of new code (662 bridge adapter + 788 native module shims) to port 32,500 lines of upstream Voltra to LynxJS. The entire SwiftUI/Glance rendering engine ships byte-identical.'
+  - title: Native Primitives in JSX
+    details: Compose native interfaces using SwiftUI (iOS) and Jetpack Compose Glance (Android) primitives directly in ReactLynx.
     icon: <img src="/icons/card-id.svg" />
-  - title: Same JSX, different runtime
-    details: '<code>&lt;Voltra.VStack&gt;</code>, <code>&lt;Voltra.Text&gt;</code>, <code>useLiveActivity</code> — the API surface is unchanged. Lynx aliases <code>react</code> to <code>@lynx-js/react</code> at build time, so upstream components work as-is. Read the component reference at <a href="https://www.use-voltra.dev/" target="_blank">use-voltra.dev</a>.'
+  - title: Live Activities & Widgets
+    details: Build Dynamic Island experiences and Live Activities for iOS, plus Home Screen widgets for both iOS and Android — all from one ReactLynx codebase.
     icon: <img src="/icons/subscriptions.svg" />
-  - title: What this site covers
-    details: 'Three things you only need if you are using the Lynx port: the layer-model architecture, a list of Lynx CSS gotchas that bit every commit cluster during the port, and rebuild SOPs for the iOS and Android host apps.'
+  - title: Push-to-update for Live Activities
+    details: Stream real-time updates to Live Activities via push notifications from any JavaScript runtime. Keep activities current without app interaction.
     icon: <img src="/icons/radio-signal.svg" />
 ---

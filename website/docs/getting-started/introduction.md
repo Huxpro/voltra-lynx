@@ -1,55 +1,69 @@
 # Introduction
 
-**Voltra for Lynx** is a port of [Voltra](https://www.use-voltra.dev/) — the
-React JSX library for native iOS Live Activities, Dynamic Island, and Android
-Home Screen widgets — to [LynxJS](https://lynxjs.org/).
+Voltra is a library for building iOS Live Activities, Dynamic Island layouts,
+and Android Home Screen widgets using ReactLynx JSX. Until now, these features
+required writing native code in Swift or Kotlin.
 
-This site **doesn't replace** the official Voltra docs. The component
-reference, Live Activity development guides, widget APIs, server-side
-update flow, charts, performance notes — all of those live at
-[**use-voltra.dev**](https://www.use-voltra.dev/) and apply unchanged to
-the Lynx port.
+Voltra gives you a JavaScript API and JSX components that automatically
+become native primitives (SwiftUI on iOS, Jetpack Compose Glance on Android).
 
-What this site adds, on top of the upstream docs:
+## Why Voltra?
 
-- [**How the port works**](/lynx/architecture) — the 5-layer model, code
-  reuse table, the React Alias breakthrough that made 100% Layer 0 reuse
-  possible, and the Expo→Lynx translation tables.
-- [**Lynx CSS gotchas**](/lynx/css-gotchas) — silent-failure traps that
-  upstream Voltra examples hit when ported (`borderRadius: 12` is silently
-  ignored, `flex: 1` produces zero height on scroll-view, etc.).
-- [**Run the iOS demo**](/lynx/run-ios) and
-  [**Run the Android demo**](/lynx/run-android) — full host-app rebuild
-  SOPs from a clean checkout, with one-shot AI build prompts at the top.
+- **One codebase, two platforms** — write the same JSX, ship it to iOS and Android.
+- **No native code required** — build widgets and live activities without touching Xcode or Android Studio for UI work.
+- **Hot reload** — Rspeedy reloads bundle changes; live activities re-render in milliseconds.
+- **Push updates** — stream Live Activity updates over APNS / FCM from any JavaScript runtime.
 
-## How Voltra works (briefly)
+## How it works
 
-If you're new to Voltra entirely, read
-[Voltra's official Introduction](https://www.use-voltra.dev/getting-started/introduction)
-first. The one-paragraph version:
+Voltra serializes your ReactLynx JSX into a lightweight JSON payload that the
+native platform extensions interpret as SwiftUI or Compose Glance views. This
+enables hot reload during development and server-side rendering for push updates.
 
-Live Activities, Dynamic Island, and Widgets render in out-of-process OS
-extensions that only accept SwiftUI / Compose Glance. The JS framework
-serializes your JSX into a JSON payload; native code parses that payload
-and constructs the SwiftUI / Glance view tree.
+Here's a Live Activity:
 
-The key consequence: **the JS framework's only job is to produce the
-payload.** Once you know that, swapping React Native for LynxJS is just a
-bridge-layer change — the entire rendering pipeline behind the JSON is
-shared.
+```tsx
+import { useLiveActivity } from '@use-voltra/lynx/ios-client'
+import { Voltra } from '@use-voltra/ios'
 
-## What changes vs upstream
+const ui = (
+  <Voltra.VStack style={{ padding: 16, borderRadius: '18px', backgroundColor: '#101828' }}>
+    <Voltra.Symbol name="car.fill" scale="large" tintColor="#38BDF8" />
+    <Voltra.Text style={{ color: '#F8FAFC', fontSize: 18, fontWeight: '600' }}>
+      Driver en route
+    </Voltra.Text>
+    <Voltra.Text style={{ color: '#94A3B8', fontSize: 12, marginTop: 8 }}>
+      Building A · Lobby pickup
+    </Voltra.Text>
+  </Voltra.VStack>
+)
 
-For most code: **nothing**. The Voltra JSX API is the same; the hook
-signatures are the same; the JSON payload is byte-identical. The only
-differences a consumer sees are:
+useLiveActivity({ lockScreen: ui }, { activityName: 'pickup', autoStart: true })
+```
 
-| | Upstream (React Native + Expo) | This fork (Lynx + Rspeedy) |
-|---|---|---|
-| Install | `npm install voltra` | `npm install @use-voltra/lynx @use-voltra/{core,ios,android,server} @lynx-js/react` |
-| Hook import | `from 'voltra/client'` | `from '@use-voltra/lynx/ios-client'` |
-| CSS `borderRadius` | `borderRadius: 12` | `borderRadius: '12px'` (see [CSS gotchas](/lynx/css-gotchas)) |
-| Dev server | Metro / Expo CLI | Rspeedy (`pnpm dev`) |
-| Native host | Expo prebuild | xcodegen + CocoaPods (iOS), Gradle (Android) |
+If you've used Voltra on React Native, the API is the same — the JSX,
+component shapes, and payload format don't change between runtimes.
 
-[Continue to Installation →](./installation)
+## Server-side push updates
+
+The same components render on a Node.js server. Generate the payload, send
+it via APNS / FCM, and your Live Activity updates without the app running:
+
+```tsx
+import { renderLiveActivityToString } from '@use-voltra/server'
+import { Voltra } from '@use-voltra/ios'
+
+const payload = renderLiveActivityToString({
+  lockScreen: (
+    <Voltra.VStack style={{ padding: 16, borderRadius: '18px', backgroundColor: '#101828' }}>
+      <Voltra.Symbol name="car.fill" scale="large" tintColor="#38BDF8" />
+      <Voltra.Text style={{ color: '#F8FAFC', fontSize: 18, fontWeight: '600' }}>
+        Driver arrived
+      </Voltra.Text>
+    </Voltra.VStack>
+  ),
+})
+```
+
+Ready? Head to [Installation](./installation), or jump straight to the
+platform guides for [iOS](/ios/setup) and [Android](/android/setup).

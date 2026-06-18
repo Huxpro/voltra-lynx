@@ -1,8 +1,11 @@
-# Run the Android Demo
+# Android Setup
 
-The reference Android host app embeds the Lynx 3.7.0 SDK, registers
-`VoltraLynxModule.kt`, and renders the demo Lynx bundle through a
-`LynxView` plus a Glance widget receiver for Home Screen widgets.
+Voltra renders Widgets and Live Updates through Jetpack Compose Glance,
+so you need an Android host app that embeds the Lynx SDK and registers
+Voltra's native module. The fastest path is the
+[**reference host**](https://github.com/Huxpro/voltra-lynx/tree/main/voltra-lynx/host/android)
+— a working Gradle project with the module + Glance widget receiver
+already wired up.
 
 ## One-shot AI build prompt
 

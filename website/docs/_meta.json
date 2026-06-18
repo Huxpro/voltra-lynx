@@ -6,7 +6,12 @@
   },
   {
     "type": "dir",
-    "name": "lynx",
-    "label": "Lynx Port"
+    "name": "ios",
+    "label": "iOS"
+  },
+  {
+    "type": "dir",
+    "name": "android",
+    "label": "Android"
   }
 ]

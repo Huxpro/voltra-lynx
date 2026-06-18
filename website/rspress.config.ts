@@ -1,38 +1,35 @@
-import { withCallstackPreset } from '@callstack/rspress-preset'
 import { defineConfig } from '@rspress/core'
+import path from 'node:path'
 
 // When deployed via GitHub Pages at https://huxpro.github.io/voltra-lynx/
-// rspress needs to know the base path so asset URLs resolve correctly.
-// Override with `BASE=/some-other-path/ pnpm build` if hosting elsewhere.
+// rspress needs the base path so asset URLs resolve correctly.
+// Override with `BASE=/some-other-path/ npm run build` if hosting elsewhere.
 const base = process.env.BASE ?? '/voltra-lynx/'
 
-export default withCallstackPreset(
-  {
-    context: __dirname,
-    docs: {
-      title: 'Voltra · ported to Lynx',
-      description: 'A LynxJS port of Voltra (use-voltra.dev). 95.6% of upstream ships byte-identical; this site documents the bridge layer that makes it work.',
-      editUrl: 'https://github.com/Huxpro/voltra-lynx/edit/main',
-      rootUrl: 'https://huxpro.github.io/voltra-lynx/',
-      icon: 'docs/public/favicon.ico',
-      logoLight: '/logo-light.svg',
-      logoDark: '/logo-dark.svg',
-      ogImage: '/og-image.png',
-      rootDir: 'docs',
-      socials: {
-        github: 'https://github.com/Huxpro/voltra-lynx',
-      },
-    },
-    vercelAnalytics: false,
+export default defineConfig({
+  base,
+  root: path.join(__dirname, 'docs'),
+  title: 'Voltra for Lynx',
+  description:
+    'Build iOS Live Activities, Dynamic Island, and Android Home Screen widgets in ReactLynx.',
+  icon: '/favicon.ico',
+  logo: {
+    light: '/logo-light.svg',
+    dark: '/logo-dark.svg',
   },
-  defineConfig({
-    base,
-    themeConfig: {
-      enableScrollToTop: true,
-      footer: {
-        message:
-          'Voltra for Lynx · MIT · forked from <a href="https://github.com/callstackincubator/voltra">callstackincubator/voltra</a>',
+  logoText: 'Voltra',
+  themeConfig: {
+    enableScrollToTop: true,
+    socialLinks: [
+      {
+        icon: 'github',
+        mode: 'link',
+        content: 'https://github.com/Huxpro/voltra-lynx',
       },
+    ],
+    footer: {
+      message:
+        'Voltra for Lynx · MIT · forked from <a href="https://www.use-voltra.dev/">use-voltra.dev</a>',
     },
-  })
-)
+  },
+})

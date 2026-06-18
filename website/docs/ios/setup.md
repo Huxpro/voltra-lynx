@@ -1,18 +1,21 @@
-# Run the iOS Demo
+# iOS Setup
 
-The reference iOS host app — `LynxVoltra` — embeds the Lynx 3.7.0 SDK,
-registers `VoltraLynxModule`, and renders the demo Lynx bundle into a
-`LynxView` plus an embedded Widget Extension for Live Activities.
+Voltra renders into native iOS Live Activities and Widgets, so you need
+an iOS host app that embeds the Lynx SDK and registers Voltra's native
+module. The fastest path is to use the
+[**reference host**](https://github.com/Huxpro/voltra-lynx/tree/main/voltra-lynx/host/ios)
+in the repo — it's a working Xcode project (xcodegen + CocoaPods) with
+the module + Widget Extension already wired up.
 
-This page shows two reproducible flows: **simulator with hot reload**
-and **physical iPhone with embedded bundle**.
+This page covers two flows:
+
+- **Simulator** with hot reload (Debug build, dev server)
+- **Physical iPhone** with an embedded JS bundle (Release build, offline)
 
 ## One-shot AI build prompt (simulator)
 
-The host READMEs in the repo each ship with this prompt at the top so
-that any coding agent (Claude Code, Cursor, etc.) can take a fresh
-clone all the way to a Live Activity rendered on the iOS Simulator
-without further input.
+Drop this into Claude Code, Cursor, or any coding agent. It takes a
+fresh clone all the way to a Live Activity rendered on the Simulator.
 
 > Build and launch the Voltra Lynx iOS demo on a booted iOS Simulator.
 >

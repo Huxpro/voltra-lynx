@@ -2,25 +2,13 @@ import { PackageManagerTabs } from '@rspress/core/theme'
 
 # Installation
 
-This page covers installing the Lynx-port packages. If you're new to Voltra
-itself, read [Voltra's official Installation guide](https://www.use-voltra.dev/getting-started/installation)
-first — it explains the project layout, native targets, and config plugin.
-
-For Lynx specifically:
-
 ## 1. Install the packages
-
-The umbrella package `@use-voltra/lynx` ships the bridge adapter and the
-two client SDKs. The pure-JS upstream packages (`@use-voltra/core`,
-`/ios`, `/android`, `/server`) are pulled in unchanged from npm — Lynx
-runs them as-is via the `react` → `@lynx-js/react` alias.
 
 <PackageManagerTabs command="install @use-voltra/lynx @use-voltra/core @use-voltra/ios @use-voltra/android @use-voltra/server @lynx-js/react" />
 
 ## 2. Configure Rspeedy
 
-Pin the dev server port so the host app's hardcoded bundle URL doesn't
-silently break when port 3000 is taken:
+Pin the dev server port so the host app finds your bundle every time:
 
 ```ts title="lynx.config.ts"
 import { defineConfig } from '@lynx-js/rspeedy'
@@ -32,25 +20,16 @@ export default defineConfig({
 })
 ```
 
-## 3. Set up the native host app
+## 3. Set up the native host
 
-Voltra for Lynx is not a runtime injection — you need a native host app
-that embeds Lynx and registers `VoltraLynxModule`. The reference hosts in
-the fork repo work as templates:
+Live Activities and Widgets render in native OS extensions, so you need an
+iOS or Android host that embeds Lynx and registers Voltra's native module.
+Follow the platform guides:
 
-| Platform | Reference host | Build SOP |
-|---|---|---|
-| iOS | [`voltra-lynx/host/ios/LynxVoltra`](https://github.com/Huxpro/voltra-lynx/tree/main/voltra-lynx/host/ios) | [Run the iOS demo](/lynx/run-ios) |
-| Android | [`voltra-lynx/host/android`](https://github.com/Huxpro/voltra-lynx/tree/main/voltra-lynx/host/android) | [Run the Android demo](/lynx/run-android) |
+- [**iOS Setup**](/ios/setup) — Xcode project, CocoaPods, Widget Extension
+- [**Android Setup**](/android/setup) — Gradle modules, Glance widgets
 
-Both come with one-shot AI build prompts and clean-rebuild instructions.
-
-## 4. Write a Live Activity
-
-Once the native host is running and `pnpm dev` is serving the bundle,
-write Voltra JSX in your Rspeedy app. The component reference is
-[**at use-voltra.dev**](https://www.use-voltra.dev/) — every `Voltra.*`
-component documented there works in Lynx:
+## 4. Write your first Live Activity
 
 ```tsx
 import { useLiveActivity } from '@use-voltra/lynx/ios-client'
@@ -68,9 +47,7 @@ useLiveActivity(
 )
 ```
 
-The only differences from upstream are:
-- The hook lives at `@use-voltra/lynx/ios-client` instead of `voltra/client`.
-- `borderRadius` needs a string with `px` (see [CSS gotchas](/lynx/css-gotchas)).
-
-Everything else — the component shapes, props, payload format, native
-behavior — is identical to what's at [use-voltra.dev](https://www.use-voltra.dev/).
+The Voltra component reference (every `Voltra.*` component, styles, props,
+events) is on the [**official Voltra docs**](https://www.use-voltra.dev/) —
+the API is the same on Lynx. A couple of CSS conventions are different in
+Lynx; see [iOS Styling Notes](/ios/styling).

@@ -4,8 +4,12 @@
     "link": "/getting-started/introduction"
   },
   {
-    "text": "Lynx Port",
-    "link": "/lynx/architecture"
+    "text": "iOS",
+    "link": "/ios/setup"
+  },
+  {
+    "text": "Android",
+    "link": "/android/setup"
   },
   {
     "text": "Voltra docs ↗",
