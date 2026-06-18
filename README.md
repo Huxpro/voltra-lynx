@@ -1,12 +1,12 @@
 <div align="center">
 
-# Voltra for Lynx
+# Voltra · ported to Lynx
 
-**Build iOS Live Activities, Dynamic Island, and Android Widgets with JSX —
-on [LynxJS](https://lynxjs.org/).**
+**A [LynxJS](https://lynxjs.org/) port of [Voltra](https://www.use-voltra.dev/).**
+This repo and its docs are an **extension** of upstream — not a replacement.
 
-[![docs](https://img.shields.io/badge/docs-huxpro.github.io%2Fvoltra--lynx-6366f1?style=for-the-badge)](https://huxpro.github.io/voltra-lynx/)
-[![upstream](https://img.shields.io/badge/upstream-callstackincubator%2Fvoltra-blue?style=for-the-badge)](https://github.com/callstackincubator/voltra)
+[![docs](https://img.shields.io/badge/this%20site-huxpro.github.io%2Fvoltra--lynx-6366f1?style=for-the-badge)](https://huxpro.github.io/voltra-lynx/)
+[![upstream](https://img.shields.io/badge/upstream%20docs-use--voltra.dev-blue?style=for-the-badge)](https://www.use-voltra.dev/)
 [![license](https://img.shields.io/npm/l/voltra?style=for-the-badge)](./LICENSE.txt)
 
 </div>
@@ -15,9 +15,16 @@ on [LynxJS](https://lynxjs.org/).**
 
 ## What this fork is
 
-A port of [Voltra](https://github.com/callstackincubator/voltra) — the React
-JSX library for native iOS Live Activities, Dynamic Island, and Android Widgets
-— to **[LynxJS](https://lynxjs.org/)**.
+A port of [Voltra](https://www.use-voltra.dev/) — the React JSX library for
+native iOS Live Activities, Dynamic Island, and Android Widgets — to
+**[LynxJS](https://lynxjs.org/)**.
+
+**The component API, hook signatures, payload format, native render behavior,
+and all platform development guides are the same as upstream.** The official
+documentation at **[use-voltra.dev](https://www.use-voltra.dev/)** applies
+unchanged. This repo only documents what's *additional* to the port: a small
+bridge layer, a list of Lynx CSS gotchas, and reference iOS/Android host apps
+for embedding the Lynx SDK.
 
 The fundamental observation that made the port cheap: Live Activities and
 Widgets render in out-of-process OS extensions that only accept SwiftUI /
@@ -58,15 +65,18 @@ UI library to a different host runtime. **95.6%** reuse.
 └── tasks/                   ← PRDs that drove the port (61+ user stories)
 ```
 
-## Get started
+## Where to read what
 
-| If you want to… | Read |
+| Topic | Read |
 |---|---|
-| Use Voltra in **LynxJS** | [`voltra-lynx/README.md`](./voltra-lynx/README.md) — quick start, LoC reuse table |
-| Build the iOS demo on a simulator or device | [`voltra-lynx/host/ios/README.md`](./voltra-lynx/host/ios/README.md) — full rebuild SOP + AI prompt |
-| Build the Android demo | [`voltra-lynx/host/android/README.md`](./voltra-lynx/host/android/README.md) |
-| Understand the architecture | [`LYNX_PORT.md`](./LYNX_PORT.md) — layer model, translation tables, Lynx CSS gotchas |
-| Use the **original React Native** Voltra | upstream → [callstackincubator/voltra](https://github.com/callstackincubator/voltra) |
+| Voltra component reference (`<Voltra.VStack>`, `Symbol`, `Chart`, …) | **[use-voltra.dev](https://www.use-voltra.dev/)** ← canonical |
+| Live Activity / Widget / push-update concepts | **[use-voltra.dev](https://www.use-voltra.dev/)** ← canonical |
+| Original React Native + Expo setup | **[use-voltra.dev](https://www.use-voltra.dev/)** ← canonical |
+| The **port architecture** (5-layer model, code reuse breakdown) | [`LYNX_PORT.md`](./LYNX_PORT.md) and [docs site](https://huxpro.github.io/voltra-lynx/lynx/architecture) |
+| **Lynx CSS gotchas** (the silent-failure traps unique to the port) | [docs site](https://huxpro.github.io/voltra-lynx/lynx/css-gotchas) |
+| Use Voltra in **LynxJS** (install, package layout) | [`voltra-lynx/README.md`](./voltra-lynx/README.md) |
+| Build the **iOS** demo on simulator or physical iPhone | [`voltra-lynx/host/ios/README.md`](./voltra-lynx/host/ios/README.md) |
+| Build the **Android** demo | [`voltra-lynx/host/android/README.md`](./voltra-lynx/host/android/README.md) |
 
 ## Quick example (Lynx)
 

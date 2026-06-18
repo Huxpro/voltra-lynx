@@ -7,26 +7,26 @@ hero:
       light: /logo-light.svg
       dark: /logo-dark.svg
     alt: Voltra for Lynx
-  name: 'Live Activities & Widgets in Lynx'
-  tagline: 'Voltra for Lynx brings native iOS Live Activities, Dynamic Island layouts, and Android Home Screen widgets to LynxJS — without writing Swift or Kotlin. A port of the original React Native Voltra library with 95.6% code reuse.'
+  name: 'Voltra · ported to Lynx'
+  tagline: 'A Lynx port of <a href="https://www.use-voltra.dev/" target="_blank">Voltra</a> — the React JSX library for iOS Live Activities, Dynamic Island, and Android Home Screen widgets. 95.6% of upstream ships byte-identical; only the bridge layer is new. This site documents the port. For the component API and platform development guides, see the official Voltra docs.'
   actions:
     - theme: brand
-      text: Get Started
-      link: /getting-started/introduction
+      text: How the port works
+      link: /lynx/architecture
     - theme: alt
-      text: View on GitHub
-      link: https://github.com/Huxpro/voltra-lynx
+      text: Official Voltra docs ↗
+      link: https://www.use-voltra.dev/
   badge:
-    text: Lynx fork · Hackathon
+    text: Extension of upstream · Hackathon
     type: info
 features:
   - title: 95.6% Code Reuse
-    details: Only 1,440 lines of new code (662 bridge adapter + 788 native module shims) to port 32,500 lines of native UI library to LynxJS. The entire SwiftUI/Glance rendering engine ships byte-identical from upstream.
+    details: 'Only 1,440 lines of new code (662 bridge adapter + 788 native module shims) to port 32,500 lines of upstream Voltra to LynxJS. The entire SwiftUI/Glance rendering engine ships byte-identical.'
     icon: <img src="/icons/card-id.svg" />
-  - title: Native Primitives in JSX
-    details: Compose SwiftUI (iOS) and Jetpack Compose Glance (Android) primitives directly in ReactLynx JSX. Same `<Voltra.VStack>`, `<Voltra.Text>`, `<Voltra.Symbol>` components as upstream Voltra — works because Lynx aliases `react` to `@lynx-js/react` at build time.
+  - title: Same JSX, different runtime
+    details: '<code>&lt;Voltra.VStack&gt;</code>, <code>&lt;Voltra.Text&gt;</code>, <code>useLiveActivity</code> — the API surface is unchanged. Lynx aliases <code>react</code> to <code>@lynx-js/react</code> at build time, so upstream components work as-is. Read the component reference at <a href="https://www.use-voltra.dev/" target="_blank">use-voltra.dev</a>.'
     icon: <img src="/icons/subscriptions.svg" />
-  - title: Live Activities & Widgets
-    details: Build Dynamic Island, Lock Screen Live Activities, and Home Screen widgets for both iOS and Android from a single ReactLynx codebase.
+  - title: What this site covers
+    details: 'Three things you only need if you are using the Lynx port: the layer-model architecture, a list of Lynx CSS gotchas that bit every commit cluster during the port, and rebuild SOPs for the iOS and Android host apps.'
     icon: <img src="/icons/radio-signal.svg" />
 ---

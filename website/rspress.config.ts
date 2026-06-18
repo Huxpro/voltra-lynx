@@ -10,8 +10,8 @@ export default withCallstackPreset(
   {
     context: __dirname,
     docs: {
-      title: 'Voltra for Lynx',
-      description: 'Build Live Activities, Dynamic Island, and Widgets with JSX — on LynxJS.',
+      title: 'Voltra · ported to Lynx',
+      description: 'A LynxJS port of Voltra (use-voltra.dev). 95.6% of upstream ships byte-identical; this site documents the bridge layer that makes it work.',
       editUrl: 'https://github.com/Huxpro/voltra-lynx/edit/main',
       rootUrl: 'https://huxpro.github.io/voltra-lynx/',
       icon: 'docs/public/favicon.ico',
