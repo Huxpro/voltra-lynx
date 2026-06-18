@@ -2,17 +2,76 @@ import { PackageManagerTabs } from '@rspress/core/theme'
 
 # Installation
 
-To use Voltra in your project, you only need to install one package.
+Voltra for Lynx is structured for a [Rspeedy](https://lynxjs.org/rspeedy/)
+project. The single umbrella package `@use-voltra/lynx` exports three
+subpaths — `/bridge`, `/ios-client`, `/android-client` — alongside the
+upstream pure-JS packages.
 
-## 1. Install the package
+## 1. Install the packages
 
-Add Voltra to your Expo project:
+<PackageManagerTabs command="install @use-voltra/lynx @use-voltra/core @use-voltra/ios @use-voltra/android @use-voltra/server @lynx-js/react" />
 
-<PackageManagerTabs command="install voltra" />
+The upstream packages (`@use-voltra/core`, `/ios`, `/android`, `/server`)
+ship unmodified — they only depend on `react`, which Rspeedy's
+`pluginReactLynx` aliases to `@lynx-js/react` at build time.
 
-## 2. Next Steps
+## 2. Configure Rspeedy
 
-After installing the package, you need to configure the Voltra Expo plugin for each platform you want to support.
+Voltra for Lynx pins the dev server port so the host app's hardcoded
+bundle URL doesn't silently break when port 3000 is taken. In
+`lynx.config.ts`:
 
-- [Configure iOS Setup](../ios/setup)
-- [Configure Android Setup](../android/setup)
+```ts
+import { defineConfig } from '@lynx-js/rspeedy'
+import { pluginReactLynx } from '@lynx-js/react-rsbuild-plugin'
+
+export default defineConfig({
+  plugins: [pluginReactLynx()],
+  server: {
+    port: 3000,
+    strictPort: true,
+  },
+})
+```
+
+## 3. Set up the native host app
+
+Voltra for Lynx is not a runtime injection — you need a native host app
+that embeds Lynx + registers `VoltraLynxModule`. The reference hosts are:
+
+- [`voltra-lynx/host/ios/`](https://github.com/Huxpro/voltra-lynx/tree/main/voltra-lynx/host/ios) — Xcode project (xcodegen + CocoaPods)
+- [`voltra-lynx/host/android/`](https://github.com/Huxpro/voltra-lynx/tree/main/voltra-lynx/host/android) — Gradle project (Sparkling-scaffolded)
+
+Both come with READMEs containing a one-shot AI build prompt that takes
+a fresh clone all the way to a running demo. See
+[Run the iOS Demo](/lynx/run-ios).
+
+## 4. Quick verify
+
+After install, import the hook in your example and confirm types resolve:
+
+```tsx
+import { useLiveActivity } from '@use-voltra/lynx/ios-client'
+import { Voltra } from '@use-voltra/ios'
+```
+
+If the hook type resolves to a `{ start, update, end, isActive, … }` shape,
+the install is complete. The next step is wiring up the iOS or Android
+native host — see the platform guides:
+
+- [iOS Setup](../ios/setup)
+- [Android Setup](../android/setup)
+
+## Lynx CSS conventions
+
+A handful of upstream Voltra examples use bare-number CSS values that
+Lynx silently ignores. The full list lives in
+[Lynx CSS Gotchas](/lynx/css-gotchas); the short version:
+
+| Upstream (wrong in Lynx) | Lynx (right) |
+|---|---|
+| `borderRadius: 12` | `borderRadius: '12px'` |
+| `lineHeight: 18` | `lineHeight: '18px'` (or remove) |
+| `scroll-y` | `scroll-orientation="vertical"` |
+| `flex: 1` (on `<scroll-view>`) | `linearWeight: 1` |
+| `onPress` | `bindtap` |

@@ -4,6 +4,10 @@
     "link": "/getting-started/introduction"
   },
   {
+    "text": "Lynx Port",
+    "link": "/lynx/architecture"
+  },
+  {
     "text": "iOS",
     "link": "/ios/introduction"
   },

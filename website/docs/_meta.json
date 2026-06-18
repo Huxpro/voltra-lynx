@@ -6,6 +6,11 @@
   },
   {
     "type": "dir",
+    "name": "lynx",
+    "label": "Lynx Port"
+  },
+  {
+    "type": "dir",
     "name": "ios",
     "label": "iOS"
   },
