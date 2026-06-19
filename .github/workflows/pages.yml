@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'website/**'
+      - 'presentation/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch: {}
 
@@ -44,6 +45,15 @@ jobs:
         env:
           BASE: /voltra-lynx/
         run: npm run build
+
+      - name: Include presentation deck
+        # The deck lives at /presentation/ as a hand-written HTML file. Copy
+        # the slides + their referenced assets into the Pages output so they
+        # ship at /voltra-lynx/presentation/. The /preview/ subfolder is dev
+        # artifacts (.gitignored) and not referenced by the slides.
+        run: |
+          mkdir -p website/doc_build/presentation
+          rsync -a --exclude 'preview' presentation/ website/doc_build/presentation/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
