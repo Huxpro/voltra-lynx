@@ -19,11 +19,11 @@ hero:
 features:
   - title: Native Primitives in JSX
     details: Compose native interfaces using SwiftUI (iOS) and Jetpack Compose Glance (Android) primitives directly in ReactLynx.
-    icon: <img src="/icons/card-id.svg" />
+    icon: <img src="/voltra-lynx/icons/card-id.svg" />
   - title: Live Activities & Widgets
     details: Build Dynamic Island experiences and Live Activities for iOS, plus Home Screen widgets for both iOS and Android — all from one ReactLynx codebase.
-    icon: <img src="/icons/subscriptions.svg" />
+    icon: <img src="/voltra-lynx/icons/subscriptions.svg" />
   - title: Push-to-update for Live Activities
     details: Stream real-time updates to Live Activities via push notifications from any JavaScript runtime. Keep activities current without app interaction.
-    icon: <img src="/icons/radio-signal.svg" />
+    icon: <img src="/voltra-lynx/icons/radio-signal.svg" />
 ---
