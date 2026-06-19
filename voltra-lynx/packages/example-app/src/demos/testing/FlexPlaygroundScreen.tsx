@@ -127,15 +127,15 @@ export function FlexPlaygroundScreen() {
           {/* Flex Direction */}
           <view
             style={{
-              display: 'linear',
-              linearDirection: 'row',
+              display: 'flex',
+              flexDirection: 'row',
               alignItems: 'center',
               marginBottom: 12,
             }}
           >
             <text
               style={
-                { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
+                { fontSize: 14, color: '#CBD5F5', flex: 1 } as any
               }
             >
               Flex Direction:
@@ -164,15 +164,15 @@ export function FlexPlaygroundScreen() {
           {/* Align Items */}
           <view
             style={{
-              display: 'linear',
-              linearDirection: 'row',
+              display: 'flex',
+              flexDirection: 'row',
               alignItems: 'center',
               marginBottom: 12,
             }}
           >
             <text
               style={
-                { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
+                { fontSize: 14, color: '#CBD5F5', flex: 1 } as any
               }
             >
               Align Items:
@@ -201,15 +201,15 @@ export function FlexPlaygroundScreen() {
           {/* Justify Content */}
           <view
             style={{
-              display: 'linear',
-              linearDirection: 'row',
+              display: 'flex',
+              flexDirection: 'row',
               alignItems: 'center',
               marginBottom: 12,
             }}
           >
             <text
               style={
-                { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
+                { fontSize: 14, color: '#CBD5F5', flex: 1 } as any
               }
             >
               Justify Content:
@@ -238,21 +238,21 @@ export function FlexPlaygroundScreen() {
           {/* Gap */}
           <view
             style={{
-              display: 'linear',
-              linearDirection: 'row',
+              display: 'flex',
+              flexDirection: 'row',
               alignItems: 'center',
               marginBottom: 12,
             }}
           >
             <text
               style={
-                { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
+                { fontSize: 14, color: '#CBD5F5', flex: 1 } as any
               }
             >
               Gap: {gap}px
             </text>
             <view
-              style={{ display: 'linear', linearDirection: 'row', gap: 8 }}
+              style={{ display: 'flex', flexDirection: 'row', gap: 8 }}
             >
               <view
                 bindtap={decreaseGap}
@@ -302,20 +302,20 @@ export function FlexPlaygroundScreen() {
           {/* Container Padding */}
           <view
             style={{
-              display: 'linear',
-              linearDirection: 'row',
+              display: 'flex',
+              flexDirection: 'row',
               alignItems: 'center',
             }}
           >
             <text
               style={
-                { fontSize: 14, color: '#CBD5F5', linearWeight: 1 } as any
+                { fontSize: 14, color: '#CBD5F5', flex: 1 } as any
               }
             >
               Padding: {containerPadding}px
             </text>
             <view
-              style={{ display: 'linear', linearDirection: 'row', gap: 8 }}
+              style={{ display: 'flex', flexDirection: 'row', gap: 8 }}
             >
               <view
                 bindtap={decreasePadding}

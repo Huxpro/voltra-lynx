@@ -1,5 +1,5 @@
 // Lynx-safe shared styles
-// All borderRadius use 'px' strings, no bare lineHeight, linear layout for rows
+// All borderRadius use 'px' strings, no bare lineHeight, flex layout for rows
 
 export const colors = {
   primary: '#8232FF',
@@ -56,8 +56,8 @@ export const pill = {
 };
 
 export const row = {
-  display: 'linear' as const,
-  linearDirection: 'row' as const,
+  display: 'flex' as const,
+  flexDirection: 'row' as const,
 };
 
 export const sectionHeader = {

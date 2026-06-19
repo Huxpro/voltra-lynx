@@ -141,8 +141,8 @@ function ActivityCard({ def }: { def: ActivityDef }) {
       marginTop: 16,
     }}>
       {/* Header row */}
-      <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' }}>
-        <text style={{ fontSize: 18, fontWeight: '600', color: '#E2E8F0', linearWeight: 1 } as any}>
+      <view style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+        <text style={{ fontSize: 18, fontWeight: '600', color: '#E2E8F0', flex: 1 } as any}>
           {def.title}
         </text>
         <view style={{
@@ -162,7 +162,7 @@ function ActivityCard({ def }: { def: ActivityDef }) {
       </text>
 
       {/* Button row */}
-      <view style={{ display: 'linear', linearDirection: 'row', marginTop: 16 }}>
+      <view style={{ display: 'flex', flexDirection: 'row', marginTop: 16 }}>
         <view
           bindtap={handleStartEnd}
           style={{
@@ -203,14 +203,14 @@ function TestingGroundsScreen({ onBack }: { onBack: () => void }) {
     const entry = TESTING_ENTRIES.find(e => e.id === activeScreen);
     const DemoComponent = entry?.component;
     return (
-      <view style={{ width: '100%', height: '100%', backgroundColor: '#0B0F19' }}>
-        <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center', padding: 12, paddingTop: 60, backgroundColor: '#0F172A', borderBottomWidth: 1, borderBottomColor: 'rgba(148, 163, 184, 0.12)' }}>
+      <view style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#0B0F19' }}>
+        <view style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: 12, paddingTop: 60, backgroundColor: '#0F172A', borderBottomWidth: 1, borderBottomColor: 'rgba(148, 163, 184, 0.12)' }}>
           <view bindtap={() => setActiveScreen(null)} style={{ paddingRight: 12 }}>
             <text style={{ fontSize: 16, fontWeight: '600', color: '#8232FF' }}>Back</text>
           </view>
           <text style={{ fontSize: 17, fontWeight: 'bold', color: '#E2E8F0' }}>{entry?.title}</text>
         </view>
-        <scroll-view style={{ width: '100%', linearWeight: 1 }} scroll-orientation="vertical">
+        <scroll-view style={{ width: '100%', flex: 1 }} scroll-orientation="vertical">
           {DemoComponent ? <DemoComponent /> : null}
         </scroll-view>
       </view>
@@ -218,8 +218,8 @@ function TestingGroundsScreen({ onBack }: { onBack: () => void }) {
   }
 
   return (
-    <view style={{ width: '100%', height: '100%', backgroundColor: '#0B0F19' }}>
-      <scroll-view style={{ width: '100%', linearWeight: 1 } as any} scroll-orientation="vertical">
+    <view style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#0B0F19' }}>
+      <scroll-view style={{ width: '100%', flex: 1 } as any} scroll-orientation="vertical">
         <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 70, paddingBottom: 24 }}>
           <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' } as any}>
             Testing Grounds
@@ -302,8 +302,8 @@ export function App() {
   }
 
   return (
-    <view style={{ width: '100%', height: '100%', backgroundImage: BG_GRADIENT } as any}>
-      <scroll-view style={{ width: '100%', linearWeight: 1 }} scroll-orientation="vertical">
+    <view style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundImage: BG_GRADIENT } as any}>
+      <scroll-view style={{ width: '100%', flex: 1 }} scroll-orientation="vertical">
         <view style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 60, paddingBottom: 24 }}>
           {/* Header */}
           <text style={{ fontSize: 24, fontWeight: '700', color: '#FFFFFF' }}>Voltra</text>
@@ -312,7 +312,7 @@ export function App() {
           </text>
 
           {/* Navigation */}
-          <view style={{ marginTop: 16, display: 'linear', linearDirection: 'row' }}>
+          <view style={{ marginTop: 16, display: 'flex', flexDirection: 'row' }}>
             <view
               bindtap={() => setScreen('testing')}
               style={{

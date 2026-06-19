@@ -173,18 +173,18 @@ export function ProgressIndicatorsScreen() {
           </text>
 
           {/* Type */}
-          <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <text style={{ color: '#fff', fontSize: 14 }}>Type</text>
-            <view style={{ display: 'linear', linearDirection: 'row' }}>
+            <view style={{ display: 'flex', flexDirection: 'row' }}>
               <ToggleButton label="Linear" active={type === 'linear'} onTap={() => setType('linear')} />
               <ToggleButton label="Circular" active={type === 'circular'} onTap={() => setType('circular')} />
             </view>
           </view>
 
           {/* Mode */}
-          <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <text style={{ color: '#fff', fontSize: 14 }}>Mode</text>
-            <view style={{ display: 'linear', linearDirection: 'row' }}>
+            <view style={{ display: 'flex', flexDirection: 'row' }}>
               <ToggleButton label="Determinate" active={mode === 'determinate'} onTap={() => setMode('determinate')} />
               <ToggleButton label="Timer" active={mode === 'timer'} onTap={() => setMode('timer')} disabled={type === 'circular'} />
               <ToggleButton label="Indeterminate" active={mode === 'indeterminate'} onTap={() => setMode('indeterminate')} disabled={type === 'linear'} />
@@ -193,9 +193,9 @@ export function ProgressIndicatorsScreen() {
 
           {/* Progress value (determinate only) */}
           {mode === 'determinate' && (
-            <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
               <text style={{ color: '#fff', fontSize: 14 }}>Progress: {progressValue}%</text>
-              <view style={{ display: 'linear', linearDirection: 'row' }}>
+              <view style={{ display: 'flex', flexDirection: 'row' }}>
                 <ToggleButton label="-10" active={false} onTap={() => setProgressValue(Math.max(0, progressValue - 10))} />
                 <ToggleButton label="+10" active={false} onTap={() => setProgressValue(Math.min(100, progressValue + 10))} />
               </view>
@@ -205,9 +205,9 @@ export function ProgressIndicatorsScreen() {
           {/* Timer config */}
           {mode === 'timer' && (
             <view>
-              <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                 <text style={{ color: '#fff', fontSize: 14 }}>Duration (seconds)</text>
-                <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' } as any}>
+                <view style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' } as any}>
                   <view
                     bindtap={() => setDurationSec(String(Math.max(10, (parseInt(durationSec) || 30) - 10)))}
                     style={{ backgroundColor: '#334155', paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4, borderRadius: '6px', marginRight: 6 } as any}
@@ -225,7 +225,7 @@ export function ProgressIndicatorsScreen() {
                   </view>
                 </view>
               </view>
-              <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                 <text style={{ color: '#fff', fontSize: 14 }}>Count Down</text>
                 <ToggleButton label={countDown ? 'ON' : 'OFF'} active={countDown} onTap={() => setCountDown(!countDown)} />
               </view>
@@ -252,9 +252,9 @@ export function ProgressIndicatorsScreen() {
           </text>
 
           {/* Track Color */}
-          <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <text style={{ color: '#fff', fontSize: 14 }}>Track Color</text>
-            <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' } as any}>
+            <view style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' } as any}>
               {['#334155', '#1E293B', '#4B5563'].map((c) => (
                 <view
                   key={c}
@@ -269,9 +269,9 @@ export function ProgressIndicatorsScreen() {
           </view>
 
           {/* Progress Color */}
-          <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <text style={{ color: '#fff', fontSize: 14 }}>Progress Color</text>
-            <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' } as any}>
+            <view style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' } as any}>
               {['#8232FF', '#00D1FF', '#10B981', '#F59E0B'].map((c) => (
                 <view
                   key={c}
@@ -289,9 +289,9 @@ export function ProgressIndicatorsScreen() {
           {type === 'linear' && (
             <view>
               {/* Height */}
-              <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                 <text style={{ color: '#fff', fontSize: 14 }}>Height: {height}</text>
-                <view style={{ display: 'linear', linearDirection: 'row' }}>
+                <view style={{ display: 'flex', flexDirection: 'row' }}>
                   <ToggleButton label="Small" active={height === 4} onTap={() => setHeight(4)} />
                   <ToggleButton label="Medium" active={height === 8} onTap={() => setHeight(8)} />
                   <ToggleButton label="Large" active={height === 16} onTap={() => setHeight(16)} />
@@ -299,9 +299,9 @@ export function ProgressIndicatorsScreen() {
               </view>
 
               {/* Corner Radius */}
-              <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                 <text style={{ color: '#fff', fontSize: 14 }}>Corner Radius: {cornerRadius}</text>
-                <view style={{ display: 'linear', linearDirection: 'row' }}>
+                <view style={{ display: 'flex', flexDirection: 'row' }}>
                   <ToggleButton label="None" active={cornerRadius === 0} onTap={() => setCornerRadius(0)} />
                   <ToggleButton label="Small" active={cornerRadius === 4} onTap={() => setCornerRadius(4)} />
                   <ToggleButton label="Full" active={cornerRadius === 20} onTap={() => setCornerRadius(20)} />
@@ -309,7 +309,7 @@ export function ProgressIndicatorsScreen() {
               </view>
 
               {/* Custom Thumb */}
-              <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                 <text style={{ color: '#fff', fontSize: 14 }}>Custom Thumb</text>
                 <ToggleButton label={useThumb ? 'ON' : 'OFF'} active={useThumb} onTap={() => setUseThumb(!useThumb)} />
               </view>
@@ -318,9 +318,9 @@ export function ProgressIndicatorsScreen() {
 
           {/* Circular-specific styling */}
           {type === 'circular' && (
-            <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
               <text style={{ color: '#fff', fontSize: 14 }}>Line Width: {lineWidth}</text>
-              <view style={{ display: 'linear', linearDirection: 'row' }}>
+              <view style={{ display: 'flex', flexDirection: 'row' }}>
                 <ToggleButton label="2" active={lineWidth === 2} onTap={() => setLineWidth(2)} />
                 <ToggleButton label="6" active={lineWidth === 6} onTap={() => setLineWidth(6)} />
                 <ToggleButton label="12" active={lineWidth === 12} onTap={() => setLineWidth(12)} />

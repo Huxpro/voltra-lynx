@@ -241,16 +241,24 @@ Any React library that only uses `createElement`/hooks (not DOM) should work in 
 
 ### Layout
 
-| Pattern | Wrong (Web/RN) | Correct (Lynx) |
-|---------|---------------|-----------------|
-| Scroll direction | `scroll-y` | `scroll-orientation="vertical"` |
-| Fill remaining space | `flex: 1` | `linearWeight: 1` |
-| Horizontal row | `display: 'flex', flexDirection: 'row'` | `display: 'linear', linearDirection: 'row'` |
-| Root view sizing | `flex: 1` | `width: '100%', height: '100%'` |
+Lynx supports both `display: flex` (full CSS Flexbox, only `min-content` unsupported) and `display: linear` (Android LinearLayout-style). **Prefer flex** — it ports 1:1 from the React Native `example/` and matches what web developers expect.
 
-- Default layout is `linear` (vertical, like Android LinearLayout), NOT flexbox
-- `flex: 1` on `<scroll-view>` results in **zero computed height** (confirmed by LynxBase OnCall threads)
-- `flexGrow: 1` also unreliable on scroll-view — always use `linearWeight: 1`
+| Pattern | Web / RN | Lynx (preferred) | Lynx (linear, when needed) |
+|---------|----------|------------------|-----------------------------|
+| Scroll direction | `scroll-y` | `scroll-orientation="vertical"` | same |
+| Horizontal row | `display: 'flex', flexDirection: 'row'` | same | `display: 'linear', linearDirection: 'row'` |
+| Fill remaining space (parent is flex) | `flex: 1` | `flex: 1` | — |
+| Fill remaining space (parent is linear) | — | — | `linearWeight: 1` |
+| Root view sizing | `flex: 1` | `width: '100%', height: '100%'` | same |
+
+Default `display` for `<view>` is `linear` (column). Either set `display: 'flex'` explicitly on the parent when using flex children, or stay in linear and use `linearWeight`.
+
+#### The real `<scroll-view>` rules
+
+Per [Lynx's scroll-view docs](https://lynxjs.org/api/elements/built-in/scroll-view.html):
+
+1. **`<scroll-view>` always uses linear layout for its direct children** — they only support `linear` positions and `sticky`. Want a flex grid inside? Wrap the contents in a single `<view style={{ display: 'flex', ... }}>` child.
+2. **`flex: 1` on `<scroll-view>` only works when its parent is `display: 'flex'`.** If the parent is the default linear `<view>`, the scroll-view collapses to zero height. Fix: set `display: 'flex', flexDirection: 'column'` on the parent, or keep `linearWeight: 1` on the scroll-view.
 
 ### Styling
 

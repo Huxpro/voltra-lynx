@@ -332,8 +332,8 @@ export function ImageFallbackScreen() {
             {/* Fallback preview */}
             <view
               style={{
-                display: 'linear',
-                linearDirection: 'row',
+                display: 'flex',
+                flexDirection: 'row',
                 alignItems: 'center',
                 marginBottom: 12,
               }}

@@ -166,19 +166,19 @@ export function TimerScreen() {
           {/* Mode */}
           <view
             style={{
-              display: 'linear',
-              linearDirection: 'row',
+              display: 'flex',
+              flexDirection: 'row',
               alignItems: 'center',
               marginBottom: 16,
             }}
           >
             <text
-              style={{ color: '#fff', fontSize: 16, linearWeight: 1 } as any}
+              style={{ color: '#fff', fontSize: 16, flex: 1 } as any}
             >
               Mode
             </text>
             <view
-              style={{ display: 'linear', linearDirection: 'row', gap: 8 }}
+              style={{ display: 'flex', flexDirection: 'row', gap: 8 }}
             >
               <view
                 bindtap={() => setMode('timer')}
@@ -227,19 +227,19 @@ export function TimerScreen() {
           {mode === 'timer' && (
             <view
               style={{
-                display: 'linear',
-                linearDirection: 'row',
+                display: 'flex',
+                flexDirection: 'row',
                 alignItems: 'center',
                 marginBottom: 16,
               }}
             >
               <text
-                style={{ color: '#fff', fontSize: 16, linearWeight: 1 } as any}
+                style={{ color: '#fff', fontSize: 16, flex: 1 } as any}
               >
                 Direction
               </text>
               <view
-                style={{ display: 'linear', linearDirection: 'row', gap: 8 }}
+                style={{ display: 'flex', flexDirection: 'row', gap: 8 }}
               >
                 <view
                   bindtap={() => setDirection('down')}
@@ -289,18 +289,18 @@ export function TimerScreen() {
           {mode === 'timer' && (
             <view
               style={{
-                display: 'linear',
-                linearDirection: 'row',
+                display: 'flex',
+                flexDirection: 'row',
                 alignItems: 'center',
                 marginBottom: 16,
               }}
             >
               <text
-                style={{ color: '#fff', fontSize: 16, linearWeight: 1 } as any}
+                style={{ color: '#fff', fontSize: 16, flex: 1 } as any}
               >
                 Duration (seconds)
               </text>
-              <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' } as any}>
+              <view style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' } as any}>
                 <view
                   bindtap={() => setDurationSec(String(Math.max(60, (parseInt(durationSec) || 300) - 60)))}
                   style={{ backgroundColor: '#334155', paddingLeft: 10, paddingRight: 10, paddingTop: 6, paddingBottom: 6, borderRadius: '6px', marginRight: 8 } as any}
@@ -323,19 +323,19 @@ export function TimerScreen() {
           {/* Text Style */}
           <view
             style={{
-              display: 'linear',
-              linearDirection: 'row',
+              display: 'flex',
+              flexDirection: 'row',
               alignItems: 'center',
               marginBottom: 16,
             }}
           >
             <text
-              style={{ color: '#fff', fontSize: 16, linearWeight: 1 } as any}
+              style={{ color: '#fff', fontSize: 16, flex: 1 } as any}
             >
               Style
             </text>
             <view
-              style={{ display: 'linear', linearDirection: 'row', gap: 8 }}
+              style={{ display: 'flex', flexDirection: 'row', gap: 8 }}
             >
               <view
                 bindtap={() => setTextStyle('timer')}
@@ -383,18 +383,18 @@ export function TimerScreen() {
           {/* Show Hours */}
           <view
             style={{
-              display: 'linear',
-              linearDirection: 'row',
+              display: 'flex',
+              flexDirection: 'row',
               alignItems: 'center',
             }}
           >
             <text
-              style={{ color: '#fff', fontSize: 16, linearWeight: 1 } as any}
+              style={{ color: '#fff', fontSize: 16, flex: 1 } as any}
             >
               Show Hours
             </text>
             <view
-              style={{ display: 'linear', linearDirection: 'row', gap: 8 }}
+              style={{ display: 'flex', flexDirection: 'row', gap: 8 }}
             >
               <view
                 bindtap={() => setShowHours(false)}

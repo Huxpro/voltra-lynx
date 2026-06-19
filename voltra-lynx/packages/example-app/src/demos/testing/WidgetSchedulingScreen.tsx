@@ -224,16 +224,16 @@ export function WidgetSchedulingScreen() {
 
           {/* State 2 stepper */}
           <view style={{
-            display: 'linear',
-            linearDirection: 'row',
+            display: 'flex',
+            flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
             marginBottom: 12,
           } as any}>
-            <text style={{ fontSize: 14, color: '#FFFFFF', linearWeight: 1 } as any}>
+            <text style={{ fontSize: 14, color: '#FFFFFF', flex: 1 } as any}>
               State 2 (minutes from now):
             </text>
-            <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' } as any}>
+            <view style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' } as any}>
               <view
                 bindtap={() => setMinutesUntilSecond(String(Math.max(1, (parseInt(minutesUntilSecond) || 2) - 1)))}
                 style={{ backgroundColor: '#334155', paddingLeft: 10, paddingRight: 10, paddingTop: 6, paddingBottom: 6, borderRadius: '6px', marginRight: 8 } as any}
@@ -254,15 +254,15 @@ export function WidgetSchedulingScreen() {
 
           {/* State 3 stepper */}
           <view style={{
-            display: 'linear',
-            linearDirection: 'row',
+            display: 'flex',
+            flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
           } as any}>
-            <text style={{ fontSize: 14, color: '#FFFFFF', linearWeight: 1 } as any}>
+            <text style={{ fontSize: 14, color: '#FFFFFF', flex: 1 } as any}>
               State 3 (minutes from now):
             </text>
-            <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' } as any}>
+            <view style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' } as any}>
               <view
                 bindtap={() => setMinutesUntilThird(String(Math.max(1, (parseInt(minutesUntilThird) || 5) - 1)))}
                 style={{ backgroundColor: '#334155', paddingLeft: 10, paddingRight: 10, paddingTop: 6, paddingBottom: 6, borderRadius: '6px', marginRight: 8 } as any}
@@ -302,11 +302,11 @@ export function WidgetSchedulingScreen() {
             Add the widget to your home screen to see it transition between states.
           </text>
 
-          <view style={{ display: 'linear', linearDirection: 'row' } as any}>
+          <view style={{ display: 'flex', flexDirection: 'row' } as any}>
             <view
               bindtap={handleScheduleTimeline}
               style={{
-                linearWeight: 1,
+                flex: 1,
                 backgroundColor: isScheduling ? '#555' : '#007AFF',
                 padding: 14,
                 borderRadius: '10px',
@@ -353,7 +353,7 @@ export function WidgetSchedulingScreen() {
             </text>
 
             {/* State 1 */}
-            <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center', marginBottom: 16 } as any}>
+            <view style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 16 } as any}>
               <view style={{
                 width: 12,
                 height: 12,
@@ -361,7 +361,7 @@ export function WidgetSchedulingScreen() {
                 backgroundColor: '#3498DB',
                 marginRight: 12,
               } as any} />
-              <view style={{ linearWeight: 1 } as any}>
+              <view style={{ flex: 1 } as any}>
                 <text style={{ fontSize: 16, fontWeight: '600', color: '#FFFFFF', marginBottom: 2 }}>
                   State 1 (Current)
                 </text>
@@ -370,7 +370,7 @@ export function WidgetSchedulingScreen() {
             </view>
 
             {/* State 2 */}
-            <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center', marginBottom: 16 } as any}>
+            <view style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 16 } as any}>
               <view style={{
                 width: 12,
                 height: 12,
@@ -378,7 +378,7 @@ export function WidgetSchedulingScreen() {
                 backgroundColor: '#16A085',
                 marginRight: 12,
               } as any} />
-              <view style={{ linearWeight: 1 } as any}>
+              <view style={{ flex: 1 } as any}>
                 <text style={{ fontSize: 16, fontWeight: '600', color: '#FFFFFF', marginBottom: 2 }}>
                   State 2
                 </text>
@@ -387,7 +387,7 @@ export function WidgetSchedulingScreen() {
             </view>
 
             {/* State 3 */}
-            <view style={{ display: 'linear', linearDirection: 'row', alignItems: 'center' } as any}>
+            <view style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' } as any}>
               <view style={{
                 width: 12,
                 height: 12,
@@ -395,7 +395,7 @@ export function WidgetSchedulingScreen() {
                 backgroundColor: '#8E44AD',
                 marginRight: 12,
               } as any} />
-              <view style={{ linearWeight: 1 } as any}>
+              <view style={{ flex: 1 } as any}>
                 <text style={{ fontSize: 16, fontWeight: '600', color: '#FFFFFF', marginBottom: 2 }}>
                   State 3
                 </text>

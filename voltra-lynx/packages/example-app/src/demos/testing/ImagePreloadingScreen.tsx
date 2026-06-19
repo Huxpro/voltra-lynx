@@ -107,7 +107,7 @@ export function ImagePreloadingScreen() {
         <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 8 }}>
           Progress
         </text>
-        <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between' } as any}>
+        <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' } as any}>
           <text style={{ fontSize: 13, color: '#CBD5F5' }}>
             Images: {entries.length}
           </text>
@@ -141,8 +141,8 @@ export function ImagePreloadingScreen() {
       {/* Image list */}
       {entries.map((entry) => (
         <view key={entry.key} style={{
-          display: 'linear',
-          linearDirection: 'row',
+          display: 'flex',
+          flexDirection: 'row',
           alignItems: 'center',
           padding: 12,
           backgroundColor: '#1E293B',
@@ -159,7 +159,7 @@ export function ImagePreloadingScreen() {
           } as any} />
 
           {/* Info */}
-          <view style={{ linearWeight: 1 } as any}>
+          <view style={{ flex: 1 } as any}>
             <text style={{ fontSize: 13, fontWeight: '500', color: '#E2E8F0' }}>
               {entry.key}
             </text>

@@ -102,7 +102,7 @@ export function GradientPlaygroundScreen() {
           <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 12 } as any}>Controls</text>
 
           {/* Gradient Type */}
-          <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <text style={{ color: '#CBD5F5', fontSize: 14 }}>Type:</text>
             <view
               bindtap={cycleGradientType}
@@ -120,7 +120,7 @@ export function GradientPlaygroundScreen() {
           {/* Direction (linear only) */}
           {gradientType === 'linear' && (
             <view>
-              <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                 <text style={{ color: '#CBD5F5', fontSize: 14 }}>Mode:</text>
                 <view
                   bindtap={() => setUseAngle((v) => !v)}
@@ -135,7 +135,7 @@ export function GradientPlaygroundScreen() {
                 </view>
               </view>
               {useAngle ? (
-                <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                   <text style={{ color: '#CBD5F5', fontSize: 14 }}>Angle: {angle}deg</text>
                   <view
                     bindtap={cycleAngle}
@@ -150,7 +150,7 @@ export function GradientPlaygroundScreen() {
                   </view>
                 </view>
               ) : (
-                <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                   <text style={{ color: '#CBD5F5', fontSize: 14 }}>Direction:</text>
                   <view
                     bindtap={cycleDirection}
@@ -170,7 +170,7 @@ export function GradientPlaygroundScreen() {
 
           {/* Angle for conic */}
           {gradientType === 'conic' && (
-            <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
               <text style={{ color: '#CBD5F5', fontSize: 14 }}>Start angle: {angle}deg</text>
               <view
                 bindtap={cycleAngle}
@@ -187,7 +187,7 @@ export function GradientPlaygroundScreen() {
           )}
 
           {/* Color Preset */}
-          <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <text style={{ color: '#CBD5F5', fontSize: 14 }}>Colors: {PRESETS[preset].label}</text>
             <view
               bindtap={cyclePreset}
@@ -203,9 +203,9 @@ export function GradientPlaygroundScreen() {
           </view>
 
           {/* Border Radius */}
-          <view style={{ display: 'linear', linearDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <view style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <text style={{ color: '#CBD5F5', fontSize: 14 }}>borderRadius: {borderRadius}px</text>
-            <view style={{ display: 'linear', linearDirection: 'row' }}>
+            <view style={{ display: 'flex', flexDirection: 'row' }}>
               <view
                 bindtap={decreaseBorderRadius}
                 style={{

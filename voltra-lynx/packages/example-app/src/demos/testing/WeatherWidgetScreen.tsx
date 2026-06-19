@@ -521,13 +521,13 @@ export function WeatherWidgetScreen() {
         <text style={{ fontSize: 13, color: '#94A3B8', marginBottom: 12 } as any}>
           Select a weather condition to update the widget:
         </text>
-        <view style={{ display: 'linear', linearDirection: 'row' } as any}>
+        <view style={{ display: 'flex', flexDirection: 'row' } as any}>
           {WEATHER_CONDITIONS.map((condition, index) => (
             <view
               key={condition.id}
               bindtap={() => handleWeatherChange(condition.id)}
               style={{
-                linearWeight: 1,
+                flex: 1,
                 backgroundColor: selectedWeather === condition.id ? '#007AFF' : 'rgba(255,255,255,0.1)',
                 padding: 12,
                 borderRadius: '8px',
@@ -553,11 +553,11 @@ export function WeatherWidgetScreen() {
         <text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 12 } as any}>
           Quick Actions
         </text>
-        <view style={{ display: 'linear', linearDirection: 'row' } as any}>
+        <view style={{ display: 'flex', flexDirection: 'row' } as any}>
           <view
             bindtap={handleRandomWeather}
             style={{
-              linearWeight: 1,
+              flex: 1,
               backgroundColor: isUpdating ? '#555' : 'rgba(255,255,255,0.1)',
               padding: 12,
               borderRadius: '8px',
@@ -572,7 +572,7 @@ export function WeatherWidgetScreen() {
           <view
             bindtap={handleCustomWeather}
             style={{
-              linearWeight: 1,
+              flex: 1,
               backgroundColor: isUpdating ? '#555' : 'rgba(255,255,255,0.1)',
               padding: 12,
               borderRadius: '8px',
