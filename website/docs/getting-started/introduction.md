@@ -9,10 +9,10 @@ become native primitives (SwiftUI on iOS, Jetpack Compose Glance on Android).
 
 ## Why Voltra?
 
-- **One codebase, two platforms** — write the same JSX, ship it to iOS and Android.
-- **No native code required** — build widgets and live activities without touching Xcode or Android Studio for UI work.
-- **Hot reload** — Rspeedy reloads bundle changes; live activities re-render in milliseconds.
-- **Push updates** — stream Live Activity updates over APNS / FCM from any JavaScript runtime.
+- **One codebase, two platforms.** Write the same JSX, ship it to iOS and Android.
+- **No native code required.** Build widgets and live activities without touching Xcode or Android Studio for UI work.
+- **Hot reload.** Rspeedy reloads bundle changes; live activities re-render in milliseconds.
+- **Push updates.** Stream Live Activity updates over APNS / FCM from any JavaScript runtime.
 
 ## How it works
 
@@ -41,7 +41,7 @@ const ui = (
 useLiveActivity({ lockScreen: ui }, { activityName: 'pickup', autoStart: true })
 ```
 
-If you've used Voltra on React Native, the API is the same — the JSX,
+If you've used Voltra on React Native, the API is the same. The JSX,
 component shapes, and payload format don't change between runtimes.
 
 ## Server-side push updates

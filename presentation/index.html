@@ -401,7 +401,7 @@
     </h1>
     <p class="hero-sub">
       A native-surface UI library, ported to a new runtime,
-      with <strong>95.6%</strong> of the code untouched —
+      with <strong>95.6%</strong> of the code untouched,
       and the entire SwiftUI/Glance renderer shipped <em>byte-identical</em>.
     </p>
 
@@ -422,7 +422,7 @@
     <h2>Same pixels.<br/><span class="grad-text">Different runtime.</span></h2>
     <p class="lead mt-4">
       These iOS Live Activities, Dynamic Island layouts, and home-screen Widgets
-      now render from Lynx JSX — but because the SwiftUI rendering engine is
+      now render from Lynx JSX, but because the SwiftUI rendering engine is
       byte-identical, the output is <em>pixel-for-pixel the same</em> as the
       original React Native version.
     </p>
@@ -552,7 +552,7 @@
       <div class="layer reused">
         <span class="tag">Layer 0</span>
         <div class="desc">
-          <h5>Pure JS Packages — <code>@use-voltra/core · ios · android · server</code></h5>
+          <h5>Pure JS Packages: <code>@use-voltra/core · ios · android · server</code></h5>
           <p>Renderer, payload compression, JSX components. Framework-agnostic. Depend on <code>react</code> only.</p>
         </div>
         <span class="reuse">100% via npm</span>
@@ -560,7 +560,7 @@
       <div class="layer reused">
         <span class="tag">Layer 1</span>
         <div class="desc">
-          <h5>Business Logic — <code>live-activity/api · widgets · ongoing-notification · preload</code></h5>
+          <h5>Business Logic: <code>live-activity/api · widgets · ongoing-notification · preload</code></h5>
           <p>Hooks, API functions. Only call <code>VoltraModule</code> methods. Vendored verbatim into the Lynx package.</p>
         </div>
         <span class="reuse">~95% vendored</span>
@@ -568,7 +568,7 @@
       <div class="layer bridge">
         <span class="tag">Layer 2</span>
         <div class="desc">
-          <h5>Bridge Adapter — <code>lynx-bridge/</code></h5>
+          <h5>Bridge Adapter: <code>lynx-bridge/</code></h5>
           <p>Promise⇄callback wrapper · GlobalEventEmitter shim · Platform detection. <strong>NEW.</strong></p>
         </div>
         <span class="reuse">+ 662 LoC</span>
@@ -576,7 +576,7 @@
       <div class="layer bridge">
         <span class="tag">Layer 3</span>
         <div class="desc">
-          <h5>Native Module Registration — <code>VoltraLynxModule.swift · .kt</code></h5>
+          <h5>Native Module Registration: <code>VoltraLynxModule.swift · .kt</code></h5>
           <p>Mechanical translation of Expo Module DSL → Lynx <code>@LynxMethod</code>. Bodies delegate to existing impl.</p>
         </div>
         <span class="reuse">+ 788 LoC</span>
@@ -584,7 +584,7 @@
       <div class="layer reused">
         <span class="tag">Layer 4</span>
         <div class="desc">
-          <h5>Native Rendering — SwiftUI · Glance · Payload parsing · Image preload</h5>
+          <h5>Native Rendering: SwiftUI · Glance · Payload parsing · Image preload</h5>
           <p>The 19,800 LoC engine that actually turns JSON into pixels. Copied byte-for-byte from upstream Voltra.</p>
         </div>
         <span class="reuse">100% shared</span>
@@ -594,7 +594,7 @@
     <p class="small mt-8" style="max-width:1100px;">
       <strong>Architectural principle (P3) from <code>LYNX_PORT.md</code>:</strong>
       <em>“The Adapter Pattern Absorbs All Differences.”</em>
-      All business logic sees the same interface regardless of host framework — Expo or Lynx.
+      All business logic sees the same interface regardless of host framework (Expo or Lynx).
     </p>
   </div>
 </section>
@@ -608,8 +608,8 @@
       of the Lynx port is <span class="grad-text-2">reused</span> from the React Native library.
     </h3>
     <p class="lead mt-6" style="margin:24px auto 0;">
-      Only <strong>1,440 lines</strong> of new code — <strong>662</strong> for the JS bridge adapter,
-      <strong>788</strong> for the Swift + Kotlin native-module shims —
+      Only <strong>1,440 lines</strong> of new code (<strong>662</strong> for the JS bridge adapter,
+      <strong>788</strong> for the Swift + Kotlin native-module shims)
       to port <strong>32,500 lines</strong> of native UI library to a different host runtime.
     </p>
   </div>
@@ -634,19 +634,19 @@
         <tbody>
           <tr>
             <td><strong>L0</strong></td>
-            <td>Pure-JS — core, ios, android, server, server-impls</td>
+            <td>Pure-JS, core, ios, android, server, server-impls</td>
             <td class="num">5,734</td><td class="num">0 <span class="small">(npm-linked)</span></td>
             <td class="num"><span class="pill green">100%</span></td>
           </tr>
           <tr>
             <td><strong>L0/1</strong></td>
-            <td>Voltra umbrella — renderer, JSX, payload, styles</td>
+            <td>Voltra umbrella, renderer, JSX, payload, styles</td>
             <td class="num">4,452</td><td class="num">0 <span class="small">(npm-linked)</span></td>
             <td class="num"><span class="pill green">100%</span></td>
           </tr>
           <tr>
             <td><strong>L1</strong></td>
-            <td>Client business logic — hooks, widget-api, live-activity</td>
+            <td>Client business logic, hooks, widget-api, live-activity</td>
             <td class="num">1,616</td><td class="num">1,241 <span class="small">(vendored)</span></td>
             <td class="num"><span class="pill green">~95%</span></td>
           </tr>
@@ -659,7 +659,7 @@
           </tr>
           <tr>
             <td><strong>L3</strong></td>
-            <td>Native module registration — Swift + Kotlin</td>
+            <td>Native module registration, Swift + Kotlin</td>
             <td class="num">919</td>
             <td class="num"><span style="color:var(--cyan);font-weight:700;">788</span></td>
             <td class="num"><span class="pill yellow">REWRITE</span></td>
@@ -737,7 +737,7 @@
     <div class="grid grid-2 mt-8">
       <div class="diff-block before">
         <span class="label">Before · Expo</span>
-        <p class="tiny" style="margin-bottom:8px;">packages/ios-client/src/VoltraModule.ts — 57 LoC</p>
+        <p class="tiny" style="margin-bottom:8px;">packages/ios-client/src/VoltraModule.ts (57 LoC)</p>
         <pre><span class="kw">import</span> { requireNativeModule } <span class="kw">from</span> <span class="str">'expo'</span>
 
 <span class="kw">const</span> <span class="ty">VoltraModule</span> =
@@ -749,7 +749,7 @@
 
       <div class="diff-block after">
         <span class="label">After · Lynx</span>
-        <p class="tiny" style="margin-bottom:8px;">voltra-lynx/.../lynx/src/ios-client/VoltraModule.ts — 17 LoC</p>
+        <p class="tiny" style="margin-bottom:8px;">voltra-lynx/.../lynx/src/ios-client/VoltraModule.ts (17 LoC)</p>
         <pre><span class="kw">import</span> { createIOSModuleAdapter } <span class="kw">from</span> <span class="str">'../bridge/index.js'</span>
 
 <span class="kw">declare const</span> <span class="ty">NativeModules</span>: {
@@ -765,8 +765,8 @@
       <p>
         <strong>The adapter</strong> is a 270-line file that wraps every method
         in <code>new Promise((resolve, reject) =&gt; raw.method(args, (r) =&gt; …))</code>.
-        Above it, every line of business logic — <code>useLiveActivity</code>, <code>startLiveActivity</code>,
-        <code>updateWidget</code>, all 28+ functions — is <em>unchanged</em>.
+        Above it, every line of business logic (<code>useLiveActivity</code>, <code>startLiveActivity</code>,
+        <code>updateWidget</code>, all 28+ functions) is <em>unchanged</em>.
       </p>
     </div>
   </div>
@@ -824,8 +824,8 @@
         <strong>Pure mechanical translation.</strong>
         <code>AsyncFunction("name") { … }</code> becomes <code>@objc func name(_:callback:)</code>;
         <code>async throws → T</code> becomes a <code>Task { … callback?(…) }</code> wrapper.
-        The 330-line <code>VoltraModuleImpl.swift</code> that does all the actual work — ActivityKit calls,
-        image preloading, widget timelines — is <em>byte-for-byte identical</em>.
+        The 330-line <code>VoltraModuleImpl.swift</code> that does all the actual work (ActivityKit calls,
+        image preloading, widget timelines) is <em>byte-for-byte identical</em>.
       </p>
     </div>
   </div>
@@ -883,7 +883,7 @@
         Same shape on Android: <code>AsyncFunction</code> → <code>@LynxMethod fun … callback: Callback</code>,
         and <code>runBlocking</code> → <code>scope.launch { … ; callback.invoke(…) }</code>.
         Every <code>VoltraWidgetManager</code>, <code>VoltraNotificationManager</code>,
-        Glance renderer, parser — all <strong>9,509 lines</strong> — is identical.
+        Glance renderer, parser: all <strong>9,509 lines</strong> identical.
       </p>
     </div>
   </div>
@@ -897,15 +897,15 @@
     <h2>The <span class="grad-text">React Alias</span>.</h2>
     <p class="lead mt-4">
       <code>pluginReactLynx</code> aliases <code>react → @lynx-js/react</code> at build time.
-      Which means <em>Voltra's JSX components — <code>VStack</code>, <code>Text</code>, <code>Symbol</code>,
-      <code>Image</code> — work as-is in Lynx</em>.
+      Which means <em>Voltra's JSX components (<code>VStack</code>, <code>Text</code>, <code>Symbol</code>,
+      <code>Image</code>) work as-is in Lynx</em>.
     </p>
 
     <div class="grid grid-2 mt-8">
       <div class="card">
         <h4>Why it works</h4>
         <p class="small">
-          Voltra's components only use <code>createElement</code> and hooks —
+          Voltra's components only use <code>createElement</code> and hooks:
           never <code>ReactDOM</code>, never platform-specific APIs.
         </p>
         <p class="small mt-4">
@@ -944,12 +944,12 @@
   <div class="container" style="max-width:1300px;">
     <div class="aha-icon">📐</div>
     <div class="section-num">Breakthrough · 02 of 03</div>
-    <h2>Lynx layout: <span class="grad-text">flex works</span> — but the default is linear.</h2>
+    <h2>Lynx layout: <span class="grad-text">flex works</span>, but the default is linear.</h2>
     <p class="lead mt-4">
       Lynx supports full CSS Flexbox <em>and</em> Android-LinearLayout-style
       <code>display: linear</code>. <code>&lt;view&gt;</code> defaults to linear,
       so <code>flex: 1</code> on a child <code>&lt;scroll-view&gt;</code> collapses
-      to zero height — until you set <code>display: 'flex'</code> on the parent.
+      to zero height, until you set <code>display: 'flex'</code> on the parent.
       One opt-in, and the rest of your RN styles port 1:1.
     </p>
 
@@ -1042,7 +1042,7 @@
       <div class="card">
         <h4>What it does</h4>
         <p class="small">
-          Renders Voltra SwiftUI <em>inline inside the Lynx app</em> — not on the
+          Renders Voltra SwiftUI <em>inline inside the Lynx app</em>, not on the
           home screen, not in the lock screen. Makes the Testing Grounds screens
           show actual SwiftUI output instead of JSON dumps.
         </p>
@@ -1074,7 +1074,7 @@
       <div class="phase">
         <div class="step">Phase 02</div>
         <h6>Bridge Adapter</h6>
-        <p>module-adapter · event-adapter · platform · types — 662 LoC</p>
+        <p>module-adapter · event-adapter · platform · types, 662 LoC</p>
       </div>
       <div class="phase">
         <div class="step">Phase 03</div>
@@ -1171,7 +1171,7 @@
       <div class="card">
         <h4>Why it works</h4>
         <p class="small">
-          A user story is a <strong>cache-friendly unit of agent work</strong> —
+          A user story is a <strong>cache-friendly unit of agent work</strong>,
           small enough to fit in one context window, with explicit acceptance
           criteria the agent can self-verify against.
         </p>
@@ -1181,7 +1181,7 @@
           Positioning Screen conversion in one line.
         </p>
         <p class="small mt-4">
-          <strong>Cost of context drift</strong> drops to zero — each story is a fresh start
+          <strong>Cost of context drift</strong> drops to zero, each story is a fresh start
           with the PRD as ground truth.
         </p>
         <pre style="font-size:0.78rem;margin-top:14px;">$ git log --oneline | grep <span class="str">'US-0'</span> | wc -l
@@ -1228,15 +1228,15 @@
         <h4>The compounding effect</h4>
         <p class="small">
           When a new agent dispatches on a fresh story, it doesn't have to <em>discover</em>
-          how the bridge works. It reads three things — <code>CLAUDE.md</code>,
-          <code>LYNX_PORT.md</code>, the relevant PRD section — and produces code
+          how the bridge works. It reads three things, <code>CLAUDE.md</code>,
+          <code>LYNX_PORT.md</code>, the relevant PRD section, and produces code
           that matches the architecture.
         </p>
         <p class="small mt-4">
           <strong>Personal CLAUDE.md</strong> additionally captures lessons from past mistakes:
         </p>
         <div class="card" style="background:var(--bg-2);border-color:var(--yellow);margin-top:14px;padding:14px 16px;">
-          <div class="tiny" style="color:var(--yellow);">PRINCIPLE 1 — FROM PAST MISTAKE</div>
+          <div class="tiny" style="color:var(--yellow);">PRINCIPLE 1 · FROM PAST MISTAKE</div>
           <p class="small mt-2" style="line-height:1.4;">
             <em>说不清解决什么问题的改动，就不该做.</em>
             “If you can't name the concrete bug your change fixes, don't make it.
@@ -1255,7 +1255,7 @@
     <h2><span class="grad-text">Spec → Plan → Implement.</span></h2>
     <p class="lead mt-4">
       For non-trivial changes, the harness gates the work behind a written spec
-      and a written implementation plan, each in its own commit. Then — and only then —
+      and a written implementation plan, each in its own commit. Then, and only then,
       the implementation commits land.
     </p>
 
@@ -1289,7 +1289,7 @@
     <h2><span class="grad-text">Ralph Loop</span> · autonomous story-by-story execution.</h2>
     <p class="lead mt-4">
       For the Android port (the second half of the project), execution was handed off to
-      <strong>Ralph Loop</strong> — an autonomous agent that reads the PRD,
+      <strong>Ralph Loop</strong>, an autonomous agent that reads the PRD,
       picks the next unfinished story, implements it, runs verification, commits, and repeats.
     </p>
 
@@ -1317,7 +1317,7 @@ architectural principles strictly.</pre>
         <h4>What Ralph contributed</h4>
         <div class="stack">
           <div><span class="pill green">+ Android host app scaffolded</span></div>
-          <div><span class="pill green">+ VoltraLynxModule.kt — 558 LoC, 28 methods</span></div>
+          <div><span class="pill green">+ VoltraLynxModule.kt, 558 LoC, 28 methods</span></div>
           <div><span class="pill green">+ 5 Android demos wired end-to-end</span></div>
           <div><span class="pill green">+ Sparkling-generated gradle setup</span></div>
         </div>
@@ -1325,7 +1325,7 @@ architectural principles strictly.</pre>
         <h4 class="mt-8">Why it works here</h4>
         <p class="small">
           The architectural seam was already proven on iOS. Android is the same
-          problem with a different vocabulary — exactly the kind of
+          problem with a different vocabulary, exactly the kind of
           <em>predictable, parallel</em> work loop-style agents excel at.
         </p>
         <p class="small mt-4">
@@ -1350,7 +1350,7 @@ architectural principles strictly.</pre>
 
     <div class="grid grid-2 mt-8">
       <div class="card">
-        <h4>This very deck — agents used</h4>
+        <h4>This very deck, agents used</h4>
         <div class="files-list">
           <div class="file-row"><div class="name">Agent #1</div><div class="loc">research</div><div class="desc">Compute LoC + reuse % across Layer 0–4 (parallel)</div></div>
           <div class="file-row"><div class="name">Agent #2</div><div class="loc">narrative</div><div class="desc">Extract phase arc from git log + JSONL session (parallel)</div></div>
@@ -1362,11 +1362,11 @@ architectural principles strictly.</pre>
         <h4>The economics</h4>
         <p class="small">
           Anthropic's prompt cache has a 5-minute TTL. Sleeping past 300s on the
-          main thread means reading the full context uncached — slow and expensive.
+          main thread means reading the full context uncached, slow and expensive.
         </p>
         <p class="small mt-4">
           Sub-agents <em>don't share that cache</em>, so dispatching them costs
-          nothing extra — and the main thread keeps moving while they work.
+          nothing extra, and the main thread keeps moving while they work.
         </p>
         <p class="small mt-4">
           <strong>Rule of thumb</strong>: if 2+ tasks are independent (no shared
@@ -1388,7 +1388,7 @@ architectural principles strictly.</pre>
     <h2>Project-local <span class="grad-text">skills</span> & cross-session <span class="grad-text-2">memory</span>.</h2>
     <p class="lead mt-4">
       Domain knowledge is captured as agent-readable references that
-      survive across sessions — no need to re-explain the project on each prompt.
+      survive across sessions, no need to re-explain the project on each prompt.
     </p>
 
     <div class="grid grid-2 mt-8">
@@ -1426,8 +1426,8 @@ architectural principles strictly.</pre>
           <code>user</code>, <code>feedback</code>, <code>project</code>, <code>reference</code>.
         </p>
         <p class="small mt-4">
-          When a session learns something durable —
-          <em>“the iOS host uses CocoaPods Lynx 3.7.0, not the internal template”</em> —
+          When a session learns something durable,
+          <em>“the iOS host uses CocoaPods Lynx 3.7.0, not the internal template”</em>,
           it writes a memory. The next session reads it on boot.
         </p>
         <p class="small mt-4">
@@ -1451,7 +1451,7 @@ architectural principles strictly.</pre>
     <h2><span class="grad-text">Mistakes, codified.</span></h2>
     <p class="lead mt-4">
       Every wrong turn becomes a written principle. The personal
-      <code>CLAUDE.md</code> grows a section per bug class — so the next agent
+      <code>CLAUDE.md</code> grows a section per bug class, so the next agent
       doesn't repeat it.
     </p>
 
@@ -1460,7 +1460,7 @@ architectural principles strictly.</pre>
         <h4 style="color:var(--red);">Principle 1</h4>
         <h3 style="font-size:1.2rem;color:var(--text);">说不清解决什么问题的改动，就不该做</h3>
         <p class="small mt-2">
-          <em>If you can't name a specific, reproducible bug — don't change it.
+          <em>If you can't name a specific, reproducible bug, don't change it.
           “More robust” and “more standard” are not reasons.</em>
         </p>
         <p class="tiny mt-4">Born from: vue-lynx migration, a “cleaner” path-resolve refactor that introduced a new pnpm-symlink bug.</p>
@@ -1472,7 +1472,7 @@ architectural principles strictly.</pre>
         <p class="small mt-2">
           <em>Ask: what does this pattern depend on? Does my environment satisfy that premise?</em>
         </p>
-        <p class="tiny mt-4">Born from: lynx-stack vs vue-lynx — same pattern, different architecture; the pattern didn't transfer.</p>
+        <p class="tiny mt-4">Born from: lynx-stack vs vue-lynx, same pattern, different architecture; the pattern didn't transfer.</p>
       </div>
 
       <div class="card" style="border-left:3px solid var(--pink);">
@@ -1519,7 +1519,7 @@ architectural principles strictly.</pre>
         <span class="n">02</span>
         <div class="b">
           <strong>Treat the host framework as just another adapter.</strong>
-          <p>Don't fork upstream code. Vendor it, write one bridge module, and absorb every ABI mismatch in one place. Promise⇄callback, EventEmitter, platform detection — all in one file.</p>
+          <p>Don't fork upstream code. Vendor it, write one bridge module, and absorb every ABI mismatch in one place. Promise⇄callback, EventEmitter, platform detection, all in one file.</p>
         </div>
       </div>
       <div class="step">
@@ -1561,7 +1561,7 @@ architectural principles strictly.</pre>
         <span class="n">08</span>
         <div class="b">
           <strong>Promote every breakthrough to a written principle.</strong>
-          <p>The React alias, the flex-vs-linear scroll-view rule, the LynxModule Swift quirks — all live in <code>LYNX_PORT.md</code> now. Next agent: free wins.</p>
+          <p>The React alias, the flex-vs-linear scroll-view rule, the LynxModule Swift quirks, all live in <code>LYNX_PORT.md</code> now. Next agent: free wins.</p>
         </div>
       </div>
     </div>

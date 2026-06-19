@@ -1,11 +1,11 @@
-# Voltra Lynx — Android Host App
+# Voltra Lynx · Android Host App
 
 The Android reference host for the Voltra Lynx port. Embeds the Lynx engine,
 registers `VoltraLynxModule.kt`, and loads the same JS bundle the iOS host
-loads — but rendered through Jetpack Compose Glance for widgets and Compose
+loads, but rendered through Jetpack Compose Glance for widgets and Compose
 notifications for live updates.
 
-The bridge layer is shared with iOS — see `../../packages/lynx/src/bridge/`.
+The bridge layer is shared with iOS; see `../../packages/lynx/src/bridge/`.
 
 ---
 
@@ -18,7 +18,7 @@ The bridge layer is shared with iOS — see `../../packages/lynx/src/bridge/`.
 >
 > Read `voltra-lynx/host/android/README.md` §Rebuild from clean. Start the
 > Lynx dev server (`pnpm dev` in `packages/example-app`) BEFORE
-> `./gradlew installDebug` — `LynxView` loads
+> `./gradlew installDebug`. `LynxView` loads
 > `http://10.0.2.2:3000/main.lynx.bundle` from the emulator (host loopback)
 > at runtime. Use `adb reverse tcp:3000 tcp:3000` if testing on a physical
 > device.
@@ -44,7 +44,7 @@ A running emulator (API 26+ for Glance widgets) or a connected device with
 USB debugging enabled.
 
 ```bash
-# create local.properties if missing — points Gradle at your SDK
+# create local.properties if missing; points Gradle at your SDK
 echo "sdk.dir=$HOME/Library/Android/sdk" > local.properties
 ```
 
@@ -52,7 +52,7 @@ echo "sdk.dir=$HOME/Library/Android/sdk" > local.properties
 
 ## Rebuild from clean
 
-### Step 1 — Install JS deps & start dev server
+### Step 1. Install JS deps & start dev server
 
 ```bash
 cd voltra-lynx
@@ -67,7 +67,7 @@ For an emulator the bundle URL is `http://10.0.2.2:3000/main.lynx.bundle`
 adb reverse tcp:3000 tcp:3000
 ```
 
-### Step 2 — Build + install
+### Step 2. Build + install
 
 ```bash
 cd voltra-lynx/host/android
@@ -75,9 +75,9 @@ cd voltra-lynx/host/android
 ```
 
 First build downloads Gradle 8.x + the Android Gradle Plugin + Lynx SDK
-artifacts. Expect 3–10 minutes the first time, sub-30s incrementally.
+artifacts. Expect 3 to 10 minutes the first time, sub-30s incrementally.
 
-### Step 3 — Launch + verify
+### Step 3. Launch + verify
 
 ```bash
 adb shell am start -n com.voltra.lynx.demo/.SplashActivity
@@ -106,10 +106,10 @@ host/android/
 │           ├── VoltraApplication.kt    ← LynxEnv init + module registration
 │           ├── SplashActivity.kt       ← LynxView host
 │           └── BuiltinTemplateProvider.kt
-└── voltra/                         ← library module — vendored upstream code
+└── voltra/                         ← library module (vendored upstream code)
     └── src/main/java/voltra/
-        ├── VoltraLynxModule.kt         ← Layer 3 — Lynx NativeModule (NEW, 558 LoC)
-        ├── widget/                     ← Layer 4 — Glance widget rendering
+        ├── VoltraLynxModule.kt         ← Layer 3 · Lynx NativeModule (NEW, 558 LoC)
+        ├── widget/                     ← Layer 4 · Glance widget rendering
         ├── glance/                     ← RemoteViews generator + style utils
         ├── notification/               ← live updates + ongoing notifications
         ├── styling/                    ← style parsers and converters

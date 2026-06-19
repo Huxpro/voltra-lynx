@@ -1,13 +1,13 @@
 # Styling Notes
 
 Lynx accepts a subset of web CSS. A handful of properties behave
-differently from React Native and the web — and some fail silently
+differently from React Native and the web, and some fail silently
 when given the wrong shape. Worth a glance before you write Voltra JSX.
 
 ## Layout
 
 Lynx supports **both `display: flex` (full CSS Flexbox) and `display: linear`**
-(Android-LinearLayout-style). Voltra-Lynx prefers flex — it ports 1:1 from
+(Android-LinearLayout-style). Voltra-Lynx prefers flex; it ports 1:1 from
 React Native and the web. The catch: `<view>`'s default `display` is `linear`,
 so you opt into flex per parent.
 
@@ -42,13 +42,13 @@ Two non-obvious rules from Lynx's [`<scroll-view>` reference](https://lynxjs.org
 - `borderRadius` with a bare number is silently ignored. Must be a string
   with `px`. This catches every upstream Voltra example.
 - `lineHeight` with a bare number is interpreted as a **multiplier**, not
-  pixels — `18` means 18× font-size, which produces enormous gaps. Either
+  pixels. `18` means 18× font-size, which produces enormous gaps. Either
   remove it (Lynx's default is usually right) or use a string with `px`.
 
 ## Text & events
 
-- `<text>` is always block-level — no inline layout.
-- You cannot put raw text inside `<view>` — must wrap in `<text>`.
+- `<text>` is always block-level; no inline layout.
+- You cannot put raw text inside `<view>`; wrap in `<text>`.
 - Use `bindtap`, not `onPress` or `onClick`.
 - Background-thread `NativeModule` calls need a `'background only'`
   directive.
@@ -74,5 +74,5 @@ bare-number CSS values throughout. When you copy them into a Lynx app:
 Inside `<Voltra.*>` JSX, these rules only matter for the parts that
 render in the Lynx view tree (a `<voltra-preview>`, a screen). The
 JSON payload sent to the native renderer just forwards style objects
-through — your widget on the home screen receives the same bytes either
+through; your widget on the home screen receives the same bytes either
 way.

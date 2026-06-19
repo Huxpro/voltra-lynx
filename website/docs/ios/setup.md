@@ -4,7 +4,7 @@ Voltra renders into native iOS Live Activities and Widgets, so you need
 an iOS host app that embeds the Lynx SDK and registers Voltra's native
 module. The fastest path is to use the
 [**reference host**](https://github.com/Huxpro/voltra-lynx/tree/main/voltra-lynx/host/ios)
-in the repo — it's a working Xcode project (xcodegen + CocoaPods) with
+in the repo. It's a working Xcode project (xcodegen + CocoaPods) with
 the module + Widget Extension already wired up.
 
 This page covers two flows:
@@ -27,13 +27,13 @@ fresh clone all the way to a Live Activity rendered on the Simulator.
 > order. After `xcrun simctl launch …`, screenshot the home screen
 > with `xcrun simctl io <sim_id> screenshot ./lynx-app-launch.png`
 > and report the file path. The dev server must remain running in the
-> background — do not kill it.
+> background; do not kill it.
 >
 > Acceptance: the simulator shows the Voltra demo navigation screen
 > (not a white screen, not a red error screen), with at least one tap
 > producing a real Live Activity in the Dynamic Island.
 
-## Simulator — 7 steps from a clean checkout
+## Simulator: 7 steps from a clean checkout
 
 ```bash
 # 1. JS deps for the whole monorepo
@@ -72,11 +72,11 @@ xcrun simctl io "$SIM_ID" screenshot ./lynx-app-launch.png
 open ./lynx-app-launch.png
 ```
 
-The Voltra navigation screen renders — single-page list of demos: Basic,
-Flight Tracker, Music Player, Workout Tracker, Weather Widget, …. Tap
-any demo → the SwiftUI Live Activity appears in the Dynamic Island.
+The Voltra navigation screen renders: a single-page list of demos (Basic,
+Flight Tracker, Music Player, Workout Tracker, Weather Widget, …). Tap
+any demo and the SwiftUI Live Activity appears in the Dynamic Island.
 
-## Physical iPhone — Release / embedded bundle
+## Physical iPhone: Release / embedded bundle
 
 For a real-device demo that runs offline (no dev server, no Mac needed
 after install), use a Release build. `ViewController.swift` flips
@@ -92,8 +92,8 @@ private static let templateURL: String = {
 }()
 ```
 
-…and `project.yml` declares a pre-build script that — only when
-`CONFIGURATION = Release` — runs `pnpm build` in `packages/example-app/`
+…and `project.yml` declares a pre-build script that, only when
+`CONFIGURATION = Release`, runs `pnpm build` in `packages/example-app/`
 and copies `dist/main.lynx.bundle` into the .app's resources.
 
 ### Phone setup checklist
@@ -148,7 +148,7 @@ xcrun devicectl device process launch --device "$DEVICE_UDID" \
 
 If `devicectl` reports
 `CoreDeviceService was unable to locate a device matching the requested
-device identifier`, that's CoreDevice being flaky — typically because
+device identifier`, that's CoreDevice being flaky, typically because
 the device runs an iOS version newer than Xcode's bundled DeviceSupport
 files (eg. Xcode 26.0 with an iPhone on iOS 26.4.2). Fall back to Xcode
 UI:

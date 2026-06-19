@@ -3,7 +3,7 @@
 # Voltra · ported to Lynx
 
 **A [LynxJS](https://lynxjs.org/) port of [Voltra](https://www.use-voltra.dev/).**
-This repo and its docs are an **extension** of upstream — not a replacement.
+This repo and its docs extend upstream rather than replace it.
 
 [![docs](https://img.shields.io/badge/this%20site-huxpro.github.io%2Fvoltra--lynx-6366f1?style=for-the-badge)](https://huxpro.github.io/voltra-lynx/)
 [![upstream](https://img.shields.io/badge/upstream%20docs-use--voltra.dev-blue?style=for-the-badge)](https://www.use-voltra.dev/)
@@ -15,8 +15,8 @@ This repo and its docs are an **extension** of upstream — not a replacement.
 
 ## What this fork is
 
-A port of [Voltra](https://www.use-voltra.dev/) — the React JSX library for
-native iOS Live Activities, Dynamic Island, and Android Widgets — to
+A port of [Voltra](https://www.use-voltra.dev/), the React JSX library for
+native iOS Live Activities, Dynamic Island, and Android Widgets, targeting
 **[LynxJS](https://lynxjs.org/)**.
 
 **The component API, hook signatures, payload format, native render behavior,
@@ -28,18 +28,18 @@ for embedding the Lynx SDK.
 
 The fundamental observation that made the port cheap: Live Activities and
 Widgets render in out-of-process OS extensions that only accept SwiftUI /
-Compose Glance. The JS framework's job is to produce a JSON payload — native
-code turns that payload into pixels. **The rendering engine doesn't care
-which JS runtime fed it the JSON.** So almost everything came across
+Compose Glance. The JS framework's job is to produce a JSON payload, then
+native code turns that payload into pixels. **The rendering engine doesn't
+care which JS runtime fed it the JSON.** So almost everything came across
 unchanged.
 
-| | Original (React Native + Expo) | This fork (LynxJS) |
+| Layer | Original (React Native + Expo) | This fork (LynxJS) |
 |---|---|---|
-| Layer 0 — pure JS packages | shipped on npm | **100% reused via npm** |
-| Layer 1 — client business logic (hooks, API) | written for Expo modules | **~95% vendored verbatim** |
-| Layer 2 — bridge adapter | `requireNativeModule` / Promise | **662 LoC new** — wraps Lynx's callback-based NativeModules into Promises |
-| Layer 3 — native module registration | Expo `Module` DSL | **788 LoC new** — `LynxModule` protocol (Swift) + `@LynxMethod` (Kotlin) |
-| Layer 4 — SwiftUI / Glance rendering | upstream Voltra | **byte-identical** |
+| Layer 0, pure JS packages | shipped on npm | **100% reused via npm** |
+| Layer 1, client business logic (hooks, API) | written for Expo modules | **~95% vendored verbatim** |
+| Layer 2, bridge adapter | `requireNativeModule` / Promise | **662 LoC new**, wraps Lynx's callback-based NativeModules into Promises |
+| Layer 3, native module registration | Expo `Module` DSL | **788 LoC new**: `LynxModule` protocol (Swift) + `@LynxMethod` (Kotlin) |
+| Layer 4, SwiftUI / Glance rendering | upstream Voltra | **byte-identical** |
 
 Net new code in the port: **1,440 LoC** to bring **32,500 LoC** of native
 UI library to a different host runtime. **95.6%** reuse.
@@ -51,7 +51,7 @@ UI library to a different host runtime. **95.6%** reuse.
 ├── voltra-lynx/             ← THE PORT: bridge adapter, ios + android hosts,
 │   │                          example app, host READMEs
 │   ├── packages/
-│   │   ├── lynx/            ← @use-voltra/lynx — bridge + client APIs
+│   │   ├── lynx/            ← @use-voltra/lynx (bridge + client APIs)
 │   │   └── example-app/     ← Rspeedy + ReactLynx demo app
 │   └── host/
 │       ├── ios/             ← LynxVoltra Xcode project
@@ -59,7 +59,7 @@ UI library to a different host runtime. **95.6%** reuse.
 │
 ├── website/                 ← rspress site → GitHub Pages
 ├── LYNX_PORT.md             ← architecture, layer model, translation rules
-├── packages/                ← upstream Voltra (RN/Expo) sources — kept for
+├── packages/                ← upstream Voltra (RN/Expo) sources, kept for
 │                              reference and as the Layer 0 upstream
 ├── example/                 ← upstream Voltra example (React Native + Expo)
 └── tasks/                   ← PRDs that drove the port (61+ user stories)
@@ -116,15 +116,16 @@ are identical to the original.
 
 ## Status
 
-- ✅ iOS host app — Live Activities, Dynamic Island, Home Screen widgets,
+- ✅ iOS host app: Live Activities, Dynamic Island, Home Screen widgets,
   in-app `<voltra-preview>` Custom Elements
-- ✅ Android host app — Glance widgets, ongoing notifications, live updates
+- ✅ Android host app: Glance widgets, ongoing notifications, live updates
 - ✅ End-to-end verified on iOS Simulator AND physical iPhone (Release build,
   embedded JS bundle, no dev server needed)
 - ✅ 95.6% code reuse measured against upstream
-- 🚧 Turnkey dev-experience layer planned at [Huxpro/lynx-dev-clients-voltra](https://github.com/Huxpro/lynx-dev-clients-voltra) — bring the RN/Expo
-  `RCTBundleURLProvider` + `react-native-xcode.sh` + dev-menu experience to
-  any Lynx integration
+- 🚧 Turnkey dev-experience layer planned at
+  [Huxpro/lynx-dev-clients-voltra](https://github.com/Huxpro/lynx-dev-clients-voltra):
+  bringing the RN/Expo `RCTBundleURLProvider` + `react-native-xcode.sh` +
+  dev-menu experience to any Lynx integration
 
 ## Credits
 
@@ -135,4 +136,4 @@ are identical to the original.
 
 ## License
 
-MIT — same as upstream.
+MIT, same as upstream.

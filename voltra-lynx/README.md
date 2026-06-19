@@ -1,13 +1,13 @@
-# voltra-lynx — Voltra for LynxJS
+# voltra-lynx · Voltra for LynxJS
 
-A port of [Voltra](https://github.com/callstackincubator/voltra) — the React JSX
-library for iOS Live Activities, Dynamic Island, and Android Widgets — to
+A port of [Voltra](https://github.com/callstackincubator/voltra), the React JSX
+library for iOS Live Activities, Dynamic Island, and Android Widgets, to
 [LynxJS](https://lynxjs.org/).
 
 The fundamental constraint: Live Activities and Widgets render in out-of-process
 OS extensions that only accept SwiftUI / Compose Glance. The JS framework's job
 is to produce a JSON payload; native code turns that payload into pixels. So
-**the rendering engine doesn't care which JS runtime fed it the JSON** — and
+**the rendering engine doesn't care which JS runtime fed it the JSON**, and
 this port reuses ~96% of the upstream codebase by reducing every Expo↔Lynx
 ABI difference to a single ~660-LoC bridge adapter.
 
@@ -27,7 +27,7 @@ take a fresh clone all the way to a Voltra demo rendered on the iOS Simulator.
 >
 > Read `voltra-lynx/host/ios/README.md` for the exact iOS rebuild sequence and
 > prerequisites. Follow that document's §Rebuild from clean steps in order.
-> Do not skip the dev server step — `LynxView` fetches the JS bundle from
+> Do not skip the dev server step. `LynxView` fetches the JS bundle from
 > `http://localhost:3000/main.lynx.bundle` at runtime.
 >
 > After `xcrun simctl launch` succeeds, take a screenshot to
@@ -49,7 +49,7 @@ voltra-lynx/
 ├── pnpm-workspace.yaml
 │
 ├── packages/
-│   ├── lynx/                      ← @use-voltra/lynx — single umbrella package
+│   ├── lynx/                      ← @use-voltra/lynx (single umbrella package)
 │   │   └── src/
 │   │       ├── bridge/            ← Layer 2 · adapter (~660 LoC, the seam)
 │   │       │   ├── module-adapter.ts   ← Promise⇄callback wrapper
@@ -75,7 +75,7 @@ voltra-lynx/
 │
 └── host/
     ├── ios/
-    │   ├── README.md              ← iOS rebuild SOP — start here for iOS
+    │   ├── README.md              ← iOS rebuild SOP, start here for iOS
     │   └── LynxVoltra/
     │       ├── project.yml        ← xcodegen spec (regenerates .xcodeproj)
     │       ├── Podfile            ← Lynx 3.7.0 + PrimJS 3.7.0
@@ -125,15 +125,15 @@ adb shell am start -n com.voltra.lynx.demo/.SplashActivity
 
 ## What got built vs what got reused
 
-The headline number is **95.6%** — that fraction of the codebase came in
+The headline number is **95.6%**: that fraction of the codebase came in
 unchanged from the upstream React Native library. The 1,440 LoC that *is*
 new in this directory is the adapter that lets the rest work.
 
 | Layer | What | Original (RN) | Lynx Port | Reuse |
 |---|---|---:|---:|---|
-| L0 | Pure JS — `@use-voltra/core, /ios, /android, /server` | 5,734 | 0 (npm) | 100% |
-| L0/1 | Voltra umbrella — renderer, JSX, payload | 4,452 | 0 (npm) | 100% |
-| L1 | Client business logic — hooks, widget-api, live-activity | 1,616 | 1,241 (vendored) | ~95% |
+| L0 | Pure JS: `@use-voltra/core, /ios, /android, /server` | 5,734 | 0 (npm) | 100% |
+| L0/1 | Voltra umbrella: renderer, JSX, payload | 4,452 | 0 (npm) | 100% |
+| L1 | Client business logic: hooks, widget-api, live-activity | 1,616 | 1,241 (vendored) | ~95% |
 | **L2** | **Bridge adapter (NEW)** | 0 | **662** | NEW |
 | **L3** | **Native module registration (NEW)** | 919 | **788** | rewrite |
 | L4 | SwiftUI + Glance rendering engine | 19,776 | 19,783 | 100% |
@@ -146,26 +146,26 @@ before/after code snippets.
 
 ## Development workflow
 
-1. **Edit JS** in `packages/example-app/src/` — `rspeedy dev` hot-reloads
+1. **Edit JS** in `packages/example-app/src/`. `rspeedy dev` hot-reloads
    into the running app.
-2. **Edit bridge / client** in `packages/lynx/src/` — run `pnpm build` from
+2. **Edit bridge / client** in `packages/lynx/src/`. Run `pnpm build` from
    the root to recompile, then refresh the bundle.
 3. **Edit Swift / Kotlin** in `host/ios/LynxVoltra/Voltra/` or
-   `host/android/voltra/` — rebuild the native host. Native edits are rare
-   because Layer 4 is vendored unchanged from upstream.
-4. **Test on simulator** — both hosts boot in <30s. The dev server stays up
+   `host/android/voltra/`, then rebuild the native host. Native edits are
+   rare because Layer 4 is vendored unchanged from upstream.
+4. **Test on simulator**. Both hosts boot in <30s. The dev server stays up
    across rebuilds.
 
 ---
 
 ## Key references
 
-- [`LYNX_PORT.md`](../LYNX_PORT.md) — Architecture, layer model, translation
+- [`LYNX_PORT.md`](../LYNX_PORT.md): architecture, layer model, translation
   tables, Lynx CSS gotchas, LynxModule Swift protocol notes.
-- [`tasks/prd-voltra-lynx-android.md`](../tasks/prd-voltra-lynx-android.md) —
+- [`tasks/prd-voltra-lynx-android.md`](../tasks/prd-voltra-lynx-android.md):
   Android port PRD (~28 user stories, executed via Ralph Loop).
-- [`tasks/prd-lynx-voltra-preview-screens.md`](../tasks/prd-lynx-voltra-preview-screens.md)
-  — `<voltra-preview>` Custom Element conversion PRD.
+- [`tasks/prd-lynx-voltra-preview-screens.md`](../tasks/prd-lynx-voltra-preview-screens.md):
+  `<voltra-preview>` Custom Element conversion PRD.
 - Upstream: https://github.com/callstackincubator/voltra
 - This fork: https://github.com/Huxpro/voltra-lynx
 

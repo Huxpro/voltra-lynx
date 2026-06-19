@@ -1,9 +1,9 @@
-# LynxVoltra — iOS Host App
+# LynxVoltra · iOS Host App
 
 The iOS reference host for the Voltra Lynx port. Embeds the Lynx engine
 (`pod 'Lynx', '3.7.0'`), registers `VoltraLynxModule`, and loads a Lynx JS
-bundle that exercises every Voltra capability — Live Activities, Dynamic Island,
-home-screen Widgets, in-app `<voltra-preview>` Custom Elements.
+bundle that exercises every Voltra capability: Live Activities, Dynamic
+Island, home-screen Widgets, in-app `<voltra-preview>` Custom Elements.
 
 ---
 
@@ -22,7 +22,7 @@ iOS Simulator without further input.
 > Follow the steps in §Rebuild from clean exactly in order. After
 > `xcrun simctl launch …`, screenshot the home screen with
 > `xcrun simctl io <sim_id> screenshot ./lynx-app-launch.png` and report the
-> file path. If any step fails, do not skip ahead — diagnose and fix the
+> file path. If any step fails, do not skip ahead. Diagnose and fix the
 > specific error, then resume from that step. The dev server must remain
 > running in the background for the Lynx bundle to load; do not kill it.
 >
@@ -36,7 +36,7 @@ iOS Simulator without further input.
 
 | Tool | Version | Install |
 |---|---|---|
-| macOS | 14+ | — |
+| macOS | 14+ | n/a |
 | Xcode | 16.0+ | App Store |
 | iOS Simulator | iOS 17+ runtime (for Live Activities) | Xcode Settings → Platforms |
 | Homebrew | latest | https://brew.sh |
@@ -53,7 +53,7 @@ xcrun simctl boot "iPhone 17 Pro"             # boot one (name from `simctl list
 open -a Simulator                              # show the window
 ```
 
-Capture the device UDID — every `simctl` command below uses it:
+Capture the device UDID; every `simctl` command below uses it:
 
 ```bash
 SIM_ID=$(xcrun simctl list devices booted | grep -oE '\([A-F0-9-]{36}\)' | tr -d '()' | head -1)
@@ -67,7 +67,7 @@ echo "$SIM_ID"
 Run these from the repository root. Each command is independent and idempotent
 unless noted.
 
-### Step 1 — Install JS dependencies
+### Step 1. Install JS dependencies
 
 ```bash
 cd voltra-lynx
@@ -77,7 +77,7 @@ pnpm install
 `pnpm-workspace.yaml` covers `packages/*`, so this installs every workspace
 (bridge, ios-client, android-client, example-app) in one shot.
 
-### Step 2 — Start the Lynx dev server (background)
+### Step 2. Start the Lynx dev server (background)
 
 ```bash
 cd voltra-lynx/packages/example-app
@@ -91,10 +91,10 @@ curl -sI http://localhost:3000/main.lynx.bundle | head -1
 # HTTP/1.1 200 OK
 ```
 
-The bundle URL is hard-coded in `ViewController.swift` — leave the server
+The bundle URL is hard-coded in `ViewController.swift`. Leave the server
 running for the lifetime of the simulator session.
 
-### Step 3 — Regenerate the Xcode project
+### Step 3. Regenerate the Xcode project
 
 ```bash
 cd voltra-lynx/host/ios/LynxVoltra
@@ -102,20 +102,20 @@ rm -rf LynxVoltra.xcodeproj LynxVoltra.xcworkspace Pods Podfile.lock build
 xcodegen generate         # reads project.yml, writes LynxVoltra.xcodeproj
 ```
 
-The repo deliberately does not check in the `.xcodeproj` — every build starts
+The repo deliberately does not check in the `.xcodeproj`; every build starts
 from `project.yml`. This keeps the diff surface tiny and the Widget Extension
 embedding deterministic.
 
-### Step 4 — Install Pods
+### Step 4. Install Pods
 
 ```bash
 pod install               # ~2-5 min first run, downloads Lynx + PrimJS
 ```
 
-This produces `LynxVoltra.xcworkspace` — **always open that, never
+This produces `LynxVoltra.xcworkspace`. **Always open that, never
 `LynxVoltra.xcodeproj` directly.** Building the bare project skips Pods.
 
-### Step 5 — Build for the simulator
+### Step 5. Build for the simulator
 
 ```bash
 xcodebuild \
@@ -134,7 +134,7 @@ On success the .app lands at:
 ./build/Build/Products/Debug-iphonesimulator/LynxVoltra.app
 ```
 
-### Step 6 — Install + launch
+### Step 6. Install + launch
 
 ```bash
 APP=./build/Build/Products/Debug-iphonesimulator/LynxVoltra.app
@@ -145,7 +145,7 @@ xcrun simctl launch   "$SIM_ID" com.voltra.lynx.demo
 The app boots, fetches `main.lynx.bundle` from the dev server, and renders
 the demo navigation screen.
 
-### Step 7 — Verify
+### Step 7. Verify
 
 ```bash
 xcrun simctl io "$SIM_ID" screenshot ./lynx-app-launch.png
@@ -154,14 +154,14 @@ open ./lynx-app-launch.png
 
 You should see the **Voltra** navigation screen (single-page list of demos:
 Basic, Flight Tracker, Music Player, Workout Tracker, Weather Widget, …).
-Tap any demo → the SwiftUI Live Activity appears in the Dynamic Island.
+Tap any demo to make the SwiftUI Live Activity appear in the Dynamic Island.
 
 ---
 
 ## Install on a physical iPhone (Release / embedded bundle)
 
 The Simulator SOP above keeps the JS bundle on a dev server. For a real
-device demo — installed once, runs offline, no Mac needed afterwards — use
+device demo (installed once, runs offline, no Mac needed afterwards) use
 a Release build. `ViewController.swift` flips automatically:
 
 ```swift
@@ -174,8 +174,8 @@ private static let templateURL: String = {
 }()
 ```
 
-…and the `project.yml` declares a pre-build script that — only when
-`CONFIGURATION = Release` — runs `pnpm build` in `packages/example-app/`
+…and the `project.yml` declares a pre-build script that, only when
+`CONFIGURATION = Release`, runs `pnpm build` in `packages/example-app/`
 and copies `dist/main.lynx.bundle` into the .app's resources.
 
 ### One-shot AI build prompt (device)
@@ -185,13 +185,13 @@ and copies `dist/main.lynx.bundle` into the .app's resources.
 >
 > Working tree: `voltra-lynx/host/ios/LynxVoltra/`. Bundle ID
 > `com.voltra.lynx.demo`, widget extension `…demo.widget`. Signing is
-> configured automatically via `DEVELOPMENT_TEAM` in `project.yml` — change
+> configured automatically via `DEVELOPMENT_TEAM` in `project.yml`. Change
 > that team ID to yours before running.
 >
 > Steps: (1) confirm the iPhone shows up in `xcrun devicectl list devices`
 > as `available`; if not, walk the user through the §Phone setup checklist
 > (Developer Mode + Trust + cable). (2) regen project from clean per
-> §Rebuild from clean steps 3–4 (xcodegen, pod install). (3) run the
+> §Rebuild from clean steps 3 and 4 (xcodegen, pod install). (3) run the
 > §Device build xcodebuild command. (4) install via `xcrun devicectl device
 > install app …` if it works, OR fall back to opening the workspace in
 > Xcode and asking the user to Cmd+R with the device selected. (5) verify
@@ -222,7 +222,7 @@ xcrun devicectl list devices
 ```bash
 cd voltra-lynx/host/ios/LynxVoltra
 
-# Clean only the build dir (don't nuke Pods between SDKs — keep them)
+# Clean only the build dir (don't nuke Pods between SDKs; keep them)
 rm -rf build
 
 xcodebuild \
@@ -239,7 +239,7 @@ xcodebuild \
 ⚠️ **If you've just built for the simulator, the `iphoneos` build will fail
 with `'Lynx/LynxConfig.h' file not found` unless you `rm -rf build/` first.**
 The Swift bridging-header scanner caches simulator-arch header maps that
-collide with the device arch. Keep `Pods/` and `*.xcodeproj/` — only the
+collide with the device arch. Keep `Pods/` and `*.xcodeproj/`; only the
 build artifacts need to be cleaned between SDK switches.
 
 The .app lands at:
@@ -250,7 +250,7 @@ The .app lands at:
 
 ### Install on the device
 
-Two paths, try the CLI first:
+Two paths; try the CLI first:
 
 ```bash
 DEVICE_UDID=$(xcrun devicectl list devices --filter-state available \
@@ -266,7 +266,7 @@ If `devicectl` reports
 `CoreDeviceService was unable to locate a device matching the requested
 device identifier`, that's CoreDevice being flaky (commonly happens when
 the device runs an iOS version newer than Xcode's bundled DeviceSupport
-files — eg. Xcode 26.0 with iPhone on iOS 26.4.2). Fall back to Xcode:
+files, eg. Xcode 26.0 with iPhone on iOS 26.4.2). Fall back to Xcode:
 
 ```bash
 open voltra-lynx/host/ios/LynxVoltra/LynxVoltra.xcworkspace
@@ -275,7 +275,7 @@ open voltra-lynx/host/ios/LynxVoltra/LynxVoltra.xcworkspace
 In the Xcode toolbar select your iPhone as the run destination, set
 Edit Scheme → Run → Build Configuration to **Release**, then Cmd+R.
 Xcode will download missing DeviceSupport files on-demand, code-sign,
-install, and launch — all in one click.
+install, and launch, all in one click.
 
 ### First launch on the device
 
@@ -323,11 +323,11 @@ host/ios/
     │   └── Voltra/                 ← VoltraLynxModule.swift + the entire
     │                                  upstream SwiftUI rendering engine
     │                                  (shared subspec, vendored unchanged)
-    └── (Pods/, *.xcodeproj/, *.xcworkspace/, build/ — all gitignored)
+    └── (Pods/, *.xcodeproj/, *.xcworkspace/, build/ all gitignored)
 ```
 
 The `Voltra/` subdirectory is the byte-identical copy of the upstream Voltra
-iOS native code — 10,000+ lines of SwiftUI, ActivityKit, WidgetKit, payload
+iOS native code: 10,000+ lines of SwiftUI, ActivityKit, WidgetKit, payload
 parsing, image preloading. See [LYNX_PORT.md](../../../LYNX_PORT.md) §Layer 4
 for the architecture.
 
@@ -342,7 +342,7 @@ for the architecture.
 | Build error: `LynxServiceAPI.h not found` | `inhibit_all_warnings!` masked an earlier failure | Check the Podfile `post_install` hook still sets `HEADER_SEARCH_PATHS` for `LynxServiceAPI` |
 | App launches but shows blank white screen | Dev server not running, or bundle URL unreachable from sim | Confirm `curl http://localhost:3000/main.lynx.bundle` returns 200 |
 | App launches but shows red Lynx error overlay | JS bundle compiled with an error | Read the overlay (or `xcrun simctl spawn $SIM_ID log stream --predicate 'subsystem == "com.voltra.lynx.demo"'`); fix in `packages/example-app/src/` and rspeedy will hot-reload |
-| `LynxVoltra.app` is empty (no Info.plist) | xcodebuild silently exited 0 with no warnings about scheme not found | Re-run `pod install` and rebuild — usually a stale `derivedDataPath` issue |
+| `LynxVoltra.app` is empty (no Info.plist) | xcodebuild silently exited 0 with no warnings about scheme not found | Re-run `pod install` and rebuild; usually a stale `derivedDataPath` issue |
 | Live Activity doesn't appear in Dynamic Island | Simulator runtime < iOS 16.2, or `NSSupportsLiveActivities` missing | Boot a 17+ simulator; verify `Info.plist` |
 | Tap on demo crashes with "Activity not authorized" | First-run permission prompt was dismissed | Settings → Voltra Lynx Demo → Allow Live Activities |
 

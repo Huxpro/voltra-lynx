@@ -3,8 +3,8 @@
 Voltra renders Widgets and Live Updates through Jetpack Compose Glance,
 so you need an Android host app that embeds the Lynx SDK and registers
 Voltra's native module. The fastest path is the
-[**reference host**](https://github.com/Huxpro/voltra-lynx/tree/main/voltra-lynx/host/android)
-— a working Gradle project with the module + Glance widget receiver
+[**reference host**](https://github.com/Huxpro/voltra-lynx/tree/main/voltra-lynx/host/android):
+a working Gradle project with the module + Glance widget receiver
 already wired up.
 
 ## One-shot AI build prompt
@@ -17,7 +17,7 @@ already wired up.
 >
 > Read `voltra-lynx/host/android/README.md` §Rebuild from clean. Start
 > the Lynx dev server (`pnpm dev` in `packages/example-app`) BEFORE
-> `./gradlew installDebug` — `LynxView` loads
+> `./gradlew installDebug`. `LynxView` loads
 > `http://10.0.2.2:3000/main.lynx.bundle` from the emulator (host
 > loopback) at runtime. Use `adb reverse tcp:3000 tcp:3000` if testing
 > on a physical device.
@@ -41,7 +41,7 @@ A running emulator (API 26+ for Glance widgets) or a connected device
 with USB debugging enabled.
 
 ```bash
-# create local.properties if missing — points Gradle at your SDK
+# create local.properties if missing; points Gradle at your SDK
 echo "sdk.dir=$HOME/Library/Android/sdk" > local.properties
 ```
 
@@ -52,7 +52,7 @@ cd voltra-lynx
 pnpm install
 ( cd packages/example-app && pnpm dev ) &     # serves http://localhost:3000
 
-# For an emulator, no extra step is needed — `10.0.2.2` is the loopback.
+# For an emulator, no extra step is needed; `10.0.2.2` is the loopback.
 # For a physical device, forward the port over USB:
 adb reverse tcp:3000 tcp:3000
 
@@ -62,7 +62,7 @@ adb shell am start -n com.voltra.lynx.demo/.SplashActivity
 ```
 
 First build downloads Gradle 8.x + the Android Gradle Plugin + Lynx SDK
-artifacts. Expect 3–10 minutes the first time, sub-30s incrementally.
+artifacts. Expect 3 to 10 minutes the first time, sub-30s incrementally.
 
 ## Verify
 
@@ -87,10 +87,10 @@ host/android/
 │           ├── VoltraApplication.kt    ← LynxEnv init + module registration
 │           ├── SplashActivity.kt       ← LynxView host
 │           └── BuiltinTemplateProvider.kt
-└── voltra/                         ← library module — vendored upstream code
+└── voltra/                         ← library module (vendored upstream code)
     └── src/main/java/voltra/
         ├── VoltraLynxModule.kt         ← Layer 3 (NEW, 558 LoC)
-        ├── widget/                     ← Layer 4 — Glance rendering
+        ├── widget/                     ← Layer 4 · Glance rendering
         ├── glance/                     ← RemoteViews generator + style utils
         ├── notification/               ← live updates + ongoing notifications
         ├── styling/                    ← style parsers and converters
