@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Slopforking Voltra · RN → Lynx in 95.6% Reuse</title>
+<title>Slopfork Voltra · 把一个 RN 库搬到 Lynx，95.6% 复用</title>
 <style>
   /* ───────── Reset / Base ───────── */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,7 +28,7 @@
     --grad-2:    linear-gradient(135deg, #22d3ee 0%, #818cf8 100%);
     --code-bg:   #14142b;
     --shadow:    0 24px 64px rgba(0,0,0,0.45);
-    --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", system-ui, sans-serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Microsoft YaHei", "Inter", system-ui, sans-serif;
     --font-mono: "SF Mono", "JetBrains Mono", "Fira Code", ui-monospace, monospace;
   }
   body {
@@ -36,7 +36,7 @@
     color: var(--text);
     font-family: var(--font-sans);
     font-size: 18px;
-    line-height: 1.55;
+    line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -62,7 +62,6 @@
   }
   .slide.center { justify-content: center; align-items: center; text-align: center; }
 
-  /* Subtle radial backgrounds per slide kind */
   .slide.hero::before,
   .slide.section::before {
     content: "";
@@ -123,14 +122,14 @@
   #lang a.active { background: var(--card-2); color: var(--text); }
 
   /* ───────── Typography ───────── */
-  h1 { font-size: 4.2rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 24px; }
-  h2 { font-size: 3rem; font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 22px; }
-  h3 { font-size: 1.7rem; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 14px; }
-  h4 { font-size: 1.05rem; font-weight: 600; letter-spacing: 0.02em; color: var(--muted); text-transform: uppercase; margin-bottom: 18px; }
+  h1 { font-size: 4.2rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; margin-bottom: 24px; }
+  h2 { font-size: 3rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 22px; }
+  h3 { font-size: 1.7rem; font-weight: 600; margin-bottom: 14px; }
+  h4 { font-size: 1.05rem; font-weight: 600; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 18px; }
   .grad-text { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .grad-text-2 { background: var(--grad-2); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; color: var(--cyan); text-transform: uppercase; margin-bottom: 18px; display: inline-block; }
-  .lead { font-size: 1.4rem; color: var(--muted); max-width: 920px; line-height: 1.5; }
+  .lead { font-size: 1.4rem; color: var(--muted); max-width: 920px; line-height: 1.7; }
   code, .mono { font-family: var(--font-mono); }
   em { color: var(--pink); font-style: normal; font-weight: 600; }
   strong { color: var(--cyan); font-weight: 600; }
@@ -176,7 +175,7 @@
   /* Tables */
   table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
   th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--border); }
-  th { color: var(--muted); font-weight: 500; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
+  th { color: var(--muted); font-weight: 500; font-size: 0.78rem; letter-spacing: 0.08em; }
   td.num { text-align: right; font-family: var(--font-mono); }
   tr:last-child td { border-bottom: none; }
   tr.total td { background: rgba(129,140,248,0.06); font-weight: 700; color: var(--text); }
@@ -201,7 +200,7 @@
   pre .punc { color: #8b8ba7; }
   .diff-block .label {
     font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em;
-    text-transform: uppercase; padding: 4px 10px; border-radius: 6px;
+    padding: 4px 10px; border-radius: 6px;
     display: inline-block; margin-bottom: 8px;
   }
   .diff-block.before .label { background: rgba(248,113,113,0.15); color: var(--red); }
@@ -279,7 +278,7 @@
   }
   .phase .step { font-family: var(--font-mono); font-size: 11px; color: var(--pri); margin-bottom: 6px; }
   .phase h6 { font-size: 0.98rem; font-weight: 600; margin-bottom: 4px; }
-  .phase p  { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+  .phase p  { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
 
   /* Technique card */
   .tech {
@@ -297,9 +296,8 @@
     padding: 3px 10px; border-radius: 6px;
     display: inline-block; margin-bottom: 10px;
   }
-  .tech h4 { color: var(--text); text-transform: none; letter-spacing: -0.01em; font-size: 1.15rem; margin-bottom: 8px; }
-  .tech p { font-size: 0.86rem; color: var(--muted); line-height: 1.5; }
-  .tech .src { display: block; font-family: var(--font-mono); font-size: 11px; color: var(--cyan); margin-top: 10px; }
+  .tech h4 { color: var(--text); letter-spacing: -0.01em; font-size: 1.15rem; margin-bottom: 8px; }
+  .tech p { font-size: 0.86rem; color: var(--muted); line-height: 1.6; }
 
   /* utility */
   .row { display: flex; align-items: center; gap: 16px; }
@@ -309,21 +307,22 @@
   .mt-12 { margin-top: 48px; }
   .gap-sm { gap: 8px; }
   .stack { display: flex; flex-direction: column; gap: 10px; }
-  .small { font-size: 0.88rem; color: var(--muted); }
+  .small { font-size: 0.92rem; color: var(--muted); line-height: 1.7; }
   .tiny { font-size: 0.78rem; color: var(--dim); font-family: var(--font-mono); }
 
   /* Hero specific */
   .hero-title {
     font-size: 6rem;
     font-weight: 800;
-    letter-spacing: -0.04em;
-    line-height: 0.95;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
   }
   .hero-sub {
     font-size: 1.5rem;
     color: var(--muted);
     margin-top: 24px;
-    max-width: 820px;
+    max-width: 880px;
+    line-height: 1.7;
   }
   .hero-stats { display: flex; gap: 48px; margin-top: 56px; }
   .hero-stats .stat .v {
@@ -334,7 +333,7 @@
     -webkit-background-clip: text; background-clip: text; color: transparent;
     line-height: 1;
   }
-  .hero-stats .stat .l { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 8px; }
+  .hero-stats .stat .l { font-size: 0.85rem; color: var(--muted); letter-spacing: 0.05em; margin-top: 8px; }
 
   /* Demo-wall mosaic */
   .wall {
@@ -358,7 +357,7 @@
   }
   .file-row .name { font-family: var(--font-mono); color: var(--pri); }
   .file-row .loc { font-family: var(--font-mono); color: var(--cyan); text-align: right; }
-  .file-row .desc { color: var(--muted); font-size: 0.85rem; }
+  .file-row .desc { color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
 
   /* Aha headline */
   .aha-icon {
@@ -374,7 +373,6 @@
     font-size: 0.95rem;
     color: var(--cyan);
     letter-spacing: 0.2em;
-    text-transform: uppercase;
     margin-bottom: 18px;
   }
 
@@ -395,39 +393,39 @@
     flex: 0 0 36px;
   }
   .step .b strong { color: var(--text); display: block; font-size: 1.05rem; margin-bottom: 4px; }
-  .step .b p { color: var(--muted); font-size: 0.9rem; margin: 0; }
+  .step .b p { color: var(--muted); font-size: 0.92rem; margin: 0; line-height: 1.7; }
 </style>
 </head>
 <body>
 
 <div id="progress"><div></div></div>
-<div id="hint"><kbd>←</kbd><kbd>→</kbd> navigate &nbsp;·&nbsp; <kbd>space</kbd> next &nbsp;·&nbsp; <kbd>f</kbd> fullscreen</div>
+<div id="hint"><kbd>←</kbd><kbd>→</kbd> 翻页 &nbsp;·&nbsp; <kbd>空格</kbd> 下一张 &nbsp;·&nbsp; <kbd>f</kbd> 全屏</div>
 <div id="nav-arrows"><button id="prev">←</button><button id="next">→</button></div>
 <div id="counter"><span id="cur">01</span> / <span id="tot">00</span></div>
-<div id="lang"><a class="active" href="index.html">EN</a><a href="zh.html">中文</a></div>
+<div id="lang"><a href="index.html">EN</a><a class="active" href="zh.html">中文</a></div>
 
 <div id="deck">
 
 <!-- ───────── SLIDE 1 ─ HERO ───────── -->
 <section class="slide hero center">
   <div class="container" style="text-align:center;">
-    <div class="eyebrow">Hackathon · Slopfork Retrospective · 2026</div>
+    <div class="eyebrow">Hackathon · Slopfork 复盘 · 2026</div>
     <h1 class="hero-title">
-      <span class="grad-text">Slopforking Voltra</span><br/>
+      <span class="grad-text">Slopfork Voltra</span><br/>
       <span style="color:var(--text);">React Native → Lynx</span>
     </h1>
     <p class="hero-sub">
-      A native-surface UI library, ported to a new runtime,
-      with <strong>95.6%</strong> of the code untouched,
-      and the entire SwiftUI/Glance renderer shipped <em>byte-identical</em>.
+      把一个直接渲染到原生系统 UI 的 React 库搬到新的运行时，
+      <strong>95.6%</strong> 的代码原封不动，
+      整个 SwiftUI / Glance 渲染层<em>字节相同</em>地搬过去。
     </p>
 
     <div class="hero-stats" style="justify-content:center;">
-      <div class="stat"><div class="v">32,497</div><div class="l">LoC Original</div></div>
-      <div class="stat"><div class="v">1,440</div><div class="l">LoC New (Bridge + Shim)</div></div>
+      <div class="stat"><div class="v">32,497</div><div class="l">原版代码量</div></div>
+      <div class="stat"><div class="v">1,440</div><div class="l">新增代码 (Bridge + Shim)</div></div>
       <div class="stat"><div class="v">64</div><div class="l">Commits</div></div>
       <div class="stat"><div class="v">~61</div><div class="l">User Stories</div></div>
-      <div class="stat"><div class="v">5d</div><div class="l">Calendar Time</div></div>
+      <div class="stat"><div class="v">5天</div><div class="l">实际耗时</div></div>
     </div>
   </div>
 </section>
@@ -435,13 +433,12 @@
 <!-- ───────── SLIDE 2 ─ DEMO WALL ───────── -->
 <section class="slide">
   <div class="container">
-    <div class="eyebrow">The Result · End-to-End</div>
-    <h2>Same pixels.<br/><span class="grad-text">Different runtime.</span></h2>
+    <div class="eyebrow">成品 · 端到端验证</div>
+    <h2>同样的像素，<br/><span class="grad-text">不同的运行时。</span></h2>
     <p class="lead mt-4">
-      These iOS Live Activities, Dynamic Island layouts, and home-screen Widgets
-      now render from Lynx JSX, but because the SwiftUI rendering engine is
-      byte-identical, the output is <em>pixel-for-pixel the same</em> as the
-      original React Native version.
+      下面这些 iOS Live Activity、Dynamic Island 布局、桌面 Widget，
+      现在都由 Lynx JSX 渲染出来。因为 SwiftUI 渲染引擎字节相同，
+      输出和原版 React Native 版本<em>逐像素一致</em>。
     </p>
 
     <div class="wall mt-8">
@@ -453,11 +450,11 @@
       <div class="shot-tile w-2"><img src="assets/snapshots/compass-live-activity-preview.png"/><div class="cap">Compass</div></div>
       <div class="shot-tile w-2"><img src="assets/snapshots/liquid-glass-live-activity-preview.png"/><div class="cap">Liquid Glass</div></div>
 
-      <div class="shot-tile h-2"><img src="assets/snapshots/weather-widget-sunny.png"/><div class="cap">☀ Sunny</div></div>
-      <div class="shot-tile h-2"><img src="assets/snapshots/weather-widget-rainy.png"/><div class="cap">🌧 Rainy</div></div>
-      <div class="shot-tile h-2"><img src="assets/snapshots/weather-widget-stormy.png"/><div class="cap">⛈ Stormy</div></div>
-      <div class="shot-tile h-2"><img src="assets/snapshots/weather-widget-snowy.png"/><div class="cap">❄ Snowy</div></div>
-      <div class="shot-tile w-2 h-2"><img src="assets/snapshots/z-index-layering.png"/><div class="cap">Z-Index Layering</div></div>
+      <div class="shot-tile h-2"><img src="assets/snapshots/weather-widget-sunny.png"/><div class="cap">☀ 晴</div></div>
+      <div class="shot-tile h-2"><img src="assets/snapshots/weather-widget-rainy.png"/><div class="cap">🌧 雨</div></div>
+      <div class="shot-tile h-2"><img src="assets/snapshots/weather-widget-stormy.png"/><div class="cap">⛈ 雷暴</div></div>
+      <div class="shot-tile h-2"><img src="assets/snapshots/weather-widget-snowy.png"/><div class="cap">❄ 雪</div></div>
+      <div class="shot-tile w-2 h-2"><img src="assets/snapshots/z-index-layering.png"/><div class="cap">Z-Index 叠加</div></div>
     </div>
   </div>
 </section>
@@ -465,20 +462,20 @@
 <!-- ───────── SLIDE 3 ─ WHAT IS VOLTRA ───────── -->
 <section class="slide">
   <div class="container">
-    <div class="eyebrow">Context · Why this is interesting</div>
-    <h2>What is <span class="grad-text">Voltra</span>?</h2>
+    <div class="eyebrow">背景 · 为什么这件事有意思</div>
+    <h2><span class="grad-text">Voltra</span> 是什么？</h2>
     <p class="lead mt-4">
-      Voltra turns React JSX into <strong>SwiftUI</strong> and
-      <strong>Jetpack Compose Glance</strong>, so you can ship custom
-      Live Activities, Dynamic Island layouts and Android Widgets
-      <em>without touching native code</em>.
+      Voltra 把 React JSX 直接转成 <strong>SwiftUI</strong> 和
+      <strong>Jetpack Compose Glance</strong>，
+      让你<em>不写一行原生代码</em>就能做出定制的 Live Activity、
+      Dynamic Island 布局和 Android Widget。
     </p>
 
     <div class="grid grid-2 mt-8">
       <div class="card">
-        <h4>The original</h4>
+        <h4>原版</h4>
         <h3 style="color:var(--text);margin-bottom:14px;">Voltra · React Native (Expo)</h3>
-        <p class="small">A Callstack-incubated open-source library. JSX → JSON → SwiftUI/Glance.<br/>~32,500 LoC across 7 packages, an Expo config plugin, and native modules.</p>
+        <p class="small">Callstack 孵化的开源库。JSX → JSON → SwiftUI / Glance。<br/>~32,500 行代码，分成 7 个 package、一个 Expo config plugin、一组原生 Module。</p>
         <div class="row mt-6 gap-sm">
           <span class="pill cyan">@use-voltra/core</span>
           <span class="pill cyan">/ios</span>
@@ -493,12 +490,12 @@
       </div>
 
       <div class="card glow">
-        <h4>The port target</h4>
+        <h4>移植目标</h4>
         <h3 style="color:var(--text);margin-bottom:14px;">LynxJS</h3>
         <p class="small">
-          ByteDance's cross-platform runtime. JS executes on a background thread;
-          UI is native. <strong>Not React Native.</strong> Different module ABI,
-          different layout primitives, different DSL. But same Reactive mental model.
+          字节跳动的跨端运行时。JS 跑在后台线程，UI 走原生。
+          <strong>不是 React Native</strong>。Native Module ABI 不一样、
+          布局原语不一样、DSL 不一样，但 Reactive 心智模型一致。
         </p>
         <div class="row mt-6 gap-sm">
           <span class="pill">@lynx-js/react</span>
@@ -506,7 +503,7 @@
           <span class="pill">GlobalEventEmitter</span>
         </div>
         <div class="row mt-4 gap-sm">
-          <span class="pill yellow">flex + linear layout</span>
+          <span class="pill yellow">flex + linear 双布局</span>
           <span class="pill yellow">Callback-based</span>
         </div>
       </div>
@@ -517,29 +514,29 @@
 <!-- ───────── SLIDE 4 ─ THE CHALLENGE ───────── -->
 <section class="slide">
   <div class="container">
-    <div class="eyebrow">The Hard Problem</div>
-    <h2>You can't render Live Activities <span class="grad-text">in a JS view tree</span>.</h2>
+    <div class="eyebrow">硬核问题</div>
+    <h2>Live Activity <span class="grad-text">没法在 JS 视图树里渲染</span>。</h2>
 
     <div class="grid grid-2 mt-8">
       <div class="stack">
         <div class="card">
-          <h4 style="color:var(--red);">Constraint</h4>
-          <p>Live Activities, Dynamic Island, Widgets, and Glance run in
-            <strong>out-of-process OS extensions</strong>.</p>
-          <p class="mt-4">They <em>only</em> accept SwiftUI / Compose Glance.
-            No WKWebView. No React Native bridge. No Lynx runtime.</p>
+          <h4 style="color:var(--red);">硬约束</h4>
+          <p>Live Activity、Dynamic Island、Widget、Glance，全部跑在
+            <strong>独立进程的系统 Extension</strong> 里。</p>
+          <p class="mt-4">它们<em>只接收</em> SwiftUI / Compose Glance。
+            没有 WKWebView、没有 RN Bridge、没有 Lynx runtime。</p>
         </div>
         <div class="card">
-          <h4 style="color:var(--yellow);">Implication</h4>
-          <p>The actual UI rendering must happen <strong>natively</strong>.
-            The JS framework only ever produces a <em>JSON payload</em>;
-            native code reads that payload and constructs SwiftUI/Glance views.</p>
+          <h4 style="color:var(--yellow);">推论</h4>
+          <p>真正的 UI 渲染必须在<strong>原生侧</strong>发生。
+            JS 框架的唯一职责是生产一个 <em>JSON Payload</em>，
+            原生代码读这个 Payload，再构造出 SwiftUI / Glance 视图。</p>
         </div>
       </div>
 
       <div class="card" style="display:flex;flex-direction:column;justify-content:center;">
-        <h4>The pipeline (unchanged)</h4>
-        <pre><span class="com">// JS side</span>
+        <h4>这条管线（保持不变）</h4>
+        <pre><span class="com">// JS 端</span>
 &lt;Voltra.<span class="ty">VStack</span>&gt;
   &lt;Voltra.<span class="ty">Text</span>&gt;Order #42&lt;/Voltra.<span class="ty">Text</span>&gt;
 &lt;/Voltra.<span class="ty">VStack</span>&gt;
@@ -547,12 +544,12 @@
 <span class="fn">renderLiveActivityToString</span>()
     <span class="punc">↓</span>
 <span class="str">'{"type":"VStack","children":[…]}'</span>
-    <span class="punc">↓</span>  <span class="com">// crosses bridge</span>
-<span class="com">// Native side (Swift/Kotlin)</span>
+    <span class="punc">↓</span>  <span class="com">// 跨过 bridge</span>
+<span class="com">// 原生侧 (Swift / Kotlin)</span>
 <span class="fn">VoltraParser.parse</span>(json) → <span class="ty">SwiftUI.View</span></pre>
         <p class="small mt-4">
-          <strong>This is the key insight.</strong> The bridge is small.
-          Almost everything else is shared.
+          <strong>这是关键洞察。</strong>Bridge 很薄，
+          上下其他东西全是共享的。
         </p>
       </div>
     </div>
@@ -562,56 +559,56 @@
 <!-- ───────── SLIDE 5 ─ LAYER MODEL ───────── -->
 <section class="slide">
   <div class="container">
-    <div class="eyebrow">The Insight</div>
-    <h2>The <span class="grad-text">5-Layer Model</span> shows what travels free.</h2>
+    <div class="eyebrow">洞察</div>
+    <h2><span class="grad-text">五层模型</span>告诉你哪些是免费搬过来的。</h2>
 
     <div class="layers mt-8">
       <div class="layer reused">
         <span class="tag">Layer 0</span>
         <div class="desc">
-          <h5>Pure JS Packages: <code>@use-voltra/core · ios · android · server</code></h5>
-          <p>Renderer, payload compression, JSX components. Framework-agnostic. Depend on <code>react</code> only.</p>
+          <h5>纯 JS 包: <code>@use-voltra/core · ios · android · server</code></h5>
+          <p>渲染器、Payload 压缩、JSX 组件。框架无关，只依赖 <code>react</code>。</p>
         </div>
-        <span class="reuse">100% via npm</span>
+        <span class="reuse">100% 走 npm</span>
       </div>
       <div class="layer reused">
         <span class="tag">Layer 1</span>
         <div class="desc">
-          <h5>Business Logic: <code>live-activity/api · widgets · ongoing-notification · preload</code></h5>
-          <p>Hooks, API functions. Only call <code>VoltraModule</code> methods. Vendored verbatim into the Lynx package.</p>
+          <h5>业务逻辑: <code>live-activity/api · widgets · ongoing-notification · preload</code></h5>
+          <p>Hooks、API 函数。只调 <code>VoltraModule</code> 的方法。在 Lynx 包里原样 vendoring。</p>
         </div>
-        <span class="reuse">~95% vendored</span>
+        <span class="reuse">~95% 原样 vendored</span>
       </div>
       <div class="layer bridge">
         <span class="tag">Layer 2</span>
         <div class="desc">
           <h5>Bridge Adapter: <code>lynx-bridge/</code></h5>
-          <p>Promise⇄callback wrapper · GlobalEventEmitter shim · Platform detection. <strong>NEW.</strong></p>
+          <p>Promise⇄callback 包装 · GlobalEventEmitter 适配 · 平台判断。<strong>全新代码。</strong></p>
         </div>
         <span class="reuse">+ 662 LoC</span>
       </div>
       <div class="layer bridge">
         <span class="tag">Layer 3</span>
         <div class="desc">
-          <h5>Native Module Registration: <code>VoltraLynxModule.swift · .kt</code></h5>
-          <p>Mechanical translation of Expo Module DSL → Lynx <code>@LynxMethod</code>. Bodies delegate to existing impl.</p>
+          <h5>原生 Module 注册: <code>VoltraLynxModule.swift · .kt</code></h5>
+          <p>Expo Module DSL → Lynx <code>@LynxMethod</code> 的机械改写。函数体全部委托给原有 impl。</p>
         </div>
         <span class="reuse">+ 788 LoC</span>
       </div>
       <div class="layer reused">
         <span class="tag">Layer 4</span>
         <div class="desc">
-          <h5>Native Rendering: SwiftUI · Glance · Payload parsing · Image preload</h5>
-          <p>The 19,800 LoC engine that actually turns JSON into pixels. Copied byte-for-byte from upstream Voltra.</p>
+          <h5>原生渲染: SwiftUI · Glance · Payload 解析 · 图片预加载</h5>
+          <p>把 JSON 真正画成像素的 19,800 行原生代码，从上游 Voltra 一字节不差地复制。</p>
         </div>
-        <span class="reuse">100% shared</span>
+        <span class="reuse">100% 共享</span>
       </div>
     </div>
 
     <p class="small mt-8" style="max-width:1100px;">
-      <strong>Architectural principle (P3) from <code>LYNX_PORT.md</code>:</strong>
-      <em>“The Adapter Pattern Absorbs All Differences.”</em>
-      All business logic sees the same interface regardless of host framework (Expo or Lynx).
+      <strong>架构原则 P3（写在 <code>LYNX_PORT.md</code> 里）:</strong>
+      <em>“Adapter Pattern 吸收所有差异”</em>。
+      所有上层业务代码看到的接口一致，不管底下是 Expo 还是 Lynx。
     </p>
   </div>
 </section>
@@ -619,15 +616,15 @@
 <!-- ───────── SLIDE 6 ─ THE NUMBER ───────── -->
 <section class="slide center">
   <div class="container" style="text-align:center;">
-    <div class="eyebrow">The Headline Number</div>
+    <div class="eyebrow">头条数字</div>
     <div class="big-num">95.6<span style="font-size:5rem;">%</span></div>
     <h3 class="mt-8" style="color:var(--text);font-size:2rem;font-weight:600;">
-      of the Lynx port is <span class="grad-text-2">reused</span> from the React Native library.
+      的代码是从 React Native 版本 <span class="grad-text-2">直接复用</span> 的。
     </h3>
     <p class="lead mt-6" style="margin:24px auto 0;">
-      Only <strong>1,440 lines</strong> of new code (<strong>662</strong> for the JS bridge adapter,
-      <strong>788</strong> for the Swift + Kotlin native-module shims)
-      to port <strong>32,500 lines</strong> of native UI library to a different host runtime.
+      只用 <strong>1,440 行</strong>新代码 (<strong>662</strong> 行 JS Bridge Adapter,
+      <strong>788</strong> 行 Swift + Kotlin 原生 Module Shim)
+      就把 <strong>32,500 行</strong>的原生 UI 库搬到了一个新运行时。
     </p>
   </div>
 </section>
@@ -635,61 +632,61 @@
 <!-- ───────── SLIDE 7 ─ LOC TABLE ───────── -->
 <section class="slide">
   <div class="container">
-    <div class="eyebrow">Code-Reuse Audit</div>
-    <h2>Where every line went.</h2>
+    <div class="eyebrow">代码复用审计</div>
+    <h2>每一行去哪儿了。</h2>
 
     <div class="card mt-6" style="padding:0;overflow:hidden;">
       <table>
         <thead>
           <tr>
-            <th>Layer</th><th>What</th>
-            <th style="text-align:right;">Original (RN)</th>
-            <th style="text-align:right;">Lynx Port</th>
-            <th style="text-align:right;">Reuse</th>
+            <th>Layer</th><th>是什么</th>
+            <th style="text-align:right;">原版 (RN)</th>
+            <th style="text-align:right;">Lynx 端</th>
+            <th style="text-align:right;">复用</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>L0</strong></td>
-            <td>Pure-JS, core, ios, android, server, server-impls</td>
-            <td class="num">5,734</td><td class="num">0 <span class="small">(npm-linked)</span></td>
+            <td>纯 JS: core / ios / android / server / server-impls</td>
+            <td class="num">5,734</td><td class="num">0 <span class="small">(npm)</span></td>
             <td class="num"><span class="pill green">100%</span></td>
           </tr>
           <tr>
             <td><strong>L0/1</strong></td>
-            <td>Voltra umbrella, renderer, JSX, payload, styles</td>
-            <td class="num">4,452</td><td class="num">0 <span class="small">(npm-linked)</span></td>
+            <td>Voltra umbrella: 渲染器、JSX、Payload、样式</td>
+            <td class="num">4,452</td><td class="num">0 <span class="small">(npm)</span></td>
             <td class="num"><span class="pill green">100%</span></td>
           </tr>
           <tr>
             <td><strong>L1</strong></td>
-            <td>Client business logic, hooks, widget-api, live-activity</td>
+            <td>客户端业务逻辑: hooks / widget-api / live-activity</td>
             <td class="num">1,616</td><td class="num">1,241 <span class="small">(vendored)</span></td>
             <td class="num"><span class="pill green">~95%</span></td>
           </tr>
           <tr>
             <td><strong>L2</strong></td>
-            <td>Bridge adapter (NEW)</td>
+            <td>Bridge Adapter (全新)</td>
             <td class="num">0</td>
             <td class="num"><span style="color:var(--cyan);font-weight:700;">662</span></td>
             <td class="num"><span class="pill cyan">NEW</span></td>
           </tr>
           <tr>
             <td><strong>L3</strong></td>
-            <td>Native module registration, Swift + Kotlin</td>
+            <td>原生 Module 注册: Swift + Kotlin</td>
             <td class="num">919</td>
             <td class="num"><span style="color:var(--cyan);font-weight:700;">788</span></td>
             <td class="num"><span class="pill yellow">REWRITE</span></td>
           </tr>
           <tr>
             <td><strong>L4</strong></td>
-            <td>SwiftUI + Glance rendering engine</td>
+            <td>SwiftUI + Glance 渲染引擎</td>
             <td class="num">19,776</td>
             <td class="num">19,783 <span class="small">(δ&lt;0.1%)</span></td>
             <td class="num"><span class="pill green">100%</span></td>
           </tr>
           <tr class="total">
-            <td colspan="2">TOTAL</td>
+            <td colspan="2">合计</td>
             <td class="num">32,497</td>
             <td class="num">1,440 NEW + 21,024 reused</td>
             <td class="num"><span class="pill green">95.6%</span></td>
@@ -703,33 +700,33 @@
 <!-- ───────── SLIDE 8 ─ BRIDGE ADAPTER ───────── -->
 <section class="slide">
   <div class="container">
-    <div class="eyebrow">Layer 2 · The Seam</div>
-    <h2>The entire framework-difference cost: <span class="grad-text">662 LoC</span>.</h2>
+    <div class="eyebrow">Layer 2 · 接缝</div>
+    <h2>整个框架差异成本: <span class="grad-text">662 行</span>。</h2>
     <p class="lead mt-4">
-      Six files, all in <code>voltra-lynx/packages/lynx/src/bridge/</code>.
-      Every Expo→Lynx ABI difference is absorbed here.
+      六个文件，全部在 <code>voltra-lynx/packages/lynx/src/bridge/</code>。
+      每一处 Expo→Lynx 的 ABI 差异都在这里被吸收。
     </p>
 
     <div class="files-list mt-8">
       <div class="file-row">
         <div class="name">module-adapter.ts</div>
         <div class="loc">270 LoC</div>
-        <div class="desc">Wraps Lynx callback-style <code>NativeModules.VoltraModule</code> into Promise-based <code>VoltraIOSModuleSpec</code> / <code>VoltraAndroidModuleSpec</code></div>
+        <div class="desc">把 Lynx 回调风格的 <code>NativeModules.VoltraModule</code> 包装成基于 Promise 的 <code>VoltraIOSModuleSpec</code> / <code>VoltraAndroidModuleSpec</code></div>
       </div>
       <div class="file-row">
         <div class="name">types.ts</div>
         <div class="loc">250 LoC</div>
-        <div class="desc">Re-declares the module-spec interfaces shared by adapter and consumers</div>
+        <div class="desc">重新声明 Module Spec 接口，Adapter 和上层共用一套类型</div>
       </div>
       <div class="file-row">
         <div class="name">platform.ts</div>
         <div class="loc">53 LoC</div>
-        <div class="desc">Runtime platform detection replacing RN's <code>Platform.OS</code></div>
+        <div class="desc">运行时平台检测，替代 RN 的 <code>Platform.OS</code></div>
       </div>
       <div class="file-row">
         <div class="name">event-adapter.ts</div>
         <div class="loc">46 LoC</div>
-        <div class="desc">Translates Lynx <code>GlobalEventEmitter</code> → RN-compatible <code>EventSubscription</code></div>
+        <div class="desc">把 Lynx <code>GlobalEventEmitter</code> 翻成 RN 兼容的 <code>EventSubscription</code></div>
       </div>
       <div class="file-row">
         <div class="name">index.ts</div>
@@ -739,7 +736,7 @@
       <div class="file-row">
         <div class="name">env.d.ts</div>
         <div class="loc">10 LoC</div>
-        <div class="desc">Ambient declarations for Lynx globals (<code>NativeModules</code>, <code>GlobalEventEmitter</code>)</div>
+        <div class="desc">Lynx 全局对象的 ambient 声明 (<code>NativeModules</code>, <code>GlobalEventEmitter</code>)</div>
       </div>
     </div>
   </div>
@@ -749,7 +746,7 @@
 <section class="slide">
   <div class="container">
     <div class="eyebrow">Before / After · TypeScript</div>
-    <h2>Module loading.</h2>
+    <h2>Module 加载方式。</h2>
 
     <div class="grid grid-2 mt-8">
       <div class="diff-block before">
@@ -760,7 +757,7 @@
 <span class="kw">const</span> <span class="ty">VoltraModule</span> =
   <span class="fn">requireNativeModule</span>&lt;<span class="ty">VoltraIOSModuleSpec</span>&gt;(<span class="str">'VoltraModule'</span>)
 
-<span class="com">// Promise-returning methods are auto-generated by Expo.
+<span class="com">// Promise 返回的方法由 Expo 自动生成。
 // module.startLiveActivity(json, opts) → Promise&lt;string&gt;</span></pre>
       </div>
 
@@ -780,10 +777,10 @@
 
     <div class="card mt-8" style="border-left:3px solid var(--cyan);">
       <p>
-        <strong>The adapter</strong> is a 270-line file that wraps every method
-        in <code>new Promise((resolve, reject) =&gt; raw.method(args, (r) =&gt; …))</code>.
-        Above it, every line of business logic (<code>useLiveActivity</code>, <code>startLiveActivity</code>,
-        <code>updateWidget</code>, all 28+ functions) is <em>unchanged</em>.
+        <strong>这个 Adapter</strong> 是一个 270 行的文件，把每个方法都包成
+        <code>new Promise((resolve, reject) =&gt; raw.method(args, (r) =&gt; …))</code>。
+        在它之上，每一行业务逻辑 (<code>useLiveActivity</code>, <code>startLiveActivity</code>,
+        <code>updateWidget</code>，全部 28+ 个函数) 都<em>原样不动</em>。
       </p>
     </div>
   </div>
@@ -793,7 +790,7 @@
 <section class="slide">
   <div class="container">
     <div class="eyebrow">Before / After · Swift</div>
-    <h2>Method declaration.</h2>
+    <h2>方法声明。</h2>
 
     <div class="grid grid-2 mt-8">
       <div class="diff-block before">
@@ -813,7 +810,7 @@
       </div>
 
       <div class="diff-block after">
-        <span class="label">After · LynxModule Protocol</span>
+        <span class="label">After · LynxModule 协议</span>
         <p class="tiny" style="margin-bottom:8px;">voltra-lynx/host/ios/.../VoltraLynxModule.swift</p>
         <pre><span class="kw">@objc func</span> <span class="fn">startLiveActivity</span>(
   _ jsonString: <span class="ty">NSString</span>,
@@ -838,11 +835,11 @@
 
     <div class="card mt-8" style="border-left:3px solid var(--cyan);">
       <p>
-        <strong>Pure mechanical translation.</strong>
-        <code>AsyncFunction("name") { … }</code> becomes <code>@objc func name(_:callback:)</code>;
-        <code>async throws → T</code> becomes a <code>Task { … callback?(…) }</code> wrapper.
-        The 330-line <code>VoltraModuleImpl.swift</code> that does all the actual work (ActivityKit calls,
-        image preloading, widget timelines) is <em>byte-for-byte identical</em>.
+        <strong>纯粹的机械改写。</strong>
+        <code>AsyncFunction("name") { … }</code> 变成 <code>@objc func name(_:callback:)</code>;
+        <code>async throws → T</code> 变成 <code>Task { … callback?(…) }</code> 包装。
+        而那个 330 行的 <code>VoltraModuleImpl.swift</code>，
+        干所有真正业务活的代码 (ActivityKit 调用、图片预加载、Widget Timeline)，<em>字节相同</em>。
       </p>
     </div>
   </div>
@@ -852,7 +849,7 @@
 <section class="slide">
   <div class="container">
     <div class="eyebrow">Before / After · Kotlin</div>
-    <h2>Method declaration.</h2>
+    <h2>方法声明。</h2>
 
     <div class="grid grid-2 mt-8">
       <div class="diff-block before">
@@ -897,10 +894,10 @@
 
     <div class="card mt-8" style="border-left:3px solid var(--cyan);">
       <p>
-        Same shape on Android: <code>AsyncFunction</code> → <code>@LynxMethod fun … callback: Callback</code>,
-        and <code>runBlocking</code> → <code>scope.launch { … ; callback.invoke(…) }</code>.
-        Every <code>VoltraWidgetManager</code>, <code>VoltraNotificationManager</code>,
-        Glance renderer, parser: all <strong>9,509 lines</strong> identical.
+        Android 端形状一样: <code>AsyncFunction</code> → <code>@LynxMethod fun … callback: Callback</code>,
+        <code>runBlocking</code> → <code>scope.launch { … ; callback.invoke(…) }</code>。
+        每一个 <code>VoltraWidgetManager</code>, <code>VoltraNotificationManager</code>,
+        Glance renderer, parser，<strong>9,509 行</strong>全部字节相同。
       </p>
     </div>
   </div>
@@ -910,48 +907,47 @@
 <section class="slide">
   <div class="container" style="max-width:1200px;">
     <div class="aha-icon">💡</div>
-    <div class="section-num">Breakthrough · 01 of 03</div>
-    <h2>The <span class="grad-text">React Alias</span>.</h2>
+    <div class="section-num">关键突破 · 01 / 03</div>
+    <h2>The <span class="grad-text">React Alias</span>。</h2>
     <p class="lead mt-4">
-      <code>pluginReactLynx</code> aliases <code>react → @lynx-js/react</code> at build time.
-      Which means <em>Voltra's JSX components (<code>VStack</code>, <code>Text</code>, <code>Symbol</code>,
-      <code>Image</code>) work as-is in Lynx</em>.
+      <code>pluginReactLynx</code> 在 build 时把 <code>react → @lynx-js/react</code> 做了 alias。
+      意思是 <em>Voltra 的 JSX 组件 (<code>VStack</code>, <code>Text</code>, <code>Symbol</code>,
+      <code>Image</code>) 在 Lynx 里直接能用</em>。
     </p>
 
     <div class="grid grid-2 mt-8">
       <div class="card">
-        <h4>Why it works</h4>
+        <h4>为什么能行</h4>
         <p class="small">
-          Voltra's components only use <code>createElement</code> and hooks:
-          never <code>ReactDOM</code>, never platform-specific APIs.
+          Voltra 的组件只用 <code>createElement</code> 和 hooks，
+          从来不用 <code>ReactDOM</code>、也不调任何平台特定 API。
         </p>
         <p class="small mt-4">
-          <code>renderLiveActivityToString()</code> walks the React element tree and
-          serializes nodes to JSON. The element tree is the same shape no matter
-          which <code>createElement</code> produced it.
+          <code>renderLiveActivityToString()</code> 走一遍 React element tree
+          序列化成 JSON。这棵 tree 的形状不在乎到底是谁的 <code>createElement</code> 生产的。
         </p>
       </div>
 
       <div class="card">
-        <h4>What it unlocks</h4>
+        <h4>它解锁了什么</h4>
         <p class="small">
-          <strong>100% Layer 0 reuse via plain npm.</strong>
-          No fork, no wrapper, no shim.
+          <strong>Layer 0 走 npm 100% 复用。</strong>
+          不 fork、不 wrap、不 shim。
         </p>
-        <pre style="margin-top:16px;font-size:0.78rem;"><span class="com">// In a Lynx .tsx file:</span>
+        <pre style="margin-top:16px;font-size:0.78rem;"><span class="com">// 在 Lynx .tsx 文件里:</span>
 <span class="kw">import</span> { Voltra } <span class="kw">from</span> <span class="str">'@use-voltra/ios'</span>
 
 &lt;Voltra.<span class="ty">VStack</span> style={{ padding: <span class="str">'16px'</span> }}&gt;
   &lt;Voltra.<span class="ty">Text</span>&gt;Order #42&lt;/Voltra.<span class="ty">Text</span>&gt;
 &lt;/Voltra.<span class="ty">VStack</span>&gt;
-<span class="com">// → traverses, serializes, native parses → SwiftUI ✨</span></pre>
+<span class="com">// → 遍历、序列化、原生解析 → SwiftUI ✨</span></pre>
       </div>
     </div>
 
     <p class="small mt-8" style="max-width:1100px;">
-      Any React library that only touches <code>createElement</code> and hooks
-      (not DOM) works in Lynx through this alias.
-      <span class="pill cyan">Same trick that makes <code>@tanstack/react-query</code> work in Lynx.</span>
+      任何只用 <code>createElement</code> 和 hooks (不碰 DOM) 的 React 库，
+      都能靠这个 alias 在 Lynx 里跑。
+      <span class="pill cyan">同样的把戏让 <code>@tanstack/react-query</code> 也能在 Lynx 上用。</span>
     </p>
   </div>
 </section>
@@ -960,69 +956,69 @@
 <section class="slide">
   <div class="container" style="max-width:1300px;">
     <div class="aha-icon">📐</div>
-    <div class="section-num">Breakthrough · 02 of 03</div>
-    <h2>Lynx layout: <span class="grad-text">flex works</span>, but the default is linear.</h2>
+    <div class="section-num">关键突破 · 02 / 03</div>
+    <h2>Lynx 布局: <span class="grad-text">flex 能用</span>，但默认是 linear。</h2>
     <p class="lead mt-4">
-      Lynx supports full CSS Flexbox <em>and</em> Android-LinearLayout-style
-      <code>display: linear</code>. <code>&lt;view&gt;</code> defaults to linear,
-      so <code>flex: 1</code> on a child <code>&lt;scroll-view&gt;</code> collapses
-      to zero height, until you set <code>display: 'flex'</code> on the parent.
-      One opt-in, and the rest of your RN styles port 1:1.
+      Lynx 同时支持完整 CSS Flexbox 和 Android-LinearLayout 风格的
+      <code>display: linear</code>。<code>&lt;view&gt;</code> 默认是 linear，
+      所以子 <code>&lt;scroll-view&gt;</code> 上的 <code>flex: 1</code> 会塌成 0 高度，
+      除非你在父节点上设 <code>display: 'flex'</code>。
+      一次显式声明，剩下 RN 那套 style 就能 1:1 搬过来。
     </p>
 
     <table class="mt-8">
       <thead>
-        <tr><th>Pattern</th><th>RN / Web</th><th>Lynx (preferred)</th><th>Linear fallback</th></tr>
+        <tr><th>场景</th><th>RN / Web</th><th>Lynx (推荐)</th><th>Linear 兜底</th></tr>
       </thead>
       <tbody>
         <tr>
-          <td>Fill remaining space</td>
+          <td>填满剩余空间</td>
           <td><code>flex: 1</code></td>
-          <td><code>flex: 1</code> (parent <code>display:'flex'</code>)</td>
+          <td><code>flex: 1</code> (父节点 <code>display:'flex'</code>)</td>
           <td class="small"><code>linearWeight: 1</code></td>
         </tr>
         <tr>
-          <td>Horizontal row</td>
+          <td>横向排布</td>
           <td><code>display: 'flex', flexDirection: 'row'</code></td>
-          <td>same</td>
+          <td>同</td>
           <td class="small"><code>display: 'linear', linearDirection: 'row'</code></td>
         </tr>
         <tr>
-          <td>Scroll axis</td>
+          <td>滚动方向</td>
           <td><code>scroll-y</code></td>
           <td><code>scroll-orientation="vertical"</code></td>
-          <td class="small">same</td>
+          <td class="small">同</td>
         </tr>
         <tr>
-          <td>Border radius</td>
+          <td>圆角</td>
           <td><code>borderRadius: 12</code></td>
           <td><code>borderRadius: '12px'</code></td>
-          <td class="small">silently ignored</td>
+          <td class="small">数字会被静默忽略</td>
         </tr>
         <tr>
-          <td>Line height</td>
+          <td>行高</td>
           <td><code>lineHeight: 18</code></td>
-          <td><code>lineHeight: '18px'</code> or remove</td>
-          <td class="small">18 × font-size gaps</td>
+          <td><code>lineHeight: '18px'</code> 或删掉</td>
+          <td class="small">数字会被当成 18× font-size</td>
         </tr>
         <tr>
-          <td>Padding shorthand</td>
+          <td>padding 缩写</td>
           <td><code>paddingHorizontal: 16</code></td>
           <td><code>paddingLeft: 16, paddingRight: 16</code></td>
-          <td class="small">not applied</td>
+          <td class="small">缩写不生效</td>
         </tr>
         <tr>
-          <td>Tap event</td>
+          <td>点击事件</td>
           <td><code>onPress</code> / <code>onClick</code></td>
           <td><code>bindtap</code></td>
-          <td class="small">no handler fires</td>
+          <td class="small">handler 不触发</td>
         </tr>
       </tbody>
     </table>
 
     <p class="small mt-6" style="color:var(--yellow);">
-      <strong>Lesson encoded into <code>LYNX_PORT.md</code> §Lynx CSS Gotchas.</strong>
-      Future agents read it before writing any layout code.
+      <strong>这些都写进了 <code>LYNX_PORT.md</code> §Lynx CSS Gotchas。</strong>
+      下一个 agent 写布局前会先读一遍。
     </p>
   </div>
 </section>
@@ -1031,25 +1027,25 @@
 <section class="slide">
   <div class="container" style="max-width:1200px;">
     <div class="aha-icon">🧩</div>
-    <div class="section-num">Breakthrough · 03 of 03</div>
-    <h2>Custom Element &gt; Native View.</h2>
+    <div class="section-num">关键突破 · 03 / 03</div>
+    <h2>Custom Element &gt; Native View。</h2>
     <p class="lead mt-4">
-      Initially flagged as <em>blocked stretch goals</em> (US-050 / US-051),
-      live in-app previews of widgets seemed to require Lynx's
-      <code>requireNativeView</code> equivalent. Turns out the simpler
-      <strong>Custom Element</strong> system was sufficient.
+      最初 (US-050 / US-051) 被标成<em>受阻的 stretch goal</em>，
+      因为 Widget 的 App 内预览看起来需要等价于 Lynx 的
+      <code>requireNativeView</code> 才能做。结果发现更简单的
+      <strong>Custom Element</strong> 机制就够用。
     </p>
 
     <div class="grid grid-2 mt-8">
       <div class="card">
-        <h4>The component</h4>
-        <pre style="font-size:0.82rem;"><span class="com">// Lynx-side</span>
+        <h4>这个组件</h4>
+        <pre style="font-size:0.82rem;"><span class="com">// Lynx 侧</span>
 &lt;<span class="ty">voltra-preview</span>
   width=<span class="str">"170"</span>
   height=<span class="str">"170"</span>
   payload={<span class="fn">renderWidgetToString</span>(jsx)}
 /&gt;</pre>
-        <h4 class="mt-6">The native registration</h4>
+        <h4 class="mt-6">原生注册</h4>
         <pre style="font-size:0.78rem;"><span class="ty">LynxUIRegister</span>.<span class="fn">register</span>(
   <span class="str">"voltra-preview"</span>,
   <span class="ty">VoltraPreviewHostView</span>.self
@@ -1057,19 +1053,19 @@
       </div>
 
       <div class="card">
-        <h4>What it does</h4>
+        <h4>它干什么</h4>
         <p class="small">
-          Renders Voltra SwiftUI <em>inline inside the Lynx app</em>, not on the
-          home screen, not in the lock screen. Makes the Testing Grounds screens
-          show actual SwiftUI output instead of JSON dumps.
+          把 Voltra SwiftUI <em>渲染到 Lynx app 内部</em>，
+          不在桌面、不在锁屏。让 Testing Grounds 的页面直接看到 SwiftUI 输出，
+          而不是 JSON dump。
         </p>
         <p class="small mt-4">
-          Wraps a <code>UIHostingController</code> on iOS / <code>ComposeView</code> on Android,
-          subscribes to width prop changes from Lynx, re-renders SwiftUI on payload mutations.
+          iOS 上包了一个 <code>UIHostingController</code>、Android 上是 <code>ComposeView</code>，
+          订阅 Lynx 传来的 width 变化，Payload 变了就重新渲染 SwiftUI。
         </p>
         <p class="small mt-4">
-          <span class="pill green">9 testing-ground screens converted</span>
-          <span class="pill green">live SwiftUI in-app</span>
+          <span class="pill green">9 个 testing-ground 页面被改造</span>
+          <span class="pill green">App 内看到真实 SwiftUI</span>
         </p>
       </div>
     </div>
@@ -1079,69 +1075,69 @@
 <!-- ───────── SLIDE 15 ─ TIMELINE ───────── -->
 <section class="slide">
   <div class="container">
-    <div class="eyebrow">The Journey · 64 commits across 10 phases</div>
-    <h2>From <code>US-001</code> to <code>US-061</code>.</h2>
+    <div class="eyebrow">整个过程 · 64 个 commit 分成 10 个阶段</div>
+    <h2>从 <code>US-001</code> 到 <code>US-061</code>。</h2>
 
     <div class="timeline mt-8">
       <div class="phase">
         <div class="step">Phase 01</div>
-        <h6>Scaffolding</h6>
-        <p>pnpm monorepo · rspeedy shell · Layer 0 proof-of-import</p>
+        <h6>项目脚手架</h6>
+        <p>pnpm monorepo · rspeedy 壳 · Layer 0 引入验证</p>
       </div>
       <div class="phase">
         <div class="step">Phase 02</div>
         <h6>Bridge Adapter</h6>
-        <p>module-adapter · event-adapter · platform · types, 662 LoC</p>
+        <p>module-adapter · event-adapter · platform · types，共 662 LoC</p>
       </div>
       <div class="phase">
         <div class="step">Phase 03</div>
         <h6>Client Vendoring</h6>
-        <p>iOS + Android client packages, business logic copied verbatim</p>
+        <p>iOS / Android client 包，业务逻辑原样复制</p>
       </div>
       <div class="phase">
         <div class="step">Phase 04</div>
-        <h6>Native Modules</h6>
-        <p>Mechanical Swift + Kotlin translation, delegating to existing impl</p>
+        <h6>Native Module</h6>
+        <p>Swift + Kotlin 机械改写，方法体委托到现有 impl</p>
       </div>
       <div class="phase">
         <div class="step">Phase 05</div>
         <h6>iOS Host App</h6>
-        <p>xcodegen · CocoaPods · Widget Extension · first end-to-end Live Activity</p>
+        <p>xcodegen · CocoaPods · Widget Extension · 端到端 Live Activity 跑通</p>
       </div>
 
       <div class="phase">
         <div class="step">Phase 06</div>
-        <h6>Demo Porting</h6>
-        <p>10 Live Activities · 5 widgets · 14 testing screens</p>
+        <h6>Demo 移植</h6>
+        <p>10 个 Live Activity · 5 个 Widget · 14 个 testing screen</p>
       </div>
       <div class="phase">
         <div class="step">Phase 07</div>
-        <h6>CSS Reality Check</h6>
-        <p>flex+linear coexist · scroll-orientation · borderRadius px · lineHeight</p>
+        <h6>CSS 现实检查</h6>
+        <p>flex 和 linear 共存 · scroll-orientation · borderRadius px · lineHeight</p>
       </div>
       <div class="phase">
         <div class="step">Phase 08</div>
-        <h6>High-Fidelity Rewrite</h6>
-        <p>Second pass · pixel-parity with RN Expo example</p>
+        <h6>高保真重写</h6>
+        <p>第二轮 · 跟 RN Expo 样例做到逐像素对齐</p>
       </div>
       <div class="phase">
         <div class="step">Phase 09</div>
-        <h6>Custom Element Preview</h6>
-        <p>&lt;voltra-preview&gt; · &lt;voltra-widget-preview&gt; · 9 screens converted</p>
+        <h6>Custom Element 预览</h6>
+        <p>&lt;voltra-preview&gt; · &lt;voltra-widget-preview&gt; · 改造 9 个页面</p>
       </div>
       <div class="phase">
         <div class="step">Phase 10</div>
-        <h6>API Surface Cleanup</h6>
-        <p>Collapsed into single <code>@use-voltra/lynx</code> · Pods removed from git</p>
+        <h6>API 表面清理</h6>
+        <p>统一收成单个 <code>@use-voltra/lynx</code> · Pods 移出 git</p>
       </div>
     </div>
 
     <div class="row mt-8 gap-sm" style="justify-content:center;flex-wrap:wrap;">
-      <span class="pill cyan">243 files changed</span>
+      <span class="pill cyan">243 文件变更</span>
       <span class="pill cyan">+27,395 / −200</span>
-      <span class="pill cyan">~61 user stories</span>
-      <span class="pill cyan">1 PRD per phase cluster</span>
-      <span class="pill cyan">≈ 1 commit per story</span>
+      <span class="pill cyan">~61 个 user story</span>
+      <span class="pill cyan">每个阶段 1 份 PRD</span>
+      <span class="pill cyan">≈ 1 story / 1 commit</span>
     </div>
   </div>
 </section>
@@ -1152,13 +1148,13 @@
     <div class="section-num">Part Two</div>
     <h1 class="hero-title" style="font-size:5rem;">
       <span class="grad-text">Harness Engineering</span><br/>
-      <span style="color:var(--text);">how we actually shipped it</span>
+      <span style="color:var(--text);">怎么真把它做出来的</span>
     </h1>
     <p class="hero-sub" style="margin:32px auto 0;">
-      27,395 lines of code across 64 commits and ~61 stories.
-      A single developer with Claude Code, structured agents, and a stack of guardrail markdown files.
+      27,395 行代码、64 次 commit、~61 个 story。
+      一个开发者 + Claude Code + 一套结构化 agent + 几个起约束作用的 markdown 文件。
       <br/><br/>
-      <strong>The harness is the product.</strong>
+      <strong>Harness 本身就是产品。</strong>
     </p>
   </div>
 </section>
@@ -1166,40 +1162,38 @@
 <!-- ───────── SLIDE 17 ─ TECHNIQUE 1 (PRD) ───────── -->
 <section class="slide">
   <div class="container">
-    <div class="eyebrow">Technique · 01</div>
-    <h2><span class="grad-text">PRD → User Stories → 1-commit-per-story.</span></h2>
+    <div class="eyebrow">技巧 · 01</div>
+    <h2><span class="grad-text">PRD → User Story → 一个 commit 一个 story。</span></h2>
     <p class="lead mt-4">
-      The work was broken into four written PRDs. Each PRD enumerates user stories
-      <code>US-001 … US-NN</code> with explicit acceptance criteria. Each story
-      maps to exactly one commit, prefixed with its ID.
+      整个项目拆成了 4 份 PRD。每份 PRD 列出
+      <code>US-001 … US-NN</code> 一组 user story，每个都有明确的验收标准。
+      每个 story 对应正好一个 commit，commit message 里带上它的编号。
     </p>
 
     <div class="grid grid-2 mt-8">
       <div class="card">
-        <h4>The 4 PRDs</h4>
+        <h4>4 份 PRD</h4>
         <div class="files-list">
-          <div class="file-row"><div class="name">prd-voltra-lynx-port.md</div><div class="loc">51 stories</div><div class="desc">Original port: bridge + demos + Testing Grounds</div></div>
-          <div class="file-row"><div class="name">prd-high-fidelity-rewrite.md</div><div class="loc">16 stories</div><div class="desc">Pixel-parity pass after CSS gotchas surfaced</div></div>
-          <div class="file-row"><div class="name">prd-lynx-voltra-preview-screens.md</div><div class="loc">12 stories</div><div class="desc">&lt;voltra-preview&gt; Custom Element conversion</div></div>
-          <div class="file-row"><div class="name">prd-voltra-lynx-android.md</div><div class="loc">28+ stories</div><div class="desc">Android host + Kotlin module + Glance widgets</div></div>
+          <div class="file-row"><div class="name">prd-voltra-lynx-port.md</div><div class="loc">51 stories</div><div class="desc">原始移植: bridge + demo + Testing Grounds</div></div>
+          <div class="file-row"><div class="name">prd-high-fidelity-rewrite.md</div><div class="loc">16 stories</div><div class="desc">CSS gotcha 暴露之后的对齐轮次</div></div>
+          <div class="file-row"><div class="name">prd-lynx-voltra-preview-screens.md</div><div class="loc">12 stories</div><div class="desc">&lt;voltra-preview&gt; Custom Element 改造</div></div>
+          <div class="file-row"><div class="name">prd-voltra-lynx-android.md</div><div class="loc">28+ stories</div><div class="desc">Android host + Kotlin module + Glance widget</div></div>
         </div>
       </div>
 
       <div class="card">
-        <h4>Why it works</h4>
+        <h4>为什么这么干</h4>
         <p class="small">
-          A user story is a <strong>cache-friendly unit of agent work</strong>,
-          small enough to fit in one context window, with explicit acceptance
-          criteria the agent can self-verify against.
+          一个 user story 是 <strong>对 agent 友好的工作单元</strong>:
+          能塞进一个 context window，有明确的验收标准让 agent 自检。
         </p>
         <p class="small mt-4">
-          The <code>(US-XXX)</code> commit suffix becomes a permanent audit trail:
-          run <code>git log --oneline | grep US-053</code> and you find the
-          Positioning Screen conversion in one line.
+          commit 后缀里的 <code>(US-XXX)</code> 变成永久审计线索:
+          <code>git log --oneline | grep US-053</code> 就能找到
+          Positioning Screen 的改造。
         </p>
         <p class="small mt-4">
-          <strong>Cost of context drift</strong> drops to zero, each story is a fresh start
-          with the PRD as ground truth.
+          <strong>context drift 成本</strong>降到零，每个 story 都从 PRD 这条 ground truth 重新出发。
         </p>
         <pre style="font-size:0.78rem;margin-top:14px;">$ git log --oneline | grep <span class="str">'US-0'</span> | wc -l
        61</pre>
@@ -1211,27 +1205,27 @@
 <!-- ───────── SLIDE 18 ─ TECHNIQUE 2 (CLAUDE.md) ───────── -->
 <section class="slide">
   <div class="container">
-    <div class="eyebrow">Technique · 02</div>
-    <h2><span class="grad-text">CLAUDE.md as architectural guardrails.</span></h2>
+    <div class="eyebrow">技巧 · 02</div>
+    <h2><span class="grad-text">CLAUDE.md 当作架构护栏。</span></h2>
     <p class="lead mt-4">
-      Architectural principles are encoded as <code>P1..P5</code> in
-      <code>LYNX_PORT.md</code>. Every agent reads it before touching code.
-      Mechanical translation tables let agents do the right thing without re-deriving it.
+      架构原则写成 <code>P1..P5</code> 放在 <code>LYNX_PORT.md</code> 里。
+      每个 agent 动代码前先读。
+      机械翻译表让 agent 不用再从头推导。
     </p>
 
     <div class="grid grid-2 mt-8">
       <div class="card">
-        <h4>The principles</h4>
+        <h4>这 5 条原则</h4>
         <div class="stack">
-          <div><span class="pill">P1</span> &nbsp;Never modify Layer 0 (pure-JS packages)</div>
-          <div><span class="pill">P2</span> &nbsp;Vendor business logic, replace only bridge files</div>
-          <div><span class="pill">P3</span> &nbsp;The Adapter Pattern absorbs all differences</div>
-          <div><span class="pill">P4</span> &nbsp;Native code follows mechanical translation</div>
-          <div><span class="pill">P5</span> &nbsp;Verify end-to-end before moving on</div>
+          <div><span class="pill">P1</span> &nbsp;不要改 Layer 0 (纯 JS 包)</div>
+          <div><span class="pill">P2</span> &nbsp;Vendor 业务逻辑，只重写 bridge 文件</div>
+          <div><span class="pill">P3</span> &nbsp;Adapter Pattern 吸收所有差异</div>
+          <div><span class="pill">P4</span> &nbsp;原生代码做机械翻译</div>
+          <div><span class="pill">P5</span> &nbsp;往下走之前先端到端验证</div>
         </div>
 
-        <h4 class="mt-8">+ Translation tables</h4>
-        <pre style="font-size:0.78rem;"><span class="com">| Expo Pattern | Lynx Equivalent |</span>
+        <h4 class="mt-8">+ 翻译表</h4>
+        <pre style="font-size:0.78rem;"><span class="com">| Expo 写法     | Lynx 对应    |</span>
 | AsyncFunction(...)
         → @LynxMethod fun(... callback: Callback)
 | requireNativeModule&lt;T&gt;
@@ -1242,22 +1236,21 @@
       </div>
 
       <div class="card">
-        <h4>The compounding effect</h4>
+        <h4>复利效应</h4>
         <p class="small">
-          When a new agent dispatches on a fresh story, it doesn't have to <em>discover</em>
-          how the bridge works. It reads three things, <code>CLAUDE.md</code>,
-          <code>LYNX_PORT.md</code>, the relevant PRD section, and produces code
-          that matches the architecture.
+          一个新 agent 拿到一个新 story 时，它不需要<em>再去发现</em>
+          bridge 是怎么工作的。它读三样东西: <code>CLAUDE.md</code>、
+          <code>LYNX_PORT.md</code>、对应的 PRD 段落，然后产出符合架构的代码。
         </p>
         <p class="small mt-4">
-          <strong>Personal CLAUDE.md</strong> additionally captures lessons from past mistakes:
+          <strong>个人 CLAUDE.md</strong> 还另外记录了过去踩过的坑:
         </p>
         <div class="card" style="background:var(--bg-2);border-color:var(--yellow);margin-top:14px;padding:14px 16px;">
-          <div class="tiny" style="color:var(--yellow);">PRINCIPLE 1 · FROM PAST MISTAKE</div>
-          <p class="small mt-2" style="line-height:1.4;">
-            <em>说不清解决什么问题的改动，就不该做.</em>
-            “If you can't name the concrete bug your change fixes, don't make it.
-            ‘More robust’ is not a reason.”
+          <div class="tiny" style="color:var(--yellow);">原则 1 · 从过去的坑里来</div>
+          <p class="small mt-2" style="line-height:1.5;">
+            <em>说不清解决什么问题的改动，就不该做。</em>
+            “如果你说不出一个具体能复现的 bug，就别动。
+            ‘更 robust’ 不是理由。”
           </p>
         </div>
       </div>
@@ -1268,17 +1261,16 @@
 <!-- ───────── SLIDE 19 ─ TECHNIQUE 3 (SPEC→PLAN) ───────── -->
 <section class="slide">
   <div class="container">
-    <div class="eyebrow">Technique · 03</div>
-    <h2><span class="grad-text">Spec → Plan → Implement.</span></h2>
+    <div class="eyebrow">技巧 · 03</div>
+    <h2><span class="grad-text">Spec → Plan → Implement。</span></h2>
     <p class="lead mt-4">
-      For non-trivial changes, the harness gates the work behind a written spec
-      and a written implementation plan, each in its own commit. Then, and only then,
-      the implementation commits land.
+      非平凡改动会先经过一份成文 spec 和一份成文实现计划，
+      两份都是各自独立的 commit。然后<em>才</em>是实现的 commit。
     </p>
 
     <div class="card mt-8" style="padding:0;">
       <table>
-        <thead><tr><th style="width:120px;">Commit</th><th>Subject</th><th>Type</th></tr></thead>
+        <thead><tr><th style="width:120px;">Commit</th><th>主题</th><th>类型</th></tr></thead>
         <tbody>
           <tr><td><code>14e732d</code></td><td>docs: spec for voltra-lynx API surface &amp; project cleanup</td><td><span class="pill">SPEC</span></td></tr>
           <tr><td><code>4141225</code></td><td>docs: implementation plan for API surface cleanup</td><td><span class="pill cyan">PLAN</span></td></tr>
@@ -1291,10 +1283,10 @@
     </div>
 
     <p class="small mt-6" style="max-width:1100px;">
-      The <strong>brainstorming → design-doc → plan</strong> pipeline (from the
-      <code>superpowers:brainstorming</code> and <code>writing-plans</code> skills)
-      forces the agent to think before typing. By the time implementation starts,
-      the decisions are already made and the agent's job is mechanical.
+      <strong>brainstorming → design-doc → plan</strong> 这条 pipeline (来自
+      <code>superpowers:brainstorming</code> 和 <code>writing-plans</code> 两个 skill)
+      强迫 agent 在动手前先想清楚。等真正开始 implement 的时候，
+      决策都已经拍板了，agent 的工作变成机械执行。
     </p>
   </div>
 </section>
@@ -1302,52 +1294,50 @@
 <!-- ───────── SLIDE 20 ─ TECHNIQUE 4 (RALPH) ───────── -->
 <section class="slide">
   <div class="container">
-    <div class="eyebrow">Technique · 04</div>
-    <h2><span class="grad-text">Ralph Loop</span> · autonomous story-by-story execution.</h2>
+    <div class="eyebrow">技巧 · 04</div>
+    <h2><span class="grad-text">Ralph Loop</span> · 自主 story-by-story 执行。</h2>
     <p class="lead mt-4">
-      For the Android port (the second half of the project), execution was handed off to
-      <strong>Ralph Loop</strong>, an autonomous agent that reads the PRD,
-      picks the next unfinished story, implements it, runs verification, commits, and repeats.
+      项目后半段的 Android port 完全交给了
+      <strong>Ralph Loop</strong>: 一个自主 agent，它读 PRD、
+      挑下一个没做的 story、做掉、跑验证、commit，然后接着下一个。
     </p>
 
     <div class="grid grid-2 mt-8">
       <div class="card">
-        <h4>The hand-off file</h4>
+        <h4>交接文件</h4>
         <p class="tiny" style="margin-bottom:8px;">.claude/ralph-loop.local.md</p>
         <pre style="font-size:0.82rem;"><span class="com">---</span>
 <span class="kw">active</span>: <span class="ty">true</span>
 <span class="kw">iteration</span>: <span class="ty">6</span>
-<span class="kw">max_iterations</span>: <span class="ty">0</span>     <span class="com"># unbounded</span>
+<span class="kw">max_iterations</span>: <span class="ty">0</span>     <span class="com"># 不设上限</span>
 <span class="kw">started_at</span>: <span class="str">"2026-04-26T13:19:56Z"</span>
 <span class="com">---</span>
 
-Implement the Voltra Lynx Android port following the
-PRD at tasks/prd-voltra-lynx-android.md.
-The JS bridge layer is already complete.
-Scaffold Android host app with Sparkling,
-implement VoltraLynxModule.kt, verify all 5 Android
-demos work end-to-end. Follow LYNX_PORT.md
-architectural principles strictly.</pre>
+按照 tasks/prd-voltra-lynx-android.md 实现 Voltra
+Lynx 的 Android port。JS bridge 层已经完成。
+用 Sparkling 搭 Android host app，实现
+VoltraLynxModule.kt，验证全部 5 个 Android demo
+端到端能跑。严格遵守 LYNX_PORT.md 里的
+架构原则。</pre>
       </div>
 
       <div class="card">
-        <h4>What Ralph contributed</h4>
+        <h4>Ralph 完成了什么</h4>
         <div class="stack">
-          <div><span class="pill green">+ Android host app scaffolded</span></div>
-          <div><span class="pill green">+ VoltraLynxModule.kt, 558 LoC, 28 methods</span></div>
-          <div><span class="pill green">+ 5 Android demos wired end-to-end</span></div>
-          <div><span class="pill green">+ Sparkling-generated gradle setup</span></div>
+          <div><span class="pill green">+ Android host app 脚手架</span></div>
+          <div><span class="pill green">+ VoltraLynxModule.kt, 558 LoC, 28 个方法</span></div>
+          <div><span class="pill green">+ 5 个 Android demo 端到端</span></div>
+          <div><span class="pill green">+ Sparkling 生成的 gradle 配置</span></div>
         </div>
 
-        <h4 class="mt-8">Why it works here</h4>
+        <h4 class="mt-8">为什么这里能用</h4>
         <p class="small">
-          The architectural seam was already proven on iOS. Android is the same
-          problem with a different vocabulary, exactly the kind of
-          <em>predictable, parallel</em> work loop-style agents excel at.
+          架构上的接缝在 iOS 端已经验证过。Android 是同一个问题，
+          只是换了一套词汇，正好是
+          <em>可预测、可并行</em> 的工作，这是 loop 风格 agent 最擅长的。
         </p>
         <p class="small mt-4">
-          <strong>Pattern</strong>: stand up a strong harness on platform A by hand,
-          let the loop port to platform B.
+          <strong>模式</strong>: 平台 A 用手做一遍把 harness 立起来，让 loop 帮你搬到平台 B。
         </p>
       </div>
     </div>
@@ -1357,39 +1347,38 @@ architectural principles strictly.</pre>
 <!-- ───────── SLIDE 21 ─ TECHNIQUE 5 (PARALLEL AGENTS) ───────── -->
 <section class="slide">
   <div class="container">
-    <div class="eyebrow">Technique · 05</div>
-    <h2><span class="grad-text">Parallel sub-agent dispatch.</span></h2>
+    <div class="eyebrow">技巧 · 05</div>
+    <h2><span class="grad-text">并行 sub-agent 分发。</span></h2>
     <p class="lead mt-4">
-      Independent research is dispatched to background sub-agents.
-      The main thread stays cache-warm; the sub-agents burn fresh
-      context against narrow questions.
+      互相独立的调研工作丢给后台 sub-agent。
+      主线程保持 cache 热，sub-agent 用各自的新 context 去对窄问题做穿透。
     </p>
 
     <div class="grid grid-2 mt-8">
       <div class="card">
-        <h4>This very deck, agents used</h4>
+        <h4>这份 deck 自己用过的 agent</h4>
         <div class="files-list">
-          <div class="file-row"><div class="name">Agent #1</div><div class="loc">research</div><div class="desc">Compute LoC + reuse % across Layer 0–4 (parallel)</div></div>
-          <div class="file-row"><div class="name">Agent #2</div><div class="loc">narrative</div><div class="desc">Extract phase arc from git log + JSONL session (parallel)</div></div>
-          <div class="file-row"><div class="name">Agent #3</div><div class="loc">repro</div><div class="desc">Try to boot iOS sim, screenshot LynxVoltra (background)</div></div>
+          <div class="file-row"><div class="name">Agent #1</div><div class="loc">研究</div><div class="desc">算每层的 LoC 和复用率 (并行)</div></div>
+          <div class="file-row"><div class="name">Agent #2</div><div class="loc">叙事</div><div class="desc">从 git log + JSONL session 抽阶段叙事 (并行)</div></div>
+          <div class="file-row"><div class="name">Agent #3</div><div class="loc">复现</div><div class="desc">试着启动 iOS sim 给 LynxVoltra 截图 (后台)</div></div>
         </div>
       </div>
 
       <div class="card">
-        <h4>The economics</h4>
+        <h4>经济性</h4>
         <p class="small">
-          Anthropic's prompt cache has a 5-minute TTL. Sleeping past 300s on the
-          main thread means reading the full context uncached, slow and expensive.
+          Anthropic 的 prompt cache TTL 是 5 分钟。
+          主线程睡超过 300 秒就意味着下一次要冷读全部 context，又慢又贵。
         </p>
         <p class="small mt-4">
-          Sub-agents <em>don't share that cache</em>, so dispatching them costs
-          nothing extra, and the main thread keeps moving while they work.
+          Sub-agent <em>不共享这套 cache</em>，所以分发它们等于免费，
+          而且主线程在它们工作的时候也能继续走。
         </p>
         <p class="small mt-4">
-          <strong>Rule of thumb</strong>: if 2+ tasks are independent (no shared
-          state, no sequential dependency), they should run in parallel.
+          <strong>经验法则</strong>: 2 个及以上互相独立的任务 (没共享状态、没顺序依赖)
+          就该并行跑。
         </p>
-        <pre style="font-size:0.78rem;margin-top:14px;"><span class="com">// Single message · 3 tool calls</span>
+        <pre style="font-size:0.78rem;margin-top:14px;"><span class="com">// 一个 message · 3 个 tool call</span>
 &lt;<span class="ty">Agent</span> description=<span class="str">"loc audit"</span> /&gt;
 &lt;<span class="ty">Agent</span> description=<span class="str">"narrative"</span> /&gt;
 &lt;<span class="ty">Bash</span> command=<span class="str">"find ..."</span> /&gt;</pre>
@@ -1401,16 +1390,16 @@ architectural principles strictly.</pre>
 <!-- ───────── SLIDE 22 ─ TECHNIQUE 6 (SKILLS + MEMORY) ───────── -->
 <section class="slide">
   <div class="container">
-    <div class="eyebrow">Technique · 06</div>
-    <h2>Project-local <span class="grad-text">skills</span> & cross-session <span class="grad-text-2">memory</span>.</h2>
+    <div class="eyebrow">技巧 · 06</div>
+    <h2>项目内的 <span class="grad-text">skills</span> 和跨 session 的 <span class="grad-text-2">memory</span>。</h2>
     <p class="lead mt-4">
-      Domain knowledge is captured as agent-readable references that
-      survive across sessions, no need to re-explain the project on each prompt.
+      领域知识被捕获成 agent 能读的引用，跨 session 不丢失。
+      每次开新对话不用再解释一遍项目。
     </p>
 
     <div class="grid grid-2 mt-8">
       <div class="card">
-        <h4>skills/voltra/ · 17 reference docs</h4>
+        <h4>skills/voltra/ · 17 份参考文档</h4>
         <div class="row gap-sm" style="flex-wrap:wrap;">
           <span class="pill">SKILL.md</span>
           <span class="pill">component-mapping</span>
@@ -1431,31 +1420,31 @@ architectural principles strictly.</pre>
           <span class="pill">source-of-truth</span>
         </div>
         <p class="small mt-6">
-          The agent loads <code>SKILL.md</code> on relevant triggers and pulls
-          deeper references on demand. Tribal knowledge → committed file → reusable.
+          Agent 在相关触发条件下加载 <code>SKILL.md</code>，需要时再深入读对应的子文档。
+          tribal knowledge → 写到文件里 → 可复用。
         </p>
       </div>
 
       <div class="card">
         <h4>~/.claude/projects/.../memory/</h4>
         <p class="small">
-          Per-project memory directory with <em>typed entries</em>:
-          <code>user</code>, <code>feedback</code>, <code>project</code>, <code>reference</code>.
+          按项目的 memory 目录，条目有<em>类型</em>:
+          <code>user</code>、<code>feedback</code>、<code>project</code>、<code>reference</code>。
         </p>
         <p class="small mt-4">
-          When a session learns something durable,
-          <em>“the iOS host uses CocoaPods Lynx 3.7.0, not the internal template”</em>,
-          it writes a memory. The next session reads it on boot.
+          当一个 session 学到了某个持久结论 (比如
+          <em>“iOS host 用的是 CocoaPods Lynx 3.7.0，不是内部模板”</em>)
+          它就写一条 memory。下个 session 启动时读到。
         </p>
         <p class="small mt-4">
-          The result: a session in week 4 inherits the breakthroughs of week 1
-          <em>without paying for them again</em>.
+          结果是: 第四周的 session 直接继承了第一周的突破，
+          <em>不用重新付一次代价</em>。
         </p>
         <pre style="font-size:0.78rem;margin-top:14px;">memory/
-├── MEMORY.md                <span class="com"># index</span>
-├── lynx-host-setup.md       <span class="com"># project</span>
-├── css-gotchas.md           <span class="com"># reference</span>
-└── react-alias-pattern.md   <span class="com"># reference</span></pre>
+├── MEMORY.md                <span class="com"># 索引</span>
+├── lynx-host-setup.md       <span class="com"># project 类型</span>
+├── css-gotchas.md           <span class="com"># reference 类型</span>
+└── react-alias-pattern.md   <span class="com"># reference 类型</span></pre>
       </div>
     </div>
   </div>
@@ -1464,52 +1453,55 @@ architectural principles strictly.</pre>
 <!-- ───────── SLIDE 23 ─ TECHNIQUE 7 (MISTAKES) ───────── -->
 <section class="slide">
   <div class="container">
-    <div class="eyebrow">Technique · 07</div>
-    <h2><span class="grad-text">Mistakes, codified.</span></h2>
+    <div class="eyebrow">技巧 · 07</div>
+    <h2><span class="grad-text">把踩过的坑写下来。</span></h2>
     <p class="lead mt-4">
-      Every wrong turn becomes a written principle. The personal
-      <code>CLAUDE.md</code> grows a section per bug class, so the next agent
-      doesn't repeat it.
+      每一次走错路都变成一条成文原则。个人 <code>CLAUDE.md</code> 按 bug 类别
+      长出一节又一节，下一个 agent 就不会再踩。
     </p>
 
     <div class="grid grid-2 mt-8">
       <div class="card" style="border-left:3px solid var(--red);">
-        <h4 style="color:var(--red);">Principle 1</h4>
+        <h4 style="color:var(--red);">原则 1</h4>
         <h3 style="font-size:1.2rem;color:var(--text);">说不清解决什么问题的改动，就不该做</h3>
         <p class="small mt-2">
-          <em>If you can't name a specific, reproducible bug, don't change it.
-          “More robust” and “more standard” are not reasons.</em>
+          <em>如果你说不出一个具体能复现的 bug，就别动。
+          “更 robust”、“更标准”都不是理由。</em>
         </p>
-        <p class="tiny mt-4">Born from: vue-lynx migration, a “cleaner” path-resolve refactor that introduced a new pnpm-symlink bug.</p>
+        <p class="tiny mt-4">来源: vue-lynx 迁移里一次“更干净”的 path-resolve 重构，
+          引入了一个新的 pnpm symlink bug。</p>
       </div>
 
       <div class="card" style="border-left:3px solid var(--yellow);">
-        <h4 style="color:var(--yellow);">Principle 2</h4>
-        <h3 style="font-size:1.2rem;color:var(--text);">Don't mechanically port upstream patterns.</h3>
+        <h4 style="color:var(--yellow);">原则 2</h4>
+        <h3 style="font-size:1.2rem;color:var(--text);">不要机械照搬上游的模式</h3>
         <p class="small mt-2">
-          <em>Ask: what does this pattern depend on? Does my environment satisfy that premise?</em>
+          <em>问自己: 这个模式依赖什么前提？我的环境满足那个前提吗？</em>
         </p>
-        <p class="tiny mt-4">Born from: lynx-stack vs vue-lynx, same pattern, different architecture; the pattern didn't transfer.</p>
+        <p class="tiny mt-4">来源: lynx-stack vs vue-lynx，
+          同一个模式但架构不一样，照搬过来不能用。</p>
       </div>
 
       <div class="card" style="border-left:3px solid var(--pink);">
-        <h4 style="color:var(--pink);">Principle 3</h4>
-        <h3 style="font-size:1.2rem;color:var(--text);">Don't intuit “pre-existing” errors.</h3>
+        <h4 style="color:var(--pink);">原则 3</h4>
+        <h3 style="font-size:1.2rem;color:var(--text);">不要凭感觉判断“这是已有问题”</h3>
         <p class="small mt-2">
-          <em><code>git stash</code> first. If the error reproduces on the parent commit, it's pre-existing.
-          Otherwise: you caused it.</em>
+          <em>先 <code>git stash</code>。如果错误在父 commit 上能复现，那是已有的。
+          否则: 是你引入的。</em>
         </p>
-        <p class="tiny mt-4">Born from: a build error blamed on the upstream, that was actually introduced by the very change being verified.</p>
+        <p class="tiny mt-4">来源: 一个构建错误，被怪在上游头上，
+          其实就是当前正在验证的改动自己引入的。</p>
       </div>
 
       <div class="card" style="border-left:3px solid var(--cyan);">
-        <h4 style="color:var(--cyan);">Principle 4</h4>
-        <h3 style="font-size:1.2rem;color:var(--text);">Compile ≠ works. Test the user path.</h3>
+        <h4 style="color:var(--cyan);">原则 4</h4>
+        <h3 style="font-size:1.2rem;color:var(--text);">编译过 ≠ 能用。要走一遍用户路径。</h3>
         <p class="small mt-2">
-          <em>pnpm build green + pnpm test green ≠ shippable.
-          Run the example end-to-end. Pack the npm package. Open the app.</em>
+          <em>pnpm build 绿 + pnpm test 绿 ≠ 可发布。
+          要把 example 跑通、npm pack 出来、把 app 真的打开。</em>
         </p>
-        <p class="tiny mt-4">Born from: a migration where unit tests passed but the example app build broke at runtime.</p>
+        <p class="tiny mt-4">来源: 一次迁移单测都过了，
+          但 example app 在 runtime 挂掉。</p>
       </div>
     </div>
   </div>
@@ -1518,67 +1510,67 @@ architectural principles strictly.</pre>
 <!-- ───────── SLIDE 24 ─ THE SLOPFORK RECIPE ───────── -->
 <section class="slide">
   <div class="container" style="max-width:1200px;">
-    <div class="eyebrow">For the Next Slopfork</div>
-    <h2>The <span class="grad-text">Slopfork Recipe</span>.</h2>
+    <div class="eyebrow">给下一次 Slopfork</div>
+    <h2><span class="grad-text">Slopfork 配方</span>。</h2>
     <p class="lead mt-4">
-      A reusable template for the next “take this library to a new runtime” project.
+      下次再做“把一个库搬到新运行时”这种事时，可以复用的模板。
     </p>
 
     <div class="recipe mt-8">
       <div class="step">
         <span class="n">01</span>
         <div class="b">
-          <strong>Find the architectural seam.</strong>
-          <p>What is framework-specific vs framework-agnostic in the source? Draw the layer model. The smaller you can keep the framework-bound region, the cheaper the port.</p>
+          <strong>找到架构上的接缝。</strong>
+          <p>源码里哪些是框架相关的、哪些是框架无关的？把分层模型画出来。框架绑定的那块越小，移植就越便宜。</p>
         </div>
       </div>
       <div class="step">
         <span class="n">02</span>
         <div class="b">
-          <strong>Treat the host framework as just another adapter.</strong>
-          <p>Don't fork upstream code. Vendor it, write one bridge module, and absorb every ABI mismatch in one place. Promise⇄callback, EventEmitter, platform detection, all in one file.</p>
+          <strong>把目标框架当成又一个 adapter。</strong>
+          <p>别 fork 上游代码。Vendor 进来，写一个 bridge module，把所有 ABI 差异塞到一个地方处理: Promise⇄callback、EventEmitter、平台判断，全在一个文件。</p>
         </div>
       </div>
       <div class="step">
         <span class="n">03</span>
         <div class="b">
-          <strong>Encode the architecture into CLAUDE.md.</strong>
-          <p>Write P1..PN principles. Add translation tables (Expo→Lynx, RN→Lynx CSS, etc.). Every agent reads this before code. Compounding returns.</p>
+          <strong>把架构写进 CLAUDE.md。</strong>
+          <p>写出 P1..PN 原则。加翻译表 (Expo→Lynx、RN→Lynx CSS 等等)。每个 agent 在写代码前都读一遍。复利效应。</p>
         </div>
       </div>
       <div class="step">
         <span class="n">04</span>
         <div class="b">
-          <strong>Decompose into PRD → user stories.</strong>
-          <p>Each story has explicit acceptance criteria, fits in one context window, and produces exactly one commit. The <code>(US-NNN)</code> suffix becomes a permanent audit trail.</p>
+          <strong>拆成 PRD → user story。</strong>
+          <p>每个 story 有明确的验收标准、能塞进一个 context window、对应正好一个 commit。<code>(US-NNN)</code> 后缀成为永久审计线索。</p>
         </div>
       </div>
       <div class="step">
         <span class="n">05</span>
         <div class="b">
-          <strong>Spec first. Plan second. Code third.</strong>
-          <p>Non-trivial work gets a <code>docs: spec for X</code> commit and a <code>docs: implementation plan for X</code> commit before any refactor lands. Forces thinking ahead of typing.</p>
+          <strong>先 spec，再 plan，最后写代码。</strong>
+          <p>非平凡改动会先有一个 <code>docs: spec for X</code> commit，再一个 <code>docs: implementation plan for X</code> commit，然后才有 refactor 的 commit。强迫先思考再敲键盘。</p>
         </div>
       </div>
       <div class="step">
         <span class="n">06</span>
         <div class="b">
-          <strong>Verify pixel-parity, not compile-parity.</strong>
-          <p>Snapshot tests catch what the type-checker doesn't. Pack the package. Open the example. Tap the buttons. <em>Compile ≠ ships.</em></p>
+          <strong>验逐像素一致，而不是只验编译过。</strong>
+          <p>Snapshot test 抓的是类型系统抓不到的东西。npm pack 出来，打开 example，把按钮挨个点一遍。<em>编译过 ≠ 能发。</em></p>
         </div>
       </div>
       <div class="step">
         <span class="n">07</span>
         <div class="b">
-          <strong>Hand off the loop once the seam is proven.</strong>
-          <p>iOS by hand; Android by Ralph Loop. Once the agent knows the pattern, parallel platforms become a queue.</p>
+          <strong>接缝跑通了，就把循环交给 loop。</strong>
+          <p>iOS 用手做、Android 交给 Ralph Loop。Agent 一旦摸到模式，并行平台就变成排队消化的事。</p>
         </div>
       </div>
       <div class="step">
         <span class="n">08</span>
         <div class="b">
-          <strong>Promote every breakthrough to a written principle.</strong>
-          <p>The React alias, the flex-vs-linear scroll-view rule, the LynxModule Swift quirks, all live in <code>LYNX_PORT.md</code> now. Next agent: free wins.</p>
+          <strong>把每一次突破升级成成文原则。</strong>
+          <p>React alias、flex vs linear 在 scroll-view 上的规则、LynxModule 的 Swift 协议细节，全都写进 <code>LYNX_PORT.md</code>。下个 agent: 白捡。</p>
         </div>
       </div>
     </div>
@@ -1588,21 +1580,21 @@ architectural principles strictly.</pre>
 <!-- ───────── SLIDE 25 ─ END ───────── -->
 <section class="slide hero center">
   <div class="container" style="text-align:center;">
-    <div class="eyebrow">Fin · Thank you</div>
+    <div class="eyebrow">Fin · 感谢观看</div>
     <h1 class="hero-title">
-      <span class="grad-text">Voltra runs on Lynx</span><br/>
-      <span style="color:var(--text);font-size:3rem;font-weight:600;">because almost nothing had to change.</span>
+      <span class="grad-text">Voltra 跑在 Lynx 上</span><br/>
+      <span style="color:var(--text);font-size:3rem;font-weight:600;">因为几乎什么都不用改。</span>
     </h1>
     <p class="hero-sub" style="margin:32px auto 0;">
-      The library is the library. The runtime is just an adapter.
-      The harness is the multiplier.
+      库还是那个库。运行时只是又一个 adapter。
+      <br/>Harness 是放大器。
     </p>
 
     <div class="hero-stats" style="justify-content:center;margin-top:64px;">
-      <div class="stat"><div class="v">95.6%</div><div class="l">Reuse</div></div>
+      <div class="stat"><div class="v">95.6%</div><div class="l">复用</div></div>
       <div class="stat"><div class="v">662</div><div class="l">Bridge LoC</div></div>
-      <div class="stat"><div class="v">788</div><div class="l">Native Shim LoC</div></div>
-      <div class="stat"><div class="v">7</div><div class="l">Harness Techniques</div></div>
+      <div class="stat"><div class="v">788</div><div class="l">原生 Shim LoC</div></div>
+      <div class="stat"><div class="v">7</div><div class="l">Harness 技巧</div></div>
     </div>
 
     <p class="small mt-12" style="color:var(--dim);font-family:var(--font-mono);">
@@ -1632,7 +1624,6 @@ architectural principles strictly.</pre>
     history.replaceState(null, "", "#" + (i + 1));
   };
 
-  // initial state from hash
   const hashN = parseInt((location.hash || "").slice(1), 10);
   if (!Number.isNaN(hashN) && hashN >= 1 && hashN <= total) {
     i = hashN - 1;
