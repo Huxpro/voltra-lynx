@@ -29,6 +29,25 @@ export default withCallstackPreset(
   },
   defineConfig({
     base,
+    // English is the default. Routes for the default lang have no /en/ prefix;
+    // Simplified Chinese routes are served at /zh/*.
+    lang: 'en',
+    locales: [
+      {
+        lang: 'en',
+        label: 'English',
+        title: 'Voltra for Lynx',
+        description:
+          'Build iOS Live Activities, Dynamic Island, and Android Home Screen widgets in ReactLynx.',
+      },
+      {
+        lang: 'zh',
+        label: '简体中文',
+        title: 'Voltra for Lynx',
+        description:
+          '使用 ReactLynx 构建 iOS 灵动岛、实时活动以及 Android 主屏小组件。',
+      },
+    ],
     // Local stylesheet hides the three Callstack ad slots
     // (DocFooterCTA, HomeBanner, OutlineCTA) injected by the theme.
     // See theme/styles.css for details.

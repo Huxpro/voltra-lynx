@@ -66,4 +66,4 @@ const payload = renderLiveActivityToString({
 ```
 
 Ready? Head to [Installation](./installation), or jump straight to the
-platform guides for [iOS](/en/ios/setup) and [Android](/en/android/setup).
+platform guides for [iOS](/ios/setup) and [Android](/android/setup).

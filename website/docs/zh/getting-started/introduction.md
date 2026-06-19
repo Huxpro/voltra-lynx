@@ -66,4 +66,4 @@ const payload = renderLiveActivityToString({
 ```
 
 准备好了吗?前往 [安装](./installation),或者直接跳到平台指南:
-[iOS](/zh/ios/setup) 或 [Android](/zh/android/setup)。
+[iOS](/ios/setup) 或 [Android](/android/setup)。

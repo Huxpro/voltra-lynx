@@ -49,11 +49,15 @@ jobs:
       - name: Include presentation deck
         # The deck lives at /presentation/ as a hand-written HTML file. Copy
         # the slides + their referenced assets into the Pages output so they
-        # ship at /voltra-lynx/presentation/. The /preview/ subfolder is dev
-        # artifacts (.gitignored) and not referenced by the slides.
+        # ship at /voltra-lynx/presentation/. Mirror it under /zh/presentation/
+        # because rspress's locale-aware nav rewrites the deck link to
+        # /voltra-lynx/zh/presentation/ when the visitor is on the Chinese
+        # locale. The /preview/ subfolder is dev artifacts (.gitignored) and
+        # not referenced by the slides.
         run: |
-          mkdir -p website/doc_build/presentation
+          mkdir -p website/doc_build/presentation website/doc_build/zh/presentation
           rsync -a --exclude 'preview' presentation/ website/doc_build/presentation/
+          rsync -a --exclude 'preview' presentation/ website/doc_build/zh/presentation/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
