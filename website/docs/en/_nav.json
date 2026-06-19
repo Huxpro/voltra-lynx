@@ -1,15 +1,15 @@
 [
   {
     "text": "Getting started",
-    "link": "/getting-started/introduction"
+    "link": "/en/getting-started/introduction"
   },
   {
     "text": "iOS",
-    "link": "/ios/setup"
+    "link": "/en/ios/setup"
   },
   {
     "text": "Android",
-    "link": "/android/setup"
+    "link": "/en/android/setup"
   },
   {
     "text": "Voltra docs ↗",

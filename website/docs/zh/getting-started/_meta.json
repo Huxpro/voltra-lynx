@@ -1,0 +1,12 @@
+[
+  {
+    "type": "file",
+    "name": "introduction",
+    "label": "简介"
+  },
+  {
+    "type": "file",
+    "name": "installation",
+    "label": "安装"
+  }
+]

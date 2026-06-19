@@ -1,14 +1,14 @@
 import { PackageManagerTabs } from '@rspress/core/theme'
 
-# Installation
+# 安装
 
-## 1. Install the packages
+## 1. 安装依赖包
 
 <PackageManagerTabs command="install @use-voltra/lynx @use-voltra/core @use-voltra/ios @use-voltra/android @use-voltra/server @lynx-js/react" />
 
-## 2. Configure Rspeedy
+## 2. 配置 Rspeedy
 
-Pin the dev server port so the host app finds your bundle every time:
+固定开发服务器端口,这样宿主 app 每次都能找到你的 bundle:
 
 ```ts title="lynx.config.ts"
 import { defineConfig } from '@lynx-js/rspeedy'
@@ -20,16 +20,15 @@ export default defineConfig({
 })
 ```
 
-## 3. Set up the native host
+## 3. 配置原生宿主
 
-Live Activities and Widgets render in native OS extensions, so you need an
-iOS or Android host that embeds Lynx and registers Voltra's native module.
-Follow the platform guides:
+实时活动和小组件运行在原生 OS 扩展里,所以你需要一个嵌入 Lynx 并注册了
+Voltra 原生模块的 iOS 或 Android 宿主 app。按对应平台指南操作:
 
-- [**iOS Setup**](/en/ios/setup): Xcode project, CocoaPods, Widget Extension
-- [**Android Setup**](/en/android/setup): Gradle modules, Glance widgets
+- [**iOS 配置**](/zh/ios/setup):Xcode 工程、CocoaPods、Widget Extension
+- [**Android 配置**](/zh/android/setup):Gradle 模块、Glance 小组件
 
-## 4. Write your first Live Activity
+## 4. 写第一个实时活动
 
 ```tsx
 import { useLiveActivity } from '@use-voltra/lynx/ios-client'
@@ -47,7 +46,6 @@ useLiveActivity(
 )
 ```
 
-The Voltra component reference (every `Voltra.*` component, styles, props,
-events) is on the [**official Voltra docs**](https://www.use-voltra.dev/);
-the API is the same on Lynx. A couple of CSS conventions are different in
-Lynx; see [iOS Styling Notes](/en/ios/styling).
+Voltra 的组件参考(每个 `Voltra.*` 组件、样式、属性、事件)都在
+[**Voltra 官方文档**](https://www.use-voltra.dev/) 里。Lynx 上的 API 与原版
+一致,只是有几条 CSS 约定不太一样,详见 [iOS 样式说明](/ios/styling)。

@@ -1,0 +1,22 @@
+[
+  {
+    "text": "快速开始",
+    "link": "/zh/getting-started/introduction"
+  },
+  {
+    "text": "iOS",
+    "link": "/zh/ios/setup"
+  },
+  {
+    "text": "Android",
+    "link": "/zh/android/setup"
+  },
+  {
+    "text": "Voltra 文档 ↗",
+    "link": "https://www.use-voltra.dev/"
+  },
+  {
+    "text": "Deck",
+    "link": "/presentation/zh.html"
+  }
+]
