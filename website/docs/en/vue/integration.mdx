@@ -1,0 +1,161 @@
+import { PackageManagerTabs } from '@rspress/core/theme'
+
+# Vue Lynx Integration
+
+Voltra is **host-framework-agnostic**. Live Activities and Widgets are produced
+as a JSON payload that native code turns into SwiftUI / Compose Glance, so the
+JS framework driving the screen is interchangeable. Everything in the
+[Getting Started](/getting-started/introduction) and platform guides applies
+when your app is built with [**Vue Lynx**](https://vue.lynxjs.org/) instead of
+ReactLynx — only the host UI layer changes.
+
+If you came here from the ReactLynx docs: the Voltra API, component shapes,
+payload format, native hosts, and styling rules are all the **same**. This page
+covers only the parts that differ.
+
+## What's identical (shared with ReactLynx)
+
+These need **no** changes when moving to a Vue host:
+
+| Layer | What | Package |
+|---|---|---|
+| Pure JS | Renderer, components, payload, types | `@use-voltra/core`, `@use-voltra/ios`, `@use-voltra/android` |
+| Bridge + client | `useLiveActivity`, `startLiveActivity`, widget APIs, native module adapter | `@use-voltra/lynx` |
+| Payload | The serialized JSON sent to native | **byte-for-byte identical** |
+| Native host | iOS Widget Extension / Android Glance modules | unchanged — see [iOS](/ios/setup) / [Android](/android/setup) |
+| Component API | Every `Voltra.*` component, its props, styles, events | unchanged — see [Voltra docs ↗](https://www.use-voltra.dev/) |
+| Styling | The Lynx CSS conventions | unchanged — see [iOS Styling Notes](/ios/styling) |
+
+In short: **Layers 0–3 are reused as-is.** Only the UI host (Layer "app")
+swaps frameworks.
+
+## What changes (host UI layer only)
+
+| Concern | ReactLynx | Vue Lynx |
+|---|---|---|
+| Build plugin | `pluginReactLynx()` | `pluginVueLynx()` from `vue-lynx/plugin` |
+| Runtime package | `@lynx-js/react` | `vue-lynx` (+ `vue` 3.5, `@rsbuild/plugin-vue`) |
+| Entry point | `root.render(<App />)` | `createApp(App).mount()` |
+| UI authoring | `.tsx` (JSX) | `.vue` SFC (`<template>`, `@tap`, `:style`) |
+| `react` resolution | aliased → `@lynx-js/react` | **not** aliased → real `react` |
+
+## 1. Install the packages
+
+<PackageManagerTabs command="install @use-voltra/lynx @use-voltra/core @use-voltra/ios @use-voltra/android vue-lynx vue react" />
+
+`vue-lynx` provides the Vue 3 runtime and `createApp`; its peer dependencies
+are `@rsbuild/core` and `@rsbuild/plugin-vue`. You also install `react` — not as
+a UI framework, but because Voltra's components are `createElement` factories
+used to build payloads (see [§4](#4-build-the-payload-host-agnostic)).
+
+## 2. Configure Rspeedy
+
+Swap `pluginReactLynx` for `pluginVueLynx`. Pin the dev server port so the
+native host finds your bundle every time — exactly as in the React setup:
+
+```ts title="lynx.config.ts"
+import { defineConfig } from '@lynx-js/rspeedy'
+import { pluginVueLynx } from 'vue-lynx/plugin'
+
+export default defineConfig({
+  environments: { lynx: {}, web: {} },
+  plugins: [
+    pluginVueLynx({ optionsApi: false }),
+  ],
+  server: { port: 3000, strictPort: true },
+})
+```
+
+## 3. Set up the native host
+
+No change. Live Activities and Widgets render in native OS extensions, so you
+still need an iOS or Android host that embeds Lynx and registers Voltra's
+native module. Follow the same platform guides:
+
+- [**iOS Setup**](/ios/setup): Xcode project, CocoaPods, Widget Extension
+- [**Android Setup**](/android/setup): Gradle modules, Glance widgets
+
+Because both frameworks compile to a `main.lynx.bundle` served on `:3000`, the
+host loads a Vue bundle with zero native changes — just run the Vue app's dev
+server instead of the React one.
+
+## 4. Build the payload (host-agnostic)
+
+This is the crux of Vue support. Voltra's `Voltra.*` components are plain
+`createElement` factories, and `renderLiveActivityToString()` (called for you by
+`startLiveActivity`) serializes the resulting element tree to JSON. That step is
+pure JS — it never touches the DOM or a host renderer — so it emits the **same
+payload** whether the surrounding app is React or Vue.
+
+To keep payloads decoupled from either host's JSX transform, author them with
+`createElement` **directly** (no JSX) in a plain `.ts` file:
+
+```ts title="voltra-payloads.ts"
+import { createElement as h } from 'react'
+import { Voltra } from '@use-voltra/ios'
+
+export function makeBasicVariants() {
+  return {
+    lockScreen: h(
+      Voltra.VStack,
+      { style: { padding: 16, borderRadius: '14px', backgroundColor: '#111827' } },
+      h(Voltra.Text, { style: { color: 'white', fontSize: 18 } }, 'Hello from Vue Lynx'),
+    ),
+  }
+}
+```
+
+## 5. Drive it from a Vue component
+
+The `.vue` component stays pure Vue. It calls the same Voltra client you'd use
+from React — `startLiveActivity`, `stopLiveActivity`, `useLiveActivity`, the
+widget APIs — passing the variants from step 4:
+
+```vue title="App.vue"
+<script setup lang="ts">
+import { startLiveActivity } from '@use-voltra/lynx/ios-client'
+import { makeBasicVariants } from './voltra-payloads'
+
+async function start() {
+  await startLiveActivity(makeBasicVariants(), { activityName: 'demo' })
+}
+</script>
+
+<template>
+  <view class="Screen">
+    <view class="Btn" @tap="start">
+      <text>Start Live Activity</text>
+    </view>
+  </view>
+</template>
+```
+
+And the entry point uses Vue's `createApp` — Vue Lynx mounts to the page root,
+so `mount()` takes no DOM selector:
+
+```ts title="index.ts"
+import { createApp } from 'vue-lynx'
+import App from './App.vue'
+
+createApp(App).mount()
+```
+
+## The one subtlety: no `react` alias under Vue
+
+`pluginReactLynx` aliases `react` → `@lynx-js/react` at build time;
+`pluginVueLynx` does **not**. So in a Vue host, `@use-voltra/ios` importing
+`react` resolves to the **real** `react` package (hence installing it in
+[§1](#1-install-the-packages)). That's fine — and cleaner — because payload
+generation only needs `createElement` to build plain element objects.
+
+The `.vue` files stay pure Vue; the payload module stays a pure
+React-element factory. They meet only at the Voltra client call. There is no
+JSX-runtime conflict because the payload module uses `createElement` rather
+than JSX.
+
+## Reference
+
+A complete, building example lives in the repo at
+[`packages/vue-example-app`](https://github.com/Huxpro/voltra-lynx/tree/main/voltra-lynx/packages/vue-example-app),
+alongside the ReactLynx `example-app`. For the official Vue Lynx framework docs
+(reactivity, SFC syntax, tooling), see [vue.lynxjs.org](https://vue.lynxjs.org/).
