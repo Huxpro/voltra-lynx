@@ -14,6 +14,21 @@ ABI difference to a single ~660-LoC bridge adapter.
 See [LYNX_PORT.md](../LYNX_PORT.md) for the full architecture, layer model,
 and translation rules.
 
+### Framework-agnostic: ReactLynx **and** Vue Lynx
+
+Because the host framework's only job is to call the Voltra client and feed it a
+JSON payload, the same port runs under either Lynx UI framework. Two example
+apps prove it:
+
+- [`packages/example-app`](packages/example-app) — **ReactLynx** (`@lynx-js/react`)
+- [`packages/vue-example-app`](packages/vue-example-app) — **Vue Lynx**
+  (`vue-lynx`, per [vue.lynxjs.org](https://vue.lynxjs.org/)). `App.vue` drives
+  the screen; payloads are still built with Voltra's `createElement` factories
+  and serialized to the identical JSON. Only the entry point + UI layer differ.
+
+Both compile to a `main.lynx.bundle` the same native host loads from
+`http://localhost:3000`.
+
 ---
 
 ## One-shot AI build prompt
@@ -63,15 +78,22 @@ voltra-lynx/
 │   ├── lynx-ios-client/
 │   ├── lynx-android-client/
 │   │
-│   └── example-app/               ← the Lynx JS app the host loads
-│       ├── rspeedy.config.ts
+│   ├── example-app/               ← the ReactLynx JS app the host loads
+│   │   ├── rspeedy.config.ts
+│   │   └── src/
+│   │       ├── App.tsx
+│   │       ├── demos/
+│   │       │   ├── ios/           ← 10 Live Activity / widget demos
+│   │       │   ├── android/       ← 5 Glance / notification demos
+│   │       │   └── testing/       ← 14 Testing Grounds screens
+│   │       └── components/        ← <voltra-preview>, <voltra-widget-preview>
+│   │
+│   └── vue-example-app/           ← the SAME demo on Vue Lynx (vue.lynxjs.org)
+│       ├── lynx.config.ts         ← pluginVueLynx instead of pluginReactLynx
 │       └── src/
-│           ├── App.tsx
-│           ├── demos/
-│           │   ├── ios/           ← 10 Live Activity / widget demos
-│           │   ├── android/       ← 5 Glance / notification demos
-│           │   └── testing/       ← 14 Testing Grounds screens
-│           └── components/        ← <voltra-preview>, <voltra-widget-preview>
+│           ├── index.ts           ← createApp(App).mount()
+│           ├── App.vue            ← Vue 3 host UI, @tap → Voltra bridge
+│           └── voltra-payloads.ts ← React createElement payloads (host-agnostic)
 │
 └── host/
     ├── ios/
@@ -120,6 +142,20 @@ cd host/android
 ./gradlew :app:installDebug
 adb shell am start -n com.voltra.lynx.demo/.SplashActivity
 ```
+
+### Vue Lynx host
+
+The native hosts above load whatever is served on `:3000`. To drive them with
+the **Vue** demo instead of the React one, just run that app's dev server:
+
+```bash
+pnpm install
+pnpm --filter @use-voltra/lynx build           # build the bridge once
+( cd packages/vue-example-app && pnpm dev )     # serves main.lynx.bundle on :3000
+```
+
+See [`packages/vue-example-app/README.md`](packages/vue-example-app/README.md)
+for how the Vue host reuses the Voltra bridge + payload pipeline unchanged.
 
 ---
 

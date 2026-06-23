@@ -237,6 +237,43 @@ Any React library that only uses `createElement`/hooks (not DOM) should work in 
 
 ---
 
+## Vue Lynx Support
+
+The port is **host-framework-agnostic**. Live Activities/Widgets are produced as
+a JSON payload (Layer 0/1), and that serialization never touches the host UI
+tree — so the same bridge runs under [Vue Lynx](https://vue.lynxjs.org/) just as
+it does under ReactLynx. See `packages/vue-example-app` for a working host.
+
+### What stays the same
+
+- `@use-voltra/core`, `/ios`, `/android` (Layer 0) — reused via npm, untouched
+- `@use-voltra/lynx` bridge + vendored client (Layer 1/2) — reused, untouched
+- The JSON payload — **byte-for-byte identical** to the React host's output
+
+### What changes (host UI layer only)
+
+| Concern | ReactLynx | Vue Lynx |
+|---|---|---|
+| Build plugin | `pluginReactLynx()` | `pluginVueLynx()` from `vue-lynx/plugin` |
+| Runtime pkg | `@lynx-js/react` | `vue-lynx` (+ `vue` 3.5, `@rsbuild/plugin-vue`) |
+| Entry point | `root.render(<App />)` | `createApp(App).mount()` |
+| UI authoring | `.tsx` (JSX) | `.vue` SFC (`<template>`, `@tap`, `:style`) |
+| `react` resolution | aliased → `@lynx-js/react` | **not** aliased → real `react` |
+
+### The one subtlety: no React alias under Vue
+
+`pluginReactLynx` aliases `react` → `@lynx-js/react`; `pluginVueLynx` does not.
+So in the Vue host, `@use-voltra/ios` importing `react` resolves to the **real**
+`react` package (add it as a dependency). That is fine — and actually cleaner —
+because payload generation only needs `createElement` to build plain element
+objects that `renderLiveActivityToString()` walks. To avoid coupling Voltra
+payloads to either host's JSX transform, author them with **`createElement`
+directly** (no JSX) in a plain `.ts` file. The `.vue` components stay pure Vue;
+the payload module stays pure React-element-factory. They meet only at the
+Voltra client call (`startLiveActivity(variants, …)`).
+
+---
+
 ## Lynx CSS Gotchas (MUST follow — violating any = broken UI)
 
 ### Layout

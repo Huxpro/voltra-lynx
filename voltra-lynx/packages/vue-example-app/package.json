@@ -1,0 +1,27 @@
+{
+  "name": "@voltra-lynx/vue-example-app",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Voltra Lynx example app built with Vue Lynx (vue.lynxjs.org) — proves the Voltra bridge + payload pipeline works under a Vue 3 host",
+  "scripts": {
+    "dev": "rspeedy dev",
+    "build": "rspeedy build",
+    "preview": "rspeedy preview"
+  },
+  "dependencies": {
+    "@use-voltra/core": "^1.4.0",
+    "@use-voltra/ios": "^1.4.0",
+    "@use-voltra/lynx": "workspace:*",
+    "react": "^18.3.1",
+    "vue": "^3.5.0",
+    "vue-lynx": "^0.4.0"
+  },
+  "devDependencies": {
+    "@lynx-js/rspeedy": "^0.14.2",
+    "@lynx-js/types": "^3.7.0",
+    "@rsbuild/core": "^1.0.0",
+    "@rsbuild/plugin-vue": "^1.2.6",
+    "typescript": "~5.8.0"
+  }
+}
